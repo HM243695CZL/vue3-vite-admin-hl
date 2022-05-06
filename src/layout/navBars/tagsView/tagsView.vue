@@ -22,7 +22,7 @@
 					<template v-if="isActive(v)">
 						<SvgIcon
 							name="ele-RefreshRight"
-							class="ml5 layout-navbars-tagsview-ul-li-refresh"
+							class="ml5"
 							@click.stop="refreshCurrentTagsView($route.fullPath)"
 						/>
 						<SvgIcon
@@ -236,6 +236,7 @@ export default defineComponent({
 			state.tagsViewList.map((v: any, k: number, arr: any) => {
 				if (!v.meta.isAffix) {
 					if (getThemeConfig.value.isShareTagsView ? v.path === path : v.url === path) {
+						refreshCurrentTagsView(path);
 						state.tagsViewList.splice(k, 1);
 						setTimeout(() => {
 							if (state.tagsViewList.length === k && getThemeConfig.value.isShareTagsView ? state.routePath === path : state.routeActive === path) {

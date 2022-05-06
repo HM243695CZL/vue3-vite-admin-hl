@@ -53,6 +53,7 @@ export function getMenuList (){
 				isKeepAlive: true,
 				isAffix: false,
 				isIframe: false,
+				roles: ['admin'],
 				icon: 'fa fa-home'
 			}
 		},
