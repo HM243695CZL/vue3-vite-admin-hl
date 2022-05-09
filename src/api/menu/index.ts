@@ -58,6 +58,21 @@ export function getMenuList (){
 			}
 		},
 		{
+			path: '/formGenerator',
+			name: 'formGenerator',
+			component: '/formGenerator',
+			meta: {
+				title: '表单生成器',
+				isLink: '',
+				isHide: false,
+				isKeepAlive: true,
+				isAffix: false,
+				isIframe: false,
+				roles: ['admin'],
+				icon: 'fa fa-outdent'
+			}
+		},
+		{
 			path: '/system',
 			name: 'system',
 			component: 'layout',
