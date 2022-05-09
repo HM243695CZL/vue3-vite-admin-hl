@@ -16,6 +16,7 @@ export function elSvg(app: App) {
 	for (const i in icons) {
 		app.component(`ele-${icons[i].name}`, icons[i]);
 	}
+	// @ts-ignore
 	app.component('SvgIcon', SvgIcon);
 }
 
