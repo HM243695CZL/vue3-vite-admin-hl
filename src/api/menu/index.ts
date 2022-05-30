@@ -119,6 +119,21 @@ export function getMenuList (){
 					}
 				},
 				{
+					path: '/system/file',
+					name: 'systemFile',
+					component: '/system/file',
+					meta: {
+						title: '文件管理',
+						isLink: '',
+						isHide: false,
+						isKeepAlive: true,
+						isAffix: false,
+						isIframe: false,
+						roles: ['admin'],
+						icon: 'fa fa-file-o'
+					}
+				},
+				{
 					path: '/system/dynamic/:id',
 					name: 'dynamicDetail',
 					component: '/system/dynamic',

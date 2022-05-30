@@ -1,0 +1,1 @@
+export const prevFileUrl = 'http://localhost:9090/public/'

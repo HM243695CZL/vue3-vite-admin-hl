@@ -2,8 +2,8 @@
 	<div class="system-user-container">
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
+				<el-input v-model='username' size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click='getUserPageList'>
 					<el-icon>
 						<ele-Search />
 					</el-icon>
@@ -15,23 +15,23 @@
 					</el-icon>
 					新增用户
 				</el-button>
+				<el-button size="default" type="default" class="ml10" @click='exportData'>导出</el-button>
+				<el-upload
+					class="upload-demo"
+					action="http://localhost:9090/user/import"
+					:on-success='handleSuccess'
+					:limit="1"
+					:show-file-list='false'
+				>
+					<el-button size='default' type="default" class='ml10'>导入</el-button>
+				</el-upload>
 			</div>
 			<el-table :data="tableData.data" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="userName" label="账户名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="关联角色" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="department" label="部门" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="用户状态" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100">
 					<template #default="scope">
 						<el-button :disabled="scope.row.userName === 'admin'" size="small" type="text" @click="onOpenEditUser(scope.row)">修改</el-button>
@@ -61,25 +61,21 @@
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { getUserPageApi, deleteUserApi } from '/@/api/user';
 import AddUer from '/@/views/system/user/component/addUser.vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
+import { StatusEnum} from '/@/common/status.enum';
 
 // 定义接口来定义对象的类型
 interface TableDataRow {
-	userName: string;
-	userNickname: string;
-	roleSign: string;
-	department: string[];
+	id: string;
+	username: string;
+	nickname: string;
 	phone: string;
 	email: string;
-	sex: string;
-	password: string;
-	overdueTime: Date;
-	status: boolean;
-	describe: string;
-	createTime: string;
 }
 interface TableDataState {
+	username: string;
 	tableData: {
 		data: Array<TableDataRow>;
 		total: number;
@@ -98,6 +94,7 @@ export default defineComponent({
 		const addUserRef = ref();
 		const editUserRef = ref();
 		const state = reactive<TableDataState>({
+			username: '',
 			tableData: {
 				data: [],
 				total: 0,
@@ -108,59 +105,64 @@ export default defineComponent({
 				},
 			},
 		});
-		// 初始化表格数据
-		const initTableData = () => {
-			const data: Array<TableDataRow> = [];
-			for (let i = 0; i < 2; i++) {
-				data.push({
-					userName: i === 0 ? 'admin' : 'test',
-					userNickname: i === 0 ? '我是管理员' : '我是普通用户',
-					roleSign: i === 0 ? 'admin' : 'common',
-					department: i === 0 ? ['vueNextAdmin', 'IT外包服务'] : ['vueNextAdmin', '资本控股'],
-					phone: '12345678910',
-					email: 'vueNextAdmin@123.com',
-					sex: '女',
-					password: '123456',
-					overdueTime: new Date(),
-					status: true,
-					describe: i === 0 ? '不可删除' : '测试用户',
-					createTime: new Date().toLocaleString(),
-				});
-			}
-			state.tableData.data = data;
-			state.tableData.total = state.tableData.data.length;
-		};
+		const getUserPageList = () => {
+			getUserPageApi({
+				pageNum: state.tableData.param.pageNum,
+				pageSize: state.tableData.param.pageSize,
+				username: state.username
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.tableData.data = res.data.records;
+					state.tableData.total = res.data.total;
+				}
+			})
+		}
 		// 打开新增用户弹窗
 		const onOpenAddUser = () => {
 			addUserRef.value.openDialog();
 		};
 		// 打开修改用户弹窗
 		const onOpenEditUser = (row: TableDataRow) => {
-			editUserRef.value.openDialog(row);
+			addUserRef.value.openDialog(row);
 		};
 		// 删除用户
 		const onRowDel = (row: TableDataRow) => {
-			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
 				confirmButtonText: '确认',
 				cancelButtonText: '取消',
 				type: 'warning',
 			})
 				.then(() => {
-					ElMessage.success('删除成功');
+					deleteUserApi({
+						id: row.id
+					}).then(res => {
+						if (res.status === StatusEnum.SUCCESS) {
+							ElMessage.success('删除成功');
+							getUserPageList()
+						}
+					})
 				})
 				.catch(() => {});
 		};
+		const exportData = () => {
+			window.open('http://localhost:9090/user/export', '_blank')
+		}
+		const handleSuccess = () => {
+			ElMessage.success('上传成功');
+			getUserPageList();
+		}
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.tableData.param.pageSize = val;
+			getUserPageList();
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.tableData.param.pageNum = val;
+			getUserPageList();
 		};
-		// 页面加载时
 		onMounted(() => {
-			initTableData();
+			getUserPageList();
 		});
 		return {
 			addUserRef,
@@ -168,10 +170,18 @@ export default defineComponent({
 			onOpenAddUser,
 			onOpenEditUser,
 			onRowDel,
+			exportData,
+			handleSuccess,
 			onHandleSizeChange,
 			onHandleCurrentChange,
+			getUserPageList,
 			...toRefs(state),
 		};
 	},
 });
 </script>
+<style lang='scss' scoped>
+.upload-demo{
+	display: inline-block;
+}
+</style>
