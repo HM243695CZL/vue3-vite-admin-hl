@@ -28,13 +28,11 @@
 <script lang='ts'>
 import { getFilePageApi, deleteFileApi } from '/@/api/file';
 import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
-import fileDownload from 'js-file-download';
-import axios from 'axios';
+import { downloadFileStream } from '/@/utils/download';
 import { StatusEnum } from '/@/common/status.enum';
 import { prevFileUrl } from '/@/utils/config';
 import PrevImgModel from './component/prevImg.vue';
 import AddFile from './component/addFile.vue';
-import { ElMessage } from 'element-plus';
 interface TableRow {
 	id: number;
 	name: string;
@@ -70,15 +68,7 @@ export default defineComponent({
 			})
 		};
 		const handleDownload = (row: TableRow) => {
-			axios.get(row.downloadUrl, {
-				responseType: 'blob'
-			}).then((res: any) => {
-				if (res.data.type === 'application/json') {
-					ElMessage.error('下载失败，请联系管理员!');
-				} else {
-					fileDownload(res.data, 'test.jpg')
-				}
-			});
+			downloadFileStream(row.downloadUrl, row.originName);
 		}
 		const handleDelete = (row: TableRow) => {
 			deleteFileApi([row.id]).then(res => {
