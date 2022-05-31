@@ -45,7 +45,7 @@
 				class="mt15"
 				:pager-count="5"
 				:page-sizes="[10, 20, 30]"
-				v-model:current-page="tableData.param.pageNum"
+				v-model:current-page="tableData.param.pageIndex"
 				background
 				v-model:page-size="tableData.param.pageSize"
 				layout="total, sizes, prev, pager, next, jumper"
@@ -53,7 +53,7 @@
 			>
 			</el-pagination>
 		</el-card>
-		<AddUer ref="addUserRef" />
+		<AddUer ref="addUserRef" @refresh-list='getUserPageList'/>
 		<EditUser ref="editUserRef" />
 	</div>
 </template>
@@ -81,7 +81,7 @@ interface TableDataState {
 		total: number;
 		loading: boolean;
 		param: {
-			pageNum: number;
+			pageIndex: number;
 			pageSize: number;
 		};
 	};
@@ -100,14 +100,14 @@ export default defineComponent({
 				total: 0,
 				loading: false,
 				param: {
-					pageNum: 1,
+					pageIndex: 1,
 					pageSize: 10,
 				},
 			},
 		});
 		const getUserPageList = () => {
 			getUserPageApi({
-				pageNum: state.tableData.param.pageNum,
+				pageIndex: state.tableData.param.pageIndex,
 				pageSize: state.tableData.param.pageSize,
 				username: state.username
 			}).then(res => {
@@ -158,7 +158,7 @@ export default defineComponent({
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
-			state.tableData.param.pageNum = val;
+			state.tableData.param.pageIndex = val;
 			getUserPageList();
 		};
 		onMounted(() => {

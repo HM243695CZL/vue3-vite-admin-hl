@@ -20,7 +20,7 @@
 				</el-table-column>
 			</el-table>
 			<prev-img-model ref='prevImgRef' />
-			<add-file ref='addFileRef' />
+			<add-file ref='addFileRef' @refresh-list='getFilePageList' />
 		</el-card>
 	</div>
 </template>

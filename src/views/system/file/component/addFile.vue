@@ -30,7 +30,7 @@ import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'addFile',
-	setup () {
+	setup (props, ctx) {
 		const uploadRef = ref();
 		const state = reactive({
 			isShowDialog: false
@@ -46,7 +46,8 @@ export default defineComponent({
 		}
 		const handleSuccess = () => {
 			ElMessage.success('上传成功');
-			onCancel();
+			state.isShowDialog = false;
+			ctx.emit('refresh-list');
 		};
 		return {
 			...toRefs(state),

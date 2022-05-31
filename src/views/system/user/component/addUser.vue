@@ -64,7 +64,7 @@ interface UserState {
 
 export default defineComponent({
 	name: 'systemAddUser',
-	setup() {
+	setup(props, ctx) {
 		const formRef = ref(null)
 		const state = reactive<UserState>({
 			isShowDialog: false,
@@ -107,7 +107,8 @@ export default defineComponent({
 		const onSubmit = () => {
 			saveUserApi(state.ruleForm).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
-					closeDialog()
+					closeDialog();
+					ctx.emit('refresh-list')
 				}
 			})
 		};
