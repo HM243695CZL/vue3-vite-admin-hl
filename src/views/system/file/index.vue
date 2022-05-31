@@ -25,13 +25,23 @@
 	</div>
 </template>
 
-<script>
-import { getFilePageApi, deleteFileApi } from '../../../api/file';
+<script lang='ts'>
+import { getFilePageApi, deleteFileApi } from '/@/api/file';
 import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import fileDownload from 'js-file-download';
+import axios from 'axios';
 import { StatusEnum } from '/@/common/status.enum';
 import { prevFileUrl } from '/@/utils/config';
 import PrevImgModel from './component/prevImg.vue';
 import AddFile from './component/addFile.vue';
+import { ElMessage } from 'element-plus';
+interface TableRow {
+	id: number;
+	name: string;
+	originName: string;
+	size: string;
+	downloadUrl: string;
+}
 export default defineComponent({
 	name: 'systemFile',
 	components: {
@@ -59,17 +69,25 @@ export default defineComponent({
 				}
 			})
 		};
-		const handleDownload = row => {
-			window.open(row.downloadUrl, '_blank')
-		};
-		const handleDelete = row => {
+		const handleDownload = (row: TableRow) => {
+			axios.get(row.downloadUrl, {
+				responseType: 'blob'
+			}).then((res: any) => {
+				if (res.data.type === 'application/json') {
+					ElMessage.error('下载失败，请联系管理员!');
+				} else {
+					fileDownload(res.data, 'test.jpg')
+				}
+			});
+		}
+		const handleDelete = (row: TableRow) => {
 			deleteFileApi([row.id]).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					getFilePageList()
 				}
 			})
 		};
-		const prevImg = row => {
+		const prevImg = (row: TableRow) => {
 			prevImgRef.value.openDialog(prevFileUrl + row.name);
 		};
 		const addFile = () => {
