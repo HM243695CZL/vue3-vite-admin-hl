@@ -4,6 +4,7 @@
 			<el-form size='default' label-width='90px' ref='formRef'>
 				<el-form-item label='上传' prop='file'>
 					<el-upload
+						ref='uploadRef'
 						class="upload-demo"
 						action="http://localhost:9090/file/upload"
 						:on-success='handleSuccess'
@@ -24,18 +25,25 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, nextTick, reactive, ref, toRefs } from 'vue';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'addFile',
 	setup () {
+		const uploadRef = ref();
 		const state = reactive({
 			isShowDialog: false
 		});
 		const onCancel = () => {
 			state.isShowDialog = false
 		};
+		const openDialog = () => {
+			state.isShowDialog = true;
+			nextTick(() => {
+				uploadRef.value.clearFiles();
+			})
+		}
 		const handleSuccess = () => {
 			ElMessage.success('上传成功');
 			onCancel();
@@ -43,7 +51,9 @@ export default defineComponent({
 		return {
 			...toRefs(state),
 			onCancel,
-			handleSuccess
+			uploadRef,
+			handleSuccess,
+			openDialog
 		}
 	}
 })

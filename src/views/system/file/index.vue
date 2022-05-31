@@ -33,6 +33,7 @@ import { StatusEnum } from '/@/common/status.enum';
 import { prevFileUrl } from '/@/utils/config';
 import PrevImgModel from './component/prevImg.vue';
 import AddFile from './component/addFile.vue';
+import { ElMessage } from 'element-plus';
 interface TableRow {
 	id: number;
 	name: string;
@@ -73,6 +74,7 @@ export default defineComponent({
 		const handleDelete = (row: TableRow) => {
 			deleteFileApi([row.id]).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success("操作成功");
 					getFilePageList()
 				}
 			})
@@ -81,7 +83,7 @@ export default defineComponent({
 			prevImgRef.value.openDialog(prevFileUrl + row.name);
 		};
 		const addFile = () => {
-			addFileRef.value.isShowDialog = true;
+			addFileRef.value.openDialog();
 		};
 		onMounted(() => {
 			getFilePageList()
