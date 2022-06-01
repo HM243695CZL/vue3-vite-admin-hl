@@ -20,8 +20,9 @@
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="description" label="角色描述" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column label="操作" width="240">
 					<template #default="scope">
+						<el-button size="small" type="text" @click="setAuth(scope.row)">分配权限</el-button>
 						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
 						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
@@ -42,7 +43,7 @@
 			</el-pagination>
 		</el-card>
 		<AddRole ref="addRoleRef" @refresh-list='getRolePageList' />
-		<EditRole ref="editRoleRef" />
+		<AuthModel ref='authModelRef' />
 	</div>
 </template>
 
@@ -50,7 +51,7 @@
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import AddRole from '/@/views/system/role/component/addRole.vue';
-import EditRole from '/@/views/system/role/component/editRole.vue';
+import AuthModel from './component/authModel.vue';
 import { deleteRoleApi, getRolePageApi } from '/@/api/role';
 import { StatusEnum } from '/@/common/status.enum';
 
@@ -75,10 +76,10 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'systemRole',
-	components: { AddRole, EditRole },
+	components: { AddRole, AuthModel },
 	setup() {
 		const addRoleRef = ref();
-		const editRoleRef = ref();
+		const authModelRef = ref();
 		const state = reactive<TableDataState>({
 			name: '',
 			tableData: {
@@ -111,6 +112,9 @@ export default defineComponent({
 		const onOpenEditRole = (row: TableRow) => {
 			addRoleRef.value.openDialog(row);
 		};
+		const setAuth = (row: TableRow) => {
+			authModelRef.value.openDialog(row);
+		}
 		// 删除角色
 		const onRowDel = (row: any) => {
 			ElMessageBox.confirm(`此操作将永久删除角色名称：“${row.name}”，是否继续?`, '提示', {
@@ -142,11 +146,12 @@ export default defineComponent({
 		});
 		return {
 			addRoleRef,
-			editRoleRef,
+			authModelRef,
 			getRolePageList,
 			onOpenAddRole,
 			onOpenEditRole,
 			onRowDel,
+			setAuth,
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			...toRefs(state),

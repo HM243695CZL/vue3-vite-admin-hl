@@ -1,5 +1,46 @@
 import request from '/@/utils/request';
 
+export function getMenuPageApi (params: any) {
+	return request({
+		url: '/menu/page',
+		method: 'get',
+		params
+	})
+}
+export function getMenuListApi (params: any) {
+	return request({
+		url: '/menu/list',
+		method: 'get',
+		params
+	})
+}
+export function saveMenuApi (data: any) {
+	return request({
+		url: '/menu/create',
+		method: 'post',
+		data
+	})
+}
+export function viewMenuApi (data: any) {
+	return request({
+		url: '/menu/view',
+		method: 'post',
+		data
+	})
+}
+export function deleteMenuApi (data: any) {
+	return request({
+		url: '/menu/delete',
+		method: 'post',
+		data
+	})
+}
+export function getMenuIconApi () {
+	return request({
+		url: '/menu/icons',
+		method: 'get'
+	})
+}
 /**
  * 后端控制菜单模拟json，路径在 https://gitee.com/lyt-top/vue-next-admin-images/tree/master/menu
  * 后端控制路由，isRequestRoutes 为 true，则开启后端控制路由

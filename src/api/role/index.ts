@@ -28,3 +28,17 @@ export function deleteRoleApi (data: any) {
 		data
 	})
 }
+export function setRoleMenuApi (data: any) {
+	return request({
+		url: '/role/roleMenu',
+		method: 'post',
+		data
+	})
+}
+export function getRoleMenuApi (params: any) {
+	return request({
+		url: 'role/getRoleMenu',
+		method: 'get',
+		params
+	})
+}

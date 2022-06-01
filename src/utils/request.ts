@@ -39,6 +39,8 @@ service.interceptors.response.use(
 					Session.clear(); // 清除浏览器全部临时缓存
 					window.location.href = '/'; // 去登录页
 				}, 1000)
+			} else if (res.status === 400){
+				ElMessage.error(res.error)
 			} else if (res.status === 500) {
 				ElMessage.error(res.msg);
 			}
