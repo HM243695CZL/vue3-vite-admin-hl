@@ -42,3 +42,17 @@ export function getUserInfoApi (data: any) {
 		data
 	})
 }
+export function getUsersByRoleIdApi (params: any) {
+	return request({
+		url: '/user/getUsersByRoleId',
+		method: 'get',
+		params
+	})
+}
+export function getUserCourseInfoApi (params: any) {
+	return request({
+		url: '/user/getCourseInfo',
+		method: 'get',
+		params
+	})
+}

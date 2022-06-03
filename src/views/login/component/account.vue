@@ -116,12 +116,18 @@ export default defineComponent({
 					// 存储 token 到浏览器缓存
 					Session.set('token', res.data.token);
 					// 存储用户信息到浏览器缓存
-					Session.set('userInfo', userInfos);
+					Session.set('userInfo', {
+						...res.data.userInfo,
+						...userInfos
+					});
 					// 1、请注意执行顺序(存储用户信息到vuex)
 					// 前端控制路由，2、请注意执行顺序
 					await initFrontEndControlRoutes();
 					signInSuccess();
-					store.dispatch('userInfos/setUserInfos', userInfos);
+					store.dispatch('userInfos/setUserInfos', {
+						...res.data.userInfo,
+						...userInfos
+					});
 				}
 			})
 		};

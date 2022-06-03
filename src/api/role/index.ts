@@ -14,6 +14,12 @@ export function saveRoleApi (data: any) {
 		data
 	})
 }
+export function getRoleListApi () {
+	return request({
+		url: '/role/list',
+		method: 'get'
+	})
+}
 export function viewRoleApi (data: any) {
 	return request({
 		url: '/role/view',

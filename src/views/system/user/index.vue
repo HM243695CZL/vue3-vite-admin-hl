@@ -30,12 +30,14 @@
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="roles" label="所属角色" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column label="操作" width="260">
 					<template #default="scope">
-						<el-button :disabled="scope.row.userName === 'admin'" size="small" type="text" @click="onOpenEditUser(scope.row)">修改</el-button>
-						<el-button :disabled="scope.row.userName === 'admin'" size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button v-if='scope.row.roles === "teacher"' size="small" type="default" @click="viewCourse(scope.row)">查看教授课程</el-button>
+						<el-button size="small" type="default" @click="onOpenEditUser(scope.row)">修改</el-button>
+						<el-button size="small" type="default" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -55,6 +57,7 @@
 		</el-card>
 		<AddUer ref="addUserRef" @refresh-list='getUserPageList'/>
 		<EditUser ref="editUserRef" />
+		<ViewCourseModel ref='viewCourseRef' />
 	</div>
 </template>
 
@@ -64,6 +67,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { getUserPageApi, deleteUserApi } from '/@/api/user';
 import AddUer from '/@/views/system/user/component/addUser.vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
+import ViewCourseModel from './component/viewCourseModel.vue';
 import { StatusEnum} from '/@/common/status.enum';
 
 // 定义接口来定义对象的类型
@@ -89,10 +93,11 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'systemUser',
-	components: { AddUer, EditUser },
+	components: { AddUer, EditUser, ViewCourseModel },
 	setup() {
 		const addUserRef = ref();
 		const editUserRef = ref();
+		const viewCourseRef = ref();
 		const state = reactive<TableDataState>({
 			username: '',
 			tableData: {
@@ -124,6 +129,9 @@ export default defineComponent({
 		// 打开修改用户弹窗
 		const onOpenEditUser = (row: TableDataRow) => {
 			addUserRef.value.openDialog(row);
+		};
+		const viewCourse = (row: TableDataRow) => {
+			viewCourseRef.value.openDialog(row);
 		};
 		// 删除用户
 		const onRowDel = (row: TableDataRow) => {
@@ -167,9 +175,11 @@ export default defineComponent({
 		return {
 			addUserRef,
 			editUserRef,
+			viewCourseRef,
 			onOpenAddUser,
 			onOpenEditUser,
 			onRowDel,
+			viewCourse,
 			exportData,
 			handleSuccess,
 			onHandleSizeChange,

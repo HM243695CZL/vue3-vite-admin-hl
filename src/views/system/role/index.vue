@@ -19,6 +19,7 @@
 			<el-table :data="tableData.data" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="keyName" label="角色标识" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="description" label="角色描述" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="240">
 					<template #default="scope">

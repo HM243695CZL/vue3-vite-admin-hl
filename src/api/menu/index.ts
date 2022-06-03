@@ -175,6 +175,21 @@ export function getMenuList (){
 					}
 				},
 				{
+					path: '/system/course',
+					name: 'systemCourse',
+					component: '/system/course',
+					meta: {
+						title: '课程管理',
+						isLink: '',
+						isHide: false,
+						isKeepAlive: true,
+						isAffix: false,
+						isIframe: false,
+						roles: ['admin'],
+						icon: 'fa fa-list'
+					}
+				},
+				{
 					path: '/system/dynamic/:id',
 					name: 'dynamicDetail',
 					component: '/system/dynamic',

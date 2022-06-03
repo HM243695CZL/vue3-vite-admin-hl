@@ -14,6 +14,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label='所属角色' prop='roles'>
+							<el-select v-model='ruleForm.roles' placeholder='请选择所属角色' class='w100'>
+								<el-option v-for='item in roleList' :key='item.id' :label='item.name + "【" + item.keyName + "】"' :value='item.id'></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="手机号" prop='phone'>
 							<el-input v-model="ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
 						</el-form-item>
@@ -37,6 +44,7 @@
 
 <script lang="ts">
 import {saveUserApi, viewUserApi} from '/@/api/user';
+import {getRoleListApi} from '/@/api/role';
 import { reactive, toRefs, onMounted, defineComponent, nextTick, ref } from 'vue';
 import { StatusEnum } from '/@/common/status.enum';
 
@@ -50,16 +58,23 @@ interface DeptData {
 	id: number;
 	children?: DeptData[];
 }
+interface RoleData {
+	id: string;
+	name: number;
+	keyName: string
+}
 interface UserState {
 	isShowDialog: boolean;
 	ruleForm: {
 		id: string;
 		username: string;
 		nickname: string;
+		roles: Array<string>;
 		phone: string;
 		email: string;
 	};
 	deptData: Array<DeptData>;
+	roleList: Array<RoleData>;
 }
 
 export default defineComponent({
@@ -72,15 +87,18 @@ export default defineComponent({
 				id: '',
 				username: '', // 账户名称
 				nickname: '', // 用户昵称
+				roles: [],
 				phone: '', // 手机号
 				email: '', // 邮箱
 			},
 			deptData: [], // 部门数据
+			roleList: []
 		});
 		// 打开弹窗
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = ''
+			getRoleList();
 			if (row) {
 				viewUserApi({
 					id: row.id
@@ -95,6 +113,11 @@ export default defineComponent({
 				})
 			}
 		};
+		const getRoleList = () => {
+			getRoleListApi().then(res => {
+				state.roleList = res.data;
+			})
+		}
 		// 关闭弹窗
 		const closeDialog = () => {
 			state.isShowDialog = false;

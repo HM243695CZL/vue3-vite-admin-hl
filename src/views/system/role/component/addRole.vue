@@ -9,6 +9,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+						<el-form-item label="角色标识" prop='keyName'>
+							<el-input v-model="ruleForm.keyName" placeholder="请输入角色标识" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="角色描述" prop='description'>
 							<el-input v-model="ruleForm.description" placeholder="请输入角色描述" clearable></el-input>
 						</el-form-item>
@@ -35,6 +40,7 @@ interface RoleState {
 	ruleForm: {
 		id: string;
 		name: string;
+		keyName: string;
 		description: string;
 	};
 }
@@ -48,6 +54,7 @@ export default defineComponent({
 			ruleForm: {
 				id: '',
 				name: '', // 角色名称
+				keyName: '',
 				description: '',
 			},
 		});
