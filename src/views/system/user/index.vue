@@ -36,6 +36,7 @@
 				<el-table-column label="操作" width="260">
 					<template #default="scope">
 						<el-button v-if='scope.row.roles === "teacher"' size="small" type="default" @click="viewCourse(scope.row)">查看教授课程</el-button>
+						<el-button v-if='scope.row.roles === "student"' size="small" type="default" @click="viewSelectedCourse(scope.row)">查看已选课程</el-button>
 						<el-button size="small" type="default" @click="onOpenEditUser(scope.row)">修改</el-button>
 						<el-button size="small" type="default" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
@@ -58,6 +59,7 @@
 		<AddUer ref="addUserRef" @refresh-list='getUserPageList'/>
 		<EditUser ref="editUserRef" />
 		<ViewCourseModel ref='viewCourseRef' />
+		<ViewSelectedCourseModel ref='viewSelectedCourseRef' />
 	</div>
 </template>
 
@@ -68,6 +70,7 @@ import { getUserPageApi, deleteUserApi } from '/@/api/user';
 import AddUer from '/@/views/system/user/component/addUser.vue';
 import EditUser from '/@/views/system/user/component/editUser.vue';
 import ViewCourseModel from './component/viewCourseModel.vue';
+import ViewSelectedCourseModel from './component/viewSelectedCourseModel.vue';
 import { StatusEnum} from '/@/common/status.enum';
 
 // 定义接口来定义对象的类型
@@ -93,11 +96,12 @@ interface TableDataState {
 
 export default defineComponent({
 	name: 'systemUser',
-	components: { AddUer, EditUser, ViewCourseModel },
+	components: { AddUer, EditUser, ViewCourseModel, ViewSelectedCourseModel },
 	setup() {
 		const addUserRef = ref();
 		const editUserRef = ref();
 		const viewCourseRef = ref();
+		const viewSelectedCourseRef = ref();
 		const state = reactive<TableDataState>({
 			username: '',
 			tableData: {
@@ -133,6 +137,9 @@ export default defineComponent({
 		const viewCourse = (row: TableDataRow) => {
 			viewCourseRef.value.openDialog(row);
 		};
+		const viewSelectedCourse = (row: TableDataRow) => {
+			viewSelectedCourseRef.value.openDialog(row);
+		}
 		// 删除用户
 		const onRowDel = (row: TableDataRow) => {
 			ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
@@ -176,10 +183,12 @@ export default defineComponent({
 			addUserRef,
 			editUserRef,
 			viewCourseRef,
+			viewSelectedCourseRef,
 			onOpenAddUser,
 			onOpenEditUser,
 			onRowDel,
 			viewCourse,
+			viewSelectedCourse,
 			exportData,
 			handleSuccess,
 			onHandleSizeChange,

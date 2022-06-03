@@ -8,10 +8,11 @@
 				<el-table-column label='分数' prop='score'></el-table-column>
 				<el-table-column label='课时' prop='times'></el-table-column>
 				<el-table-column label='授课老师' prop='teacher'></el-table-column>
-				<el-table-column label='操作' width='100'>
+				<el-table-column label='操作' width='220'>
 					<template #default='scope'>
-						<el-button size='small' type='text' @click='handleEdit(scope.row)'>修改</el-button>
-						<el-button size='small' type='text' @click='handleDelete(scope.row)'>删除</el-button>
+						<el-button size='small' type='default' @click='selectCourse(scope.row)'>选课</el-button>
+						<el-button size='small' type='default' @click='handleEdit(scope.row)'>修改</el-button>
+						<el-button size='small' type='default' @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -34,11 +35,13 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
-import { getCoursePageApi } from '/@/api/course';
+import { computed, defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { getCoursePageApi, setStudentCourseApi } from '/@/api/course';
 import { getUsersByRoleIdApi } from '/@/api/user';
 import { StatusEnum } from '/@/common/status.enum';
 import AddCourseModel from './component/addCourse.vue';
+import { store } from '/@/store';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemCourse',
@@ -53,6 +56,10 @@ export default defineComponent({
 			dataList: [],
 			total: 0,
 			teacherList: []
+		});
+		// 获取用户信息 vuex
+		const getUserInfos = computed(() => {
+			return <any>store.state.userInfos.userInfos;
 		});
 		const getUsersByRoleIdList = () => {
 			getUsersByRoleIdApi({
@@ -85,7 +92,18 @@ export default defineComponent({
 			getCoursePageList();
 		};
 		const addCourse = () => {
+			console.log(getUserInfos);
 			addCourseRef.value.openDialog()
+		};
+		const selectCourse = (row: any) => {
+			setStudentCourseApi({
+				studentId: getUserInfos.value.id,
+				courseId: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success("选课成功")
+				}
+			})
 		};
 		const handleEdit = (row: any) => {
 			addCourseRef.value.openDialog(row);
@@ -101,6 +119,7 @@ export default defineComponent({
 			...toRefs(state),
 			addCourseRef,
 			addCourse,
+			selectCourse,
 			getCoursePageList,
 			onHandleSizeChange,
 			onHandleCurrentChange,

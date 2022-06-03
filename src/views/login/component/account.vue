@@ -90,13 +90,15 @@ export default defineComponent({
 			// test 按钮权限标识
 			let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
 			// 不同用户模拟不同的用户权限
-			if (state.ruleForm.username === 'admin') {
-				defaultRoles = adminRoles;
-				defaultAuthBtnList = adminAuthBtnList;
-			} else {
-				defaultRoles = testRoles;
-				defaultAuthBtnList = testAuthBtnList;
-			}
+			// if (state.ruleForm.username === 'admin') {
+			// 	defaultRoles = adminRoles;
+			// 	defaultAuthBtnList = adminAuthBtnList;
+			// } else {
+			// 	defaultRoles = testRoles;
+			// 	defaultAuthBtnList = testAuthBtnList;
+			// }
+			defaultRoles = adminRoles;
+			defaultAuthBtnList = adminAuthBtnList;
 			// 用户信息模拟数据
 			const userInfos = {
 				userName: state.ruleForm.username,

@@ -56,3 +56,10 @@ export function getUserCourseInfoApi (params: any) {
 		params
 	})
 }
+export function getStudentCourseInfoApi (params : any) {
+	return request({
+		url: '/user/getStudentCourseInfo',
+		method: 'get',
+		params
+	})
+}

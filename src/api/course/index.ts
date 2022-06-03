@@ -28,3 +28,10 @@ export function deleteCourseApi (data: any) {
 		data
 	})
 }
+export function setStudentCourseApi (data: any) {
+	return request({
+		url: '/course/studentCourse',
+		method: 'post',
+		data
+	})
+}
