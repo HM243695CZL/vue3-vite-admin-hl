@@ -23,9 +23,9 @@
 				<el-table-column prop="description" label="角色描述" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="240">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="setAuth(scope.row)">分配权限</el-button>
-						<el-button size="small" type="text" @click="onOpenEditRole(scope.row)">修改</el-button>
-						<el-button size="small" type="text" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" type="default" @click="setAuth(scope.row)">分配权限</el-button>
+						<el-button size="small" type="default" @click="onOpenEditRole(scope.row)">修改</el-button>
+						<el-button size="small" type="default" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

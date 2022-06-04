@@ -6,8 +6,6 @@ import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { staticRoutes, dynamicRoutes } from '/@/router/route';
 import { backEndComponent, initFrontEndControlRoutes } from '/@/router/frontEnd';
-import { getMenuList } from '/@/api/menu';
-import { menuTree2menuMeta } from '/@/utils/arrayOperation';
 
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
@@ -153,7 +151,7 @@ export function setFilterRoute(chil: any) {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	dynamicRoutes[0].children = backEndComponent(menuTree2menuMeta(Session.get('menuList')));
+	dynamicRoutes[0].children = backEndComponent(Session.get('menuList'));
 	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
 	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), { ...pathMatch }];
 	return filterRouteEnd;

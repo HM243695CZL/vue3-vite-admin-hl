@@ -14,8 +14,8 @@
 				<el-table-column prop='size' label='文件大小'></el-table-column>
 				<el-table-column label='操作' width='100'>
 					<template #default='scope'>
-						<el-button size='small' type='text' @click='handleDownload(scope.row)'>下载</el-button>
-						<el-button size='small' type='text' @click='handleDelete(scope.row)'>删除</el-button>
+						<el-button size='small' type='default' @click='handleDownload(scope.row)'>下载</el-button>
+						<el-button size='small' type='default' @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

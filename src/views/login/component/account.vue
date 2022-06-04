@@ -51,8 +51,9 @@ import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { useStore } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
-import { loginApi, getUserInfoApi } from '/@/api/user';
+import { loginApi } from '/@/api/user';
 import { StatusEnum } from '/@/common/status.enum';
+import { menuTree2menuMeta } from '/@/utils/arrayOperation';
 
 export default defineComponent({
 	name: 'loginAccount',
@@ -119,10 +120,10 @@ export default defineComponent({
 					Session.set('token', res.data.token);
 					// 存储用户信息到浏览器缓存
 					Session.set('userInfo', {
-						...res.data.userInfo,
-						...userInfos
+						...userInfos,
+						...res.data.userInfo
 					});
-					Session.set('menuList', res.data.menuList);
+					Session.set('menuList', menuTree2menuMeta(res.data.menuList));
 					// 1、请注意执行顺序(存储用户信息到vuex)
 					// 前端控制路由，2、请注意执行顺序
 					await initFrontEndControlRoutes();
