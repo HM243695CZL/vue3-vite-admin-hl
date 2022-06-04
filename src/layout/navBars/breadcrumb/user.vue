@@ -147,7 +147,9 @@ export default defineComponent({
 							window.location.href = ''; // 去登录页
 						}, 500);
 					})
-					.catch(() => {});
+					.catch(e => {
+						console.log(e);
+					});
 			} else if (path === 'wareHouse') {
 				window.open('https://gitee.com/lyt-top/vue-next-admin');
 			} else {

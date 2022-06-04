@@ -152,7 +152,10 @@ export function setFilterRoute(chil: any) {
  */
 export function setFilterRouteEnd() {
 	// @ts-ignore
-	dynamicRoutes[0].children = [...dynamicRoutes[0].children, ...backEndComponent(Session.get('menuList'))];
+	const menuList = backEndComponent(Session.get('menuList')) || [];
+	menuList.map((item: any) => {
+		dynamicRoutes[0].children?.push(item);
+	})
 	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
 	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), { ...pathMatch }];
 	return filterRouteEnd;
