@@ -151,7 +151,8 @@ export function setFilterRoute(chil: any) {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	dynamicRoutes[0].children = backEndComponent(Session.get('menuList'));
+	// @ts-ignore
+	dynamicRoutes[0].children = [...dynamicRoutes[0].children, ...backEndComponent(Session.get('menuList'))];
 	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
 	filterRouteEnd[0].children = [...setFilterRoute(filterRouteEnd[0].children), { ...pathMatch }];
 	return filterRouteEnd;

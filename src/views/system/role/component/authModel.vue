@@ -11,7 +11,6 @@
 			default-expand-all
 			show-checkbox
 			node-key='id'
-			:default-checked-keys='checkKeys'
 		/>
 		<template #footer>
       <span class='dialog-footer'>
@@ -45,23 +44,24 @@ export default defineComponent({
 				children: 'children',
 				label: 'title',
 			},
-			menuList:[],
-			checkKeys: []
+			menuList:[]
 		});
 		// 获取菜单数据
 		const getMenuList = () => {
 			getMenuListApi({}).then(res =>{
 				if (res.status === StatusEnum.SUCCESS) {
 					state.menuList = res.data;
+					getRoleMenu();
 				}
 			})
 		}
 		const getRoleMenu = () => {
-			state.checkKeys = [];
 			getRoleMenuApi({
 				roleId: state.roleId
 			}).then(res => {
-				state.checkKeys = res.data;
+				res.data.map((item: number) => {
+					treeRef.value.setChecked(item, true);
+				})
 			})
 		}
 		const openDialog = (row: any) => {
@@ -69,7 +69,6 @@ export default defineComponent({
 			state.dialogVisible = true;
 			nextTick(() => {
 				getMenuList();
-				getRoleMenu();
 			})
 		};
 		const onSubmit = () => {
