@@ -30,7 +30,11 @@
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roles" label="所属角色" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="roles" label="所属角色" show-overflow-tooltip>
+					<template #default='scope'>
+						<el-tag size='small' v-for='item in scope.row.roles' :key='item'>{{item}}</el-tag>
+					</template>
+				</el-table-column>
 				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="260">
@@ -202,5 +206,11 @@ export default defineComponent({
 <style lang='scss' scoped>
 .upload-demo{
 	display: inline-block;
+}
+.el-tag{
+	margin-right: 5px;
+	&:last-child{
+		margin-right: 0;
+	}
 }
 </style>

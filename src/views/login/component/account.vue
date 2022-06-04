@@ -122,6 +122,7 @@ export default defineComponent({
 						...res.data.userInfo,
 						...userInfos
 					});
+					Session.set('menuList', res.data.menuList);
 					// 1、请注意执行顺序(存储用户信息到vuex)
 					// 前端控制路由，2、请注意执行顺序
 					await initFrontEndControlRoutes();

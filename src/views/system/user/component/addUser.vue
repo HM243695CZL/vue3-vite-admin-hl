@@ -15,7 +15,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label='所属角色' prop='roles'>
-							<el-select v-model='ruleForm.roles' placeholder='请选择所属角色' class='w100'>
+							<el-select v-model='ruleForm.roleIds' multiple placeholder='请选择所属角色' class='w100'>
 								<el-option v-for='item in roleList' :key='item.id' :label='item.name + "【" + item.keyName + "】"' :value='item.id'></el-option>
 							</el-select>
 						</el-form-item>
@@ -35,7 +35,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">新 增</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">确定</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -69,7 +69,7 @@ interface UserState {
 		id: string;
 		username: string;
 		nickname: string;
-		roles: Array<string>;
+		roleIds: Array<string>;
 		phone: string;
 		email: string;
 	};
@@ -87,7 +87,7 @@ export default defineComponent({
 				id: '',
 				username: '', // 账户名称
 				nickname: '', // 用户昵称
-				roles: [],
+				roleIds: [],
 				phone: '', // 手机号
 				email: '', // 邮箱
 			},
@@ -98,6 +98,7 @@ export default defineComponent({
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = ''
+			state.ruleForm.roleIds = [];
 			getRoleList();
 			if (row) {
 				viewUserApi({

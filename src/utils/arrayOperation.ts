@@ -39,3 +39,51 @@ export function isObjectValueEqual(a: { [key: string]: any }, b: { [key: string]
 	}
 	return true;
 }
+/**
+ * 将后台返回的菜单转成需要的数据格式
+ */
+export function menuTree2menuMeta (menuList: any) {
+	if (!menuList) return []
+	const arr: any = [];
+	menuList.map((menu: any) => {
+		let obj = {
+			path: menu.path,
+			name: menu.name,
+			component: menu.component,
+			children:  [] as any,
+			meta: {
+				title: menu.title,
+				isLink: menu.isLink,
+				isHide: menu.isHide,
+				isKeepAlive: menu.isKeepAlive,
+				isAffix: menu.isAffix,
+				isIframe: menu.isIframe,
+				roles: menu.roles,
+				icon: menu.icon
+			}
+		};
+		if (menu.children && menu.children.length) {
+			menu.children.map((ele: any) => {
+
+				obj.children.push({
+					path: ele.path,
+					name: ele.name,
+					component: ele.component,
+					children: [],
+					meta: {
+						title: ele.title,
+						isLink: ele.isLink,
+						isHide: ele.isHide,
+						isKeepAlive: ele.isKeepAlive,
+						isAffix: ele.isAffix,
+						isIframe: ele.isIframe,
+						roles: ele.roles,
+						icon: ele.icon
+					}
+				})
+			})
+		}
+		arr.push(obj);
+	})
+	return arr;
+}

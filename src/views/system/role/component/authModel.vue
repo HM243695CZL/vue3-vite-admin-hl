@@ -75,7 +75,7 @@ export default defineComponent({
 		const onSubmit = () => {
 			setRoleMenuApi({
 				roleId: state.roleId,
-				menuIds: treeRef.value.getCheckedKeys()
+				menuIds: [...treeRef.value.getCheckedKeys(), ...treeRef.value.getHalfCheckedKeys()]
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					ElMessage.success("操作成功");
