@@ -12,21 +12,19 @@
 			</div>
 			<el-table :data="dataList" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="角色标识" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="desc" label="角色描述" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" label="角色状态" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
+						<el-tag type="success" v-if="scope.row.enabled">启用</el-tag>
 						<el-tag type="info" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="describe" label="角色描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column prop="addTime" label="创建时间" show-overflow-tooltip></el-table-column>
+				<el-table-column label="操作" width="150">
 					<template #default="scope">
-						<el-butto type="default" @click="onOpenEditRole(scope.row)">修改</el-butto>
-						<el-button size="small" type="default">删除</el-button>
+						<el-button size="small" type="default" @click="onOpenEditRole(scope.row)">修改</el-button>
+						<el-button size="small" type="default" @click='deleteRole(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -44,16 +42,16 @@
 			>
 			</el-pagination>
 		</el-card>
-		<AddRole ref="addRoleRef" />
-		<EditRole ref="editRoleRef" />
+		<AddRole ref="addRoleRef" @refresh-list='getRolePageList' />
 	</div>
 </template>
 
 <script lang="ts">
 import { toRefs, reactive, ref, onMounted, defineComponent } from 'vue';
-import { getRolePageApi } from '/@/api/role';
+import { getRolePageApi, deleteRoleApi } from '/@/api/role';
 import AddRole from '/@/views/system/role/component/addRole.vue';
 import { StatusEnum } from '/@/common/status.enun';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemRole',
@@ -73,7 +71,8 @@ export default defineComponent({
 				pageSize: state.pageSize
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
-					console.log(res.data);
+					state.dataList = res.data.list;
+					state.total = res.data.total;
 				}
 			})
 		};
@@ -85,6 +84,16 @@ export default defineComponent({
 		const onOpenEditRole = (row: any) => {
 			addRoleRef.value.openDialog(row);
 		};
+		const deleteRole = (row: any) => {
+			deleteRoleApi({
+				id: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					getRolePageList();
+					ElMessage.success("删除成功");
+				}
+			})
+		}
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
@@ -104,6 +113,7 @@ export default defineComponent({
 			onOpenEditRole,
 			onHandleSizeChange,
 			onHandleCurrentChange,
+			deleteRole,
 			...toRefs(state),
 		};
 	},

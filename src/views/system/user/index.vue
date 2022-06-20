@@ -15,24 +15,22 @@
 			</div>
 			<el-table :data="dataList" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="userName" label="账户名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="关联角色" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="department" label="部门" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="用户状态" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
+				<el-table-column prop="username" label="管理员名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop='avatar' label='管理员头像' show-overflow-tooltip>
+					<template #default='scope'>
+						<img class='avatar-img' :src='scope.row.avatar' alt=''>
 					</template>
 				</el-table-column>
-				<el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
-					<template>
-						<el-button size="small" type="default">修改</el-button>
-						<el-button size="small" type="default">删除</el-button>
+				<el-table-column prop="roles" label="关联角色" show-overflow-tooltip>
+					<template #default='scope'>
+						<el-tag class='tag-item' type='success' v-for='item in scope.row.roles' :key='item'>{{item}}</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column prop="addTime" label="创建时间" show-overflow-tooltip></el-table-column>
+				<el-table-column label="操作" width="150">
+					<template #default="scope">
+						<el-button size="small" type="default" @click='handleEdit(scope.row)'>修改</el-button>
+						<el-button size="small" type="default" @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -50,15 +48,16 @@
 			>
 			</el-pagination>
 		</el-card>
-		<AddUer ref="addUserRef" />
+		<AddUer ref="addUserRef" @refresh-list='getUserPageList' />
 	</div>
 </template>
 
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { getAdminPageApi } from '/@/api/admin';
+import { getAdminPageApi, deleteAdminApi } from '/@/api/admin';
 import { StatusEnum} from '/@/common/status.enun';
 import AddUer from '/@/views/system/user/component/addUser.vue';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemUser',
@@ -89,8 +88,18 @@ export default defineComponent({
 			addUserRef.value.openDialog();
 		};
 		// 打开修改角色弹窗
-		const onOpenEditUser = (row: any) => {
+		const handleEdit = (row: any) => {
 			addUserRef.value.openDialog(row);
+		};
+		const handleDelete = (row: any) => {
+			deleteAdminApi({
+				id: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success('删除成功');
+					getUserPageList();
+				}
+			})
 		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
@@ -107,9 +116,10 @@ export default defineComponent({
 		return {
 			addUserRef,
 			editUserRef,
+			handleEdit,
+			handleDelete,
 			getUserPageList,
 			onOpenAddUser,
-			onOpenEditUser,
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			...toRefs(state),
@@ -117,3 +127,15 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang='scss'>
+.tag-item{
+	margin-right: 10px;
+	&:last-child{
+		margin-right: 0;
+	}
+}
+.avatar-img{
+	width: 50px;
+	height: 50px;
+}
+</style>

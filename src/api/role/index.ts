@@ -1,10 +1,17 @@
 import request from '/@/utils/request';
 
-export function getRolePageApi (params: any) {
+export function getRolePageApi (data: any) {
 	return request({
 		url: '/role/page',
-		method: 'get',
-		params
+		method: 'post',
+		data
+	})
+}
+
+export function getRoleListApi () {
+	return request({
+		url: '/role/list',
+		method: 'get'
 	})
 }
 
