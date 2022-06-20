@@ -3,7 +3,7 @@
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
 				<el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
+				<el-button size="default" type="primary" class="ml10" @click='getUserPageList'>
 					<el-icon>
 						<ele-Search />
 					</el-icon>
@@ -56,7 +56,8 @@
 
 <script lang="ts">
 import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
-import { getUserPageApi } from '/@/api/user';
+import { getAdminPageApi } from '/@/api/admin';
+import { StatusEnum} from '/@/common/status.enun';
 import AddUer from '/@/views/system/user/component/addUser.vue';
 
 export default defineComponent({
@@ -73,11 +74,14 @@ export default defineComponent({
 		});
 		// 初始化表格数据
 		const getUserPageList = () => {
-			getUserPageApi({
+			getAdminPageApi({
 				pageIndex: state.pageIndex,
 				pageSize: state.pageSize
 			}).then(res => {
-				console.log(res);
+				if (res.status === StatusEnum.SUCCESS) {
+					state.dataList = res.data.list;
+					state.total = res.data.total;
+				}
 			})
 		};
 		// 打开新增角色弹窗
@@ -103,6 +107,7 @@ export default defineComponent({
 		return {
 			addUserRef,
 			editUserRef,
+			getUserPageList,
 			onOpenAddUser,
 			onOpenEditUser,
 			onHandleSizeChange,

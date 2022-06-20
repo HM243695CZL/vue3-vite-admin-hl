@@ -37,6 +37,8 @@ service.interceptors.response.use(
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
 					.then(() => {})
 					.catch(() => {});
+			} else {
+				ElMessage.error(res.message);
 			}
 			return Promise.reject(service.interceptors.response);
 		} else {
@@ -50,7 +52,7 @@ service.interceptors.response.use(
 		} else if (error.message == 'Network Error') {
 			ElMessage.error('网络连接错误');
 		} else {
-			if (error.response.data) ElMessage.error(error.response.statusText);
+			if (error.response.data) ElMessage.error('【' + error.response.data.path + '】' + error.response.data.error);
 			else ElMessage.error('接口路径找不到');
 		}
 		return Promise.reject(error);
