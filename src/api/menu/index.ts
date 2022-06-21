@@ -42,36 +42,36 @@ export function getMenuList (){
 				icon: 'fa fa-home'
 			}
 		},
-		{
-			path: '/dynamicTest',
-			name: 'dynamicTest',
-			component: '/dynamicTest',
-			meta: {
-				title: '动态路由测试',
-				isLink: '',
-				isHide: false,
-				isKeepAlive: true,
-				isAffix: false,
-				isIframe: false,
-				roles: ['admin'],
-				icon: 'fa fa-home'
-			}
-		},
-		{
-			path: '/formGenerator',
-			name: 'formGenerator',
-			component: '/formGenerator',
-			meta: {
-				title: '表单生成器',
-				isLink: '',
-				isHide: false,
-				isKeepAlive: true,
-				isAffix: false,
-				isIframe: false,
-				roles: ['admin'],
-				icon: 'fa fa-outdent'
-			}
-		},
+		// {
+		// 	path: '/dynamicTest',
+		// 	name: 'dynamicTest',
+		// 	component: '/dynamicTest',
+		// 	meta: {
+		// 		title: '动态路由测试',
+		// 		isLink: '',
+		// 		isHide: false,
+		// 		isKeepAlive: true,
+		// 		isAffix: false,
+		// 		isIframe: false,
+		// 		roles: ['admin'],
+		// 		icon: 'fa fa-home'
+		// 	}
+		// },
+		// {
+		// 	path: '/formGenerator',
+		// 	name: 'formGenerator',
+		// 	component: '/formGenerator',
+		// 	meta: {
+		// 		title: '表单生成器',
+		// 		isLink: '',
+		// 		isHide: false,
+		// 		isKeepAlive: true,
+		// 		isAffix: false,
+		// 		isIframe: false,
+		// 		roles: ['admin'],
+		// 		icon: 'fa fa-outdent'
+		// 	}
+		// },
 		{
 			path: '/system',
 			name: 'system',
@@ -146,6 +146,39 @@ export function getMenuList (){
 						isIframe: false,
 						roles: ['admin'],
 						icon: 'fa fa-bars'
+					}
+				}
+			]
+		},
+		{
+			path: '/product',
+			name: 'product',
+			component: 'layout',
+			redirect: '/product/category',
+			meta: {
+				title: "商品管理",
+				isLink: '',
+				isHide: false,
+				isKeepAlive: true,
+				isAffix: false,
+				isIframe: false,
+				roles: ['admin'],
+				icon: 'fa fa-home'
+			},
+			children: [
+				{
+					path: '/product/category',
+					name: 'productCategory',
+					component: '/product/category',
+					meta: {
+						title: '商品类目',
+						isLink: '',
+						isHide: false,
+						isKeepAlive: true,
+						isAffix: false,
+						isIframe: false,
+						roles: ['admin'],
+						icon: 'fa fa-home'
 					}
 				}
 			]

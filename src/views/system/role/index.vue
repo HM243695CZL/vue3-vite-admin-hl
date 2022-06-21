@@ -63,7 +63,6 @@ export default defineComponent({
 	components: { AddRole },
 	setup() {
 		const addRoleRef = ref();
-		const editRoleRef = ref();
 		const state = reactive({
 			pageIndex: 1,
 			pageSize: 10,
@@ -112,7 +111,6 @@ export default defineComponent({
 		})
 		return {
 			addRoleRef,
-			editRoleRef,
 			getRolePageList,
 			onOpenAddRole,
 			onOpenEditRole,
