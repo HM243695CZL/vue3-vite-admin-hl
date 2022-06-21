@@ -155,6 +155,7 @@ export default defineComponent({
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = '';
+			state.ruleForm.roleIds = [];
 			getRoleList();
 			getMenuList();
 			if (row) {
