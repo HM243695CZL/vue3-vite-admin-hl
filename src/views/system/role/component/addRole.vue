@@ -1,9 +1,12 @@
 <template>
 	<div class="system-add-role-container">
 		<el-dialog :close-on-click-modal='false' title="新增角色" v-model="isShowDialog" width="769px">
-			<el-form ref='formRef' :model="ruleForm" size="default" label-width="90px">
+			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
 				<el-form-item label="角色名称" prop='name'>
 					<el-input v-model="ruleForm.name" placeholder="请输入角色名称" clearable></el-input>
+				</el-form-item>
+				<el-form-item label="角色key" prop='key'>
+					<el-input v-model="ruleForm.key" placeholder="请输入角色key" clearable></el-input>
 				</el-form-item>
 				<el-form-item label="角色备注" prop='desc'>
 					<el-input v-model="ruleForm.desc" placeholder="请输入角色备注" clearable></el-input>
@@ -34,8 +37,17 @@ export default defineComponent({
 			ruleForm: {
 				id: '',
 				name: '',
+				key: '',
 				desc: '',
 			},
+			rules: {
+				name: [
+					{ required: true, message: '角色名称不能为空', trigger: 'blur'}
+				],
+				key: [
+					{ required: true, message: '角色key不能为空', trigger: 'blur'}
+				]
+			}
 		});
 		// 打开弹窗
 		const openDialog = (row: any) => {

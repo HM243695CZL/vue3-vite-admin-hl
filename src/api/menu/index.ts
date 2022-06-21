@@ -152,3 +152,40 @@ export function getMenuList (){
 		}
 	]
 }
+
+export function getMenuListApi () {
+	return request({
+		url: '/menu/list',
+		method: 'get'
+	})
+}
+
+export function saveMenuApi (data: any) {
+	return request({
+		url: '/menu/create',
+		method: 'post',
+		data
+	})
+}
+
+export function updateMenuApi (data: any) {
+	return request({
+		url: '/menu/update',
+		method: 'post',
+		data
+	})
+}
+
+export function viewMenuApi (params: any) {
+	return request({
+		url: '/menu/view/' + params.id,
+		method: 'get'
+	})
+}
+
+export function deleteMenuApi (params: any) {
+	return request({
+		url: '/menu/delete/' + params.id,
+		method: 'get'
+	})
+}

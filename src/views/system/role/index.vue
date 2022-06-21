@@ -13,6 +13,11 @@
 			<el-table :data="dataList" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="key" label="角色key" show-overflow-tooltip>
+					<template #default="scope">
+						<el-tag type="success">{{scope.row.key}}</el-tag>
+					</template>
+				</el-table-column>
 				<el-table-column prop="desc" label="角色描述" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" label="角色状态" show-overflow-tooltip>
 					<template #default="scope">

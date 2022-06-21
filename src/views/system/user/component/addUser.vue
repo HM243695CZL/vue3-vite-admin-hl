@@ -1,7 +1,7 @@
 <template>
 	<div class="system-add-user-container">
 		<el-dialog title="新增用户" v-model="isShowDialog" width="769px">
-			<el-form ref='formRef' :model="ruleForm" size="default" label-width="90px">
+			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="100px">
 				<el-form-item label="管理员名称" prop='username'>
 					<el-input v-model="ruleForm.username" placeholder="请输入管理员名称" clearable></el-input>
 				</el-form-item>
@@ -51,6 +51,14 @@ export default defineComponent({
 				password: '',
 				avatar: '',
 				roleIds: []
+			},
+			rules: {
+				username: [
+					{ required: true, message: '用户名不能为空', trigger: 'blur'}
+				],
+				password: [
+					{ required: true, message: '密码不能为空', trigger: 'blur'}
+				]
 			},
 			roleList: []
 		});
