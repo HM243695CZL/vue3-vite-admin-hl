@@ -5,9 +5,15 @@
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="上级菜单" prop='pid'>
-							<el-select v-model='ruleForm.pid' clearable class='w100'>
-								<el-option v-for='item of menuList' :key='item.id' :label='item.title' :value='item.id'></el-option>
-							</el-select>
+							<el-tree-select
+								class='w100'
+								clearable
+								default-expand-all
+								v-model='ruleForm.pid'
+								:data='menuList'
+								:props='{children: "children", label: "title", value: "id"}'
+								check-strictly
+							></el-tree-select>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -33,7 +39,7 @@
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="所属角色" prop='roles'>
 							<el-select v-model="ruleForm.roleIds" multiple placeholder="请选择角色" clearable class="w100">
-								<el-option v-for='item of roleList' :key='item.id' :label="item.name" :value="item.id"></el-option>
+								<el-option v-for='item of roleList' :key='item.id' :label="item.name + '【' + item.key + '】'" :value="item.id"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -94,7 +100,7 @@ import { ElMessage } from 'element-plus';
 export default defineComponent({
 	name: 'systemAddMenu',
 	components: { IconSelector },
-	setup() {
+	setup(props, ctx) {
 		const formRef = ref();
 		const state = reactive({
 			isShowDialog: false,
@@ -175,12 +181,23 @@ export default defineComponent({
 		};
 		// 新增
 		const onSubmit = () => {
-			saveMenuApi(state.ruleForm).then(res => {
-				if (res.status === StatusEnum.SUCCESS) {
-					ElMessage.success("操作成功");
-					closeDialog();
-				}
-			})
+			if (state.ruleForm.id) {
+				updateMenuApi(state.ruleForm).then(res => {
+					if (res.status === StatusEnum.SUCCESS) {
+						ElMessage.success("操作成功");
+						closeDialog();
+						ctx.emit('refresh-list');
+					}
+				})
+			} else {
+				saveMenuApi(state.ruleForm).then(res => {
+					if (res.status === StatusEnum.SUCCESS) {
+						ElMessage.success("操作成功");
+						closeDialog();
+						ctx.emit('refresh-list');
+					}
+				})
+			}
 		};
 		// 页面加载时
 		onMounted(() => {

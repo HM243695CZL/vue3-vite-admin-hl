@@ -37,20 +37,21 @@
 				<el-table-column label="操作" show-overflow-tooltip width="240">
 					<template #default="scope">
 						<el-button size="small" type="default" @click="onOpenEditMenu(scope.row)">修改</el-button>
-						<el-button size="small" type="default">删除</el-button>
+						<el-button size="small" type="default" @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<AddMenu ref="addMenuRef" />
+		<AddMenu ref="addMenuRef" @refresh-list='getMenuList'/>
 	</div>
 </template>
 
 <script lang="ts">
 import { ref, toRefs, reactive, defineComponent, onMounted } from 'vue';
 import AddMenu from '/@/views/system/menu/component/addMenu.vue';
-import { getMenuListApi } from '/@/api/menu';
+import { getMenuListApi, deleteMenuApi } from '/@/api/menu';
 import { StatusEnum } from '/@/common/status.enun';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemMenu',
@@ -77,6 +78,16 @@ export default defineComponent({
 		const onOpenEditMenu = (row: any) => {
 			addMenuRef.value.openDialog(row);
 		};
+		const handleDelete = (row: any) => {
+			deleteMenuApi({
+				id: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success('删除成功');
+					getMenuList();
+				}
+			})
+		};
 		onMounted(() => {
 			getMenuList();
 		});
@@ -86,6 +97,7 @@ export default defineComponent({
 			getMenuList,
 			onOpenAddMenu,
 			onOpenEditMenu,
+			handleDelete,
 			...toRefs(state),
 		};
 	},
