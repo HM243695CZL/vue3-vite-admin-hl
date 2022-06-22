@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input type="text" placeholder="用户名 admin 或不输均为 common" v-model="ruleForm.userName" clearable autocomplete="off">
+			<el-input type="text" placeholder="用户名 admin 或不输均为 common" v-model="ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
@@ -51,6 +51,9 @@ import { initFrontEndControlRoutes } from '/@/router/frontEnd';
 import { useStore } from '/@/store/index';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
+import { loginApi } from '/@/api/admin';
+import { StatusEnum } from '/@/common/status.enun';
+
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
@@ -60,7 +63,7 @@ export default defineComponent({
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
-				userName: 'admin',
+				username: 'admin',
 				password: '123456',
 				code: '1234',
 			},
@@ -87,7 +90,7 @@ export default defineComponent({
 			// test 按钮权限标识
 			let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
 			// 不同用户模拟不同的用户权限
-			if (state.ruleForm.userName === 'admin') {
+			if (state.ruleForm.username === 'admin') {
 				defaultRoles = adminRoles;
 				defaultAuthBtnList = adminAuthBtnList;
 			} else {
@@ -96,24 +99,32 @@ export default defineComponent({
 			}
 			// 用户信息模拟数据
 			const userInfos = {
-				userName: state.ruleForm.userName,
+				userName: state.ruleForm.username,
 				photo:
-					state.ruleForm.userName === 'admin'
+					state.ruleForm.username === 'admin'
 						? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
 						: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
 				time: new Date().getTime(),
 				roles: defaultRoles,
 				authBtnList: defaultAuthBtnList,
 			};
-			// 存储 token 到浏览器缓存
-			Session.set('token', Math.random().toString(36).substr(0));
-			// 存储用户信息到浏览器缓存
-			Session.set('userInfo', userInfos);
-			// 1、请注意执行顺序(存储用户信息到vuex)
-			// 前端控制路由，2、请注意执行顺序
-			await initFrontEndControlRoutes();
-			signInSuccess();
-			store.dispatch('userInfos/setUserInfos', userInfos);
+			loginApi({
+				username: state.ruleForm.username,
+				password: state.ruleForm.password
+			}).then(async res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					// 存储 token 到浏览器缓存
+					Session.set('token', res.data.token);
+					Session.set('menuList', res.data.menuList);
+					// 存储用户信息到浏览器缓存
+					Session.set('userInfo', userInfos);
+					// 1、请注意执行顺序(存储用户信息到vuex)
+					// 前端控制路由，2、请注意执行顺序
+					await initFrontEndControlRoutes();
+					signInSuccess();
+					store.dispatch('userInfos/setUserInfos', userInfos);
+				}
+			})
 		};
 		// 登录成功后的跳转
 		const signInSuccess = () => {

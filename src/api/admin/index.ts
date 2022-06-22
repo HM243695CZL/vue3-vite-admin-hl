@@ -37,3 +37,11 @@ export function deleteAdminApi (params: any) {
 		method: 'get',
 	})
 }
+
+export function loginApi (data: any) {
+	return request({
+		url: '/admin/login',
+		method: 'post',
+		data
+	})
+}
