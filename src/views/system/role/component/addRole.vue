@@ -1,6 +1,6 @@
 <template>
 	<div class="system-add-role-container">
-		<el-dialog :close-on-click-modal='false' title="新增角色" v-model="isShowDialog" width="769px">
+		<el-dialog :close-on-click-modal='false' :title="title" v-model="isShowDialog" width="769px">
 			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
 				<el-form-item label="角色名称" prop='name'>
 					<el-input v-model="ruleForm.name" placeholder="请输入角色名称" clearable></el-input>
@@ -34,6 +34,7 @@ export default defineComponent({
 		const formRef = ref();
 		const state = reactive({
 			isShowDialog: false,
+			title: '',
 			ruleForm: {
 				id: '',
 				name: '',
@@ -54,6 +55,7 @@ export default defineComponent({
 			state.isShowDialog = true;
 			state.ruleForm.id = '';
 			if (row) {
+				state.title = '修改角色';
 				viewRoleApi({
 					id: row.id
 				}).then(res => {
@@ -62,6 +64,7 @@ export default defineComponent({
 					}
 				})
 			} else {
+				state.title = '新增角色';
 				nextTick(() => {
 					formRef.value.resetFields();
 				})

@@ -86,7 +86,7 @@ export default defineComponent({
 				if (res.status === StatusEnum.SUCCESS) {
 					// 存储 token 到浏览器缓存
 					Session.set('token', res.data.token);
-					Session.set('menuList', res.data.menuList);
+					// Session.set('menuList', res.data.menuList);
 					// 存储用户信息到浏览器缓存
 					const {id, avatar, roles, username} = res.data.userInfo;
 					// 用户信息模拟数据
@@ -95,7 +95,7 @@ export default defineComponent({
 						userName: username,
 						photo: avatar,
 						time: new Date().getTime(),
-						roles,
+						roles: ['admin'],
 						authBtnList: [],
 					};
 					Session.set('userInfo', userInfos);

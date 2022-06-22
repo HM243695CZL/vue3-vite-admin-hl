@@ -49,6 +49,7 @@
 			</el-pagination>
 		</el-card>
 		<AddRole ref="addRoleRef" @refresh-list='getRolePageList' />
+		<AuthModel ref='authRef'></AuthModel>
 	</div>
 </template>
 
@@ -56,14 +57,16 @@
 import { toRefs, reactive, ref, onMounted, defineComponent } from 'vue';
 import { getRolePageApi, deleteRoleApi } from '/@/api/role';
 import AddRole from '/@/views/system/role/component/addRole.vue';
+import AuthModel from '/@/views/system/role/component/authModel.vue';
 import { StatusEnum } from '/@/common/status.enun';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemRole',
-	components: { AddRole },
+	components: { AddRole, AuthModel },
 	setup() {
 		const addRoleRef = ref();
+		const authRef = ref();
 		const state = reactive({
 			pageIndex: 1,
 			pageSize: 10,
@@ -90,7 +93,7 @@ export default defineComponent({
 			addRoleRef.value.openDialog(row);
 		};
 		const openAuth = (row: any) => {
-			console.log(row);
+			authRef.value.openDialog(row);
 		};
 		const deleteRole = (row: any) => {
 			deleteRoleApi({
@@ -115,6 +118,7 @@ export default defineComponent({
 		})
 		return {
 			addRoleRef,
+			authRef,
 			getRolePageList,
 			onOpenAddRole,
 			onOpenEditRole,

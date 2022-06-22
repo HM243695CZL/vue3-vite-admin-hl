@@ -6,6 +6,7 @@ import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
 import { staticRoutes, dynamicRoutes } from '/@/router/route';
 import { backEndComponent, initFrontEndControlRoutes } from '/@/router/frontEnd';
+import {getMenuList} from '/@/api/menu';
 
 /**
  * 创建一个可以被 Vue 应用程序使用的路由实例
@@ -151,7 +152,7 @@ export function setFilterRoute(chil: any) {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	const menuList = backEndComponent(Session.get('menuList') || []);
+	const menuList = backEndComponent(getMenuList());
 	menuList.map((item: any) => {
 		dynamicRoutes[0].children?.push(item)
 	})

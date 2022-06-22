@@ -1,8 +1,8 @@
 import request from '/@/utils/request';
-
+const preUrl = '/role/';
 export function getRolePageApi (data: any) {
 	return request({
-		url: '/role/page',
+		url: `${preUrl}page`,
 		method: 'post',
 		data
 	})
@@ -10,14 +10,14 @@ export function getRolePageApi (data: any) {
 
 export function getRoleListApi () {
 	return request({
-		url: '/role/list',
+		url: `${preUrl}list`,
 		method: 'get'
 	})
 }
 
 export function saveRoleApi (data: any) {
 	return request({
-		url: '/role/create',
+		url: `${preUrl}create`,
 		method: 'post',
 		data
 	})
@@ -25,7 +25,7 @@ export function saveRoleApi (data: any) {
 
 export function updateRoleApi (data: any) {
 	return request({
-		url: '/role/update',
+		url: `${preUrl}update`,
 		method: 'post',
 		data
 	})
@@ -33,14 +33,29 @@ export function updateRoleApi (data: any) {
 
 export function viewRoleApi (params: any) {
 	return request({
-		url: '/role/view/' + params.id,
+		url: `${preUrl}view/` + params.id,
 		method: 'get'
 	})
 }
 
 export function deleteRoleApi (params: any) {
 	return request({
-		url: '/role/delete/' + params.id,
+		url: `${preUrl}delete` + params.id,
+		method: 'get'
+	})
+}
+
+export function saveAuthApi (data: any) {
+	return request({
+		url: `${preUrl}auth`,
+		method: 'post',
+		data
+	})
+}
+
+export function viewAuthApi( params: any) {
+	return request({
+		url: `${preUrl}viewAuth/` + params.id,
 		method: 'get'
 	})
 }
