@@ -69,6 +69,7 @@ export interface TagsViewRoutesState {
 // 用户信息
 export interface UserInfosState {
 	userInfos: {
+		id: number;
 		authBtnList: string[];
 		photo: string;
 		roles: string[];

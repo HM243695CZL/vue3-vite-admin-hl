@@ -79,35 +79,6 @@ export default defineComponent({
 		const onSignIn = async () => {
 			// 模拟数据
 			state.loading.signIn = true;
-			let defaultRoles: Array<string> = [];
-			let defaultAuthBtnList: Array<string> = [];
-			// admin 页面权限标识，对应路由 meta.roles，用于控制路由的显示/隐藏
-			let adminRoles: Array<string> = ['admin'];
-			// admin 按钮权限标识
-			let adminAuthBtnList: Array<string> = ['btn.add', 'btn.del', 'btn.edit', 'btn.link'];
-			// test 页面权限标识，对应路由 meta.roles，用于控制路由的显示/隐藏
-			let testRoles: Array<string> = ['common'];
-			// test 按钮权限标识
-			let testAuthBtnList: Array<string> = ['btn.add', 'btn.link'];
-			// 不同用户模拟不同的用户权限
-			if (state.ruleForm.username === 'admin') {
-				defaultRoles = adminRoles;
-				defaultAuthBtnList = adminAuthBtnList;
-			} else {
-				defaultRoles = testRoles;
-				defaultAuthBtnList = testAuthBtnList;
-			}
-			// 用户信息模拟数据
-			const userInfos = {
-				userName: state.ruleForm.username,
-				photo:
-					state.ruleForm.username === 'admin'
-						? 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1813762643,1914315241&fm=26&gp=0.jpg'
-						: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=317673774,2961727727&fm=26&gp=0.jpg',
-				time: new Date().getTime(),
-				roles: defaultRoles,
-				authBtnList: defaultAuthBtnList,
-			};
 			loginApi({
 				username: state.ruleForm.username,
 				password: state.ruleForm.password
@@ -117,6 +88,16 @@ export default defineComponent({
 					Session.set('token', res.data.token);
 					Session.set('menuList', res.data.menuList);
 					// 存储用户信息到浏览器缓存
+					const {id, avatar, roles, username} = res.data.userInfo;
+					// 用户信息模拟数据
+					const userInfos = {
+						id,
+						userName: username,
+						photo: avatar,
+						time: new Date().getTime(),
+						roles,
+						authBtnList: [],
+					};
 					Session.set('userInfo', userInfos);
 					// 1、请注意执行顺序(存储用户信息到vuex)
 					// 前端控制路由，2、请注意执行顺序

@@ -6,6 +6,7 @@ const userInfosModule: Module<UserInfosState, RootStateTypes> = {
 	namespaced: true,
 	state: {
 		userInfos: {
+			id: 0,
 			authBtnList: [],
 			photo: '',
 			roles: [],
