@@ -37,13 +37,6 @@
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="所属角色" prop='roles'>
-							<el-select v-model="ruleForm.roleIds" multiple placeholder="请选择角色" clearable class="w100">
-								<el-option v-for='item of roleList' :key='item.id' :label="item.name + '【' + item.key + '】'" :value="item.id"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="菜单图标" prop='icon'>
 							<IconSelector placeholder="请输入菜单图标" v-model="ruleForm.icon" type="all" />
 						</el-form-item>
@@ -118,7 +111,6 @@ export default defineComponent({
 				isAffix: false, // 是否固定
 				isLink: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink:true 2、链接地址不为空`
 				isIframe: false, // 是否内嵌，开启条件，`1、isIframe:true 2、链接地址不为空`
-				roleIds: [], // 权限标识，取角色管理
 			},
 			rules: {
 				path: [
@@ -155,7 +147,6 @@ export default defineComponent({
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = '';
-			state.ruleForm.roleIds = [];
 			getRoleList();
 			getMenuList();
 			if (row) {

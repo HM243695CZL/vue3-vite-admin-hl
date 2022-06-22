@@ -5,9 +5,6 @@
 				<el-form-item label="管理员名称" prop='username'>
 					<el-input v-model="ruleForm.username" placeholder="请输入管理员名称" clearable></el-input>
 				</el-form-item>
-				<el-form-item label="管理员密码" prop='password'>
-					<el-input v-model="ruleForm.password" placeholder="请输入管理员密码" clearable></el-input>
-				</el-form-item>
 				<el-form-item label='头像' prop='avatar'>
 					<SingleUpload :source-url='ruleForm.avatar' @change-source-url='changeAvatar'></SingleUpload>
 				</el-form-item>
@@ -48,16 +45,12 @@ export default defineComponent({
 			ruleForm: {
 				id: '',
 				username: '',
-				password: '',
 				avatar: '',
 				roleIds: []
 			},
 			rules: {
 				username: [
 					{ required: true, message: '用户名不能为空', trigger: 'blur'}
-				],
-				password: [
-					{ required: true, message: '密码不能为空', trigger: 'blur'}
 				]
 			},
 			roleList: []

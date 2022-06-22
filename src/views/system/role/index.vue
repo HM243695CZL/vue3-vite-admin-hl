@@ -28,6 +28,7 @@
 				<el-table-column prop="addTime" label="创建时间" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="150">
 					<template #default="scope">
+						<el-button size="small" type="default" @click="openAuth(scope.row)">授权</el-button>
 						<el-button size="small" type="default" @click="onOpenEditRole(scope.row)">修改</el-button>
 						<el-button size="small" type="default" @click='deleteRole(scope.row)'>删除</el-button>
 					</template>
@@ -88,6 +89,9 @@ export default defineComponent({
 		const onOpenEditRole = (row: any) => {
 			addRoleRef.value.openDialog(row);
 		};
+		const openAuth = (row: any) => {
+			console.log(row);
+		};
 		const deleteRole = (row: any) => {
 			deleteRoleApi({
 				id: row.id
@@ -114,6 +118,7 @@ export default defineComponent({
 			getRolePageList,
 			onOpenAddRole,
 			onOpenEditRole,
+			openAuth,
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			deleteRole,
