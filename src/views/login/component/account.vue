@@ -1,13 +1,13 @@
 <template>
-	<el-form size="large" class="login-content-form">
-		<el-form-item class="login-animation1">
+	<el-form ref='formRef' :rules='rules' :model="ruleForm" size="large" class="login-content-form">
+		<el-form-item class="login-animation1" prop='username'>
 			<el-input type="text" placeholder="用户名 admin 或不输均为 common" v-model="ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2">
+		<el-form-item class="login-animation2" prop='password'>
 			<el-input :type="isShowPassword ? 'text' : 'password'" placeholder="密码：123456" v-model="ruleForm.password" autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { toRefs, reactive, defineComponent, computed } from 'vue';
+import { toRefs, reactive, defineComponent, computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
@@ -60,12 +60,21 @@ export default defineComponent({
 		const store = useStore();
 		const route = useRoute();
 		const router = useRouter();
+		const formRef = ref();
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
 				username: 'admin',
 				password: '123456',
 				code: '1234',
+			},
+			rules: {
+				username: [
+					{ required: true, message: '用户名不能为空', trigger: 'blur'}
+				],
+				password: [
+					{ required: true, message: '密码不能为空', trigger: 'blur'}
+				]
 			},
 			loading: {
 				signIn: false,
@@ -79,31 +88,36 @@ export default defineComponent({
 		const onSignIn = async () => {
 			// 模拟数据
 			state.loading.signIn = true;
-			loginApi({
-				username: state.ruleForm.username,
-				password: state.ruleForm.password
-			}).then(async res => {
-				if (res.status === StatusEnum.SUCCESS) {
-					// 存储 token 到浏览器缓存
-					Session.set('token', res.data.token);
-					// Session.set('menuList', res.data.menuList);
-					// 存储用户信息到浏览器缓存
-					const {id, avatar, roles, username} = res.data.userInfo;
-					// 用户信息模拟数据
-					const userInfos = {
-						id,
-						userName: username,
-						photo: avatar,
-						time: new Date().getTime(),
-						roles: ['admin'],
-						authBtnList: [],
-					};
-					Session.set('userInfo', userInfos);
-					// 1、请注意执行顺序(存储用户信息到vuex)
-					// 前端控制路由，2、请注意执行顺序
-					await initFrontEndControlRoutes();
-					signInSuccess();
-					store.dispatch('userInfos/setUserInfos', userInfos);
+			formRef.value.validate((valid: boolean) => {
+				if (valid) {
+					loginApi({
+						username: state.ruleForm.username,
+						password: state.ruleForm.password
+					}).then(async res => {
+						state.loading.signIn = false;
+						if (res.status === StatusEnum.SUCCESS) {
+							// 存储 token 到浏览器缓存
+							Session.set('token', res.data.token);
+							Session.set('menuList', res.data.menuList);
+							// 存储用户信息到浏览器缓存
+							const {id, avatar, roles, username} = res.data.userInfo;
+							// 用户信息模拟数据
+							const userInfos = {
+								id,
+								userName: username,
+								photo: avatar,
+								time: new Date().getTime(),
+								roles,
+								authBtnList: [],
+							};
+							Session.set('userInfo', userInfos);
+							// 1、请注意执行顺序(存储用户信息到vuex)
+							// 前端控制路由，2、请注意执行顺序
+							await initFrontEndControlRoutes();
+							signInSuccess();
+							store.dispatch('userInfos/setUserInfos', userInfos);
+						}
+					})
 				}
 			})
 		};
@@ -130,6 +144,7 @@ export default defineComponent({
 		};
 		return {
 			onSignIn,
+			formRef,
 			...toRefs(state),
 		};
 	},

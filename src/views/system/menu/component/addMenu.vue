@@ -83,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, toRefs, onMounted, defineComponent, nextTick, ref } from 'vue';
+import { reactive, toRefs, defineComponent, nextTick, ref } from 'vue';
 import IconSelector from '/@/components/iconSelector/index.vue';
 import { getRoleListApi } from '/@/api/role';
 import { saveMenuApi, updateMenuApi, getMenuListApi, viewMenuApi} from '/@/api/menu';
@@ -173,27 +173,28 @@ export default defineComponent({
 		};
 		// 新增
 		const onSubmit = () => {
-			if (state.ruleForm.id) {
-				updateMenuApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
+			formRef.value.validate((valid: boolean) => {
+				if (valid) {
+					if (state.ruleForm.id) {
+						updateMenuApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
+					} else {
+						saveMenuApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
 					}
-				})
-			} else {
-				saveMenuApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
-					}
-				})
-			}
+				}
+			})
 		};
-		// 页面加载时
-		onMounted(() => {
-		});
 		return {
 			formRef,
 			openDialog,

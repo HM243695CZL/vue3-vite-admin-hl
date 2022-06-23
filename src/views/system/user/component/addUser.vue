@@ -83,23 +83,27 @@ export default defineComponent({
 		};
 		// 新增
 		const onSubmit = () => {
-			if (state.ruleForm.id) {
-				updateAdminApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
+			formRef.value.validate((valid: boolean) => {
+				if (valid) {
+					if (state.ruleForm.id) {
+						updateAdminApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
+					} else {
+						saveAdminApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
 					}
-				})
-			} else {
-				saveAdminApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
-					}
-				})
-			}
+				}
+			})
 		};
 		const changeAvatar = (url: string) => {
 			state.ruleForm.avatar = url;

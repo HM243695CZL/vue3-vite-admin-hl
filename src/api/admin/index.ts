@@ -45,3 +45,11 @@ export function loginApi (data: any) {
 		data
 	})
 }
+
+export function updatePassApi (data: any) {
+	return request({
+		url: '/admin/updatePass',
+		method: 'post',
+		data
+	})
+}

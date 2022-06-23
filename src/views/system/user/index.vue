@@ -27,8 +27,9 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="addTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="150">
+				<el-table-column label="操作" width="260">
 					<template #default="scope">
+						<el-button size="small" type="default" @click='handleEditPass(scope.row)'>修改密码</el-button>
 						<el-button size="small" type="default" @click='handleEdit(scope.row)'>修改</el-button>
 						<el-button size="small" type="default" @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
@@ -49,6 +50,7 @@
 			</el-pagination>
 		</el-card>
 		<AddUer ref="addUserRef" @refresh-list='getUserPageList' />
+		<UpdatePassModal ref='updatePassRef' />
 	</div>
 </template>
 
@@ -57,14 +59,15 @@ import { toRefs, reactive, onMounted, ref, defineComponent } from 'vue';
 import { getAdminPageApi, deleteAdminApi } from '/@/api/admin';
 import { StatusEnum} from '/@/common/status.enun';
 import AddUer from '/@/views/system/user/component/addUser.vue';
+import UpdatePassModal from '/@/views/system/user/component/updatePassModal.vue';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'systemUser',
-	components: { AddUer },
+	components: { AddUer, UpdatePassModal },
 	setup() {
 		const addUserRef = ref();
-		const editUserRef = ref();
+		const updatePassRef = ref();
 		const state = reactive({
 			pageIndex: 1,
 			pageSize: 10,
@@ -101,6 +104,9 @@ export default defineComponent({
 				}
 			})
 		};
+		const handleEditPass = (row: any) => {
+			updatePassRef.value.openDialog(row);
+		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
@@ -115,9 +121,10 @@ export default defineComponent({
 		});
 		return {
 			addUserRef,
-			editUserRef,
+			updatePassRef,
 			handleEdit,
 			handleDelete,
+			handleEditPass,
 			getUserPageList,
 			onOpenAddUser,
 			onHandleSizeChange,

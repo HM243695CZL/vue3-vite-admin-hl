@@ -152,7 +152,7 @@ export function setFilterRoute(chil: any) {
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	const menuList = backEndComponent(getMenuList());
+	const menuList = backEndComponent(Session.get('menuList') || []);
 	menuList.map((item: any) => {
 		dynamicRoutes[0].children?.push(item)
 	})
