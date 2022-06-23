@@ -10,7 +10,7 @@
 					新增类目
 				</el-button>
 			</div>
-			<el-table :data='dataList'>
+			<el-table :data='dataList' row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column prop='id' label='类目id' />
 				<el-table-column prop='name' label='类目名称' show-overflow-tooltip />
 				<el-table-column prop='iconUrl' label='类目图标'>
