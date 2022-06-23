@@ -45,3 +45,10 @@ export function deleteCategoryApi (params: any) {
 		method: 'get'
 	})
 }
+
+export function getFirstCateListApi () {
+	return request({
+		url: `${preUrl}getL1`,
+		method: 'get'
+	})
+}

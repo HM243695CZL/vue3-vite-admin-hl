@@ -14,8 +14,9 @@
 						<el-option label='二级类目' value='L2'></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label='父类目' prop='pid'>
+				<el-form-item label='父类目' prop='pid' v-if='ruleForm.level === "L2"'>
 					<el-select v-model='ruleForm.pid' placeholder='请选择父类目'>
+						<el-option :label='item.name' :value='item.id' v-for='item of categoryList' :key='item.id'></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label='类目图标' prop='iconUrl'>
@@ -40,7 +41,9 @@
 
 <script lang='ts'>
 import { defineComponent, nextTick, reactive, ref, toRefs } from 'vue';
-import { viewCategoryApi, getCategoryListApi, saveCategoryApi, updateCategoryApi } from '/@/api/pms/category';
+import { viewCategoryApi, saveCategoryApi, updateCategoryApi,
+	getFirstCateListApi
+} from '/@/api/pms/category';
 import { StatusEnum } from '/@/common/status.enun';
 import SingleUpload from '/@/components/Upload/SingleUpload.vue';
 import { ElMessage } from 'element-plus';
@@ -71,8 +74,8 @@ export default defineComponent({
 			},
 			categoryList: []
 		});
-		const getCategoryList = () => {
-			getCategoryListApi().then(res => {
+		const getFirstCategoryList = () => {
+			getFirstCateListApi().then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.categoryList = res.data;
 				}
@@ -81,7 +84,7 @@ export default defineComponent({
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = '';
-			getCategoryList();
+			getFirstCategoryList();
 			if (row) {
 				viewCategoryApi({
 					id: row.id
@@ -110,6 +113,7 @@ export default defineComponent({
 				updateCategoryApi(state.ruleForm).then(res => {
 					if (res.status === StatusEnum.SUCCESS) {
 						ElMessage.success("操作成功");
+						closeDialog();
 						ctx.emit('refresh-list');
 					}
 				})
@@ -117,6 +121,7 @@ export default defineComponent({
 				saveCategoryApi(state.ruleForm).then(res => {
 					if (res.status === StatusEnum.SUCCESS) {
 						ElMessage.success("操作成功");
+						closeDialog();
 						ctx.emit('refresh-list');
 					}
 				})
