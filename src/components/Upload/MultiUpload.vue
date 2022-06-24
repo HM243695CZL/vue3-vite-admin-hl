@@ -1,6 +1,7 @@
 <template>
-	<div class='single-upload'>
+	<div class='multi-upload'>
 		<el-upload
+			list-type="picture-card"
 			class="upload-demo"
 			:action="dataObj.host"
 			:data='dataObj'
@@ -8,9 +9,11 @@
 			:before-upload='handleBeforeUpload'
 			:on-success='handleSuccess'
 			:file-list="imgList"
-			list-type="picture"
+			:limit="maxCount"
 		>
-			<el-button type="primary">点击上传</el-button>
+			<el-icon>
+				<ele-Plus />
+			</el-icon>
 		</el-upload>
 	</div>
 </template>
@@ -21,9 +24,16 @@ import { policy } from '/@/api/oss';
 import { StatusEnum } from '/@/common/status.enun';
 
 export default defineComponent({
-	name: 'SingleUpload',
+	name: 'MultiUpload',
 	props: {
-		sourceUrl: String
+		maxCount: {
+			type: Number,
+			default: 5
+		},
+		list: {
+			type: Array,
+			default: () => []
+		}
 	},
 	setup(props, ctx) {
 		const state = reactive({
@@ -36,33 +46,32 @@ export default defineComponent({
 				host: ''
 			},
 			useOss: true,
-			fileList: [] as any
 		});
-		const imageUrl = computed(() => {
-			return props.sourceUrl;
+		const imgList = computed(() => {
+			const arr: any[] = []
+			props.list.map((item: any) => {
+				const fileName = item.substr(item.lastIndexOf('/') + 1);
+				arr.push({
+					name: fileName,
+					url: item
+				})
+			});
+			return arr;
 		});
-		const imageName = computed(() => {
-			return props.sourceUrl?.substr(props.sourceUrl?.lastIndexOf('/') + 1);
-		});
-		const imgList = computed({
-			get: () => {
-				return props.sourceUrl ? [{
-					name: imageName,
-					url: imageUrl
-				}] : []
-			},
-			set: (param: any) => {
-				state.fileList = [{
-					name: param.name,
-					url: param.url
-				}]
-			}
-		});
-		const changeSourceUrl = (val: string) => {
-			ctx.emit('changeSourceUrl', val);
-		}
-		const handleRemove = () => {
-			changeSourceUrl('');
+		const changeFileList = (fileList: any) => {
+			ctx.emit('changeFileList', fileList)
+		};
+		const handleRemove = (file: any) => {
+			console.log(file);
+		};
+		const handleSuccess = (res: any, file: any) => {
+			if (file.url.indexOf('blob') > -1) return false;
+			const url = state.dataObj.host + '/' + state.dataObj.dir + '/' + file.name;
+			imgList.value.push({
+				name: file.name,
+				url
+			});
+			changeFileList(imgList);
 		};
 		const handleBeforeUpload = () => {
 			return new Promise(((resolve, reject) => {
@@ -82,22 +91,12 @@ export default defineComponent({
 				})
 			}))
 		};
-		const handleSuccess = (res: any, file: any) => {
-			const url = state.dataObj.host + '/' + state.dataObj.dir + '/' + file.name;
-			imgList.value = [{
-				name: file.name,
-				url
-			}]
-			changeSourceUrl(url);
-		};
 		return {
-			...toRefs(state),
-			imageUrl,
-			imageName,
-			imgList,
-			handleRemove,
 			handleBeforeUpload,
-			handleSuccess
+			handleRemove,
+			handleSuccess,
+			imgList,
+			...toRefs(state)
 		}
 	}
 });
