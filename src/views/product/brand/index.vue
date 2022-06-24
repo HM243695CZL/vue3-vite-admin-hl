@@ -26,6 +26,19 @@
 					</template>
 				</el-table-column>
 			</el-table>
+			<el-pagination
+				@size-change="onHandleSizeChange"
+				@current-change="onHandleCurrentChange"
+				class="mt15"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				v-model:current-page="pageIndex"
+				background
+				v-model:page-size="pageSize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="total"
+			>
+			</el-pagination>
 		</el-card>
 		<BrandModal ref='brandModalRef' @refresh-list='getBrandList' />
 	</div>
@@ -79,7 +92,15 @@ export default defineComponent({
 					getBrandList();
 				}
 			})
-		}
+		};
+		// 分页改变
+		const onHandleSizeChange = (val: number) => {
+			state.pageSize = val;
+		};
+		// 分页改变
+		const onHandleCurrentChange = (val: number) => {
+			state.pageIndex = val;
+		};
 		onMounted(() => {
 			getBrandList()
 		});
@@ -88,6 +109,8 @@ export default defineComponent({
 			onOpenAddBrand,
 			onOpenEditBrand,
 			deleteBrand,
+			onHandleSizeChange,
+			onHandleCurrentChange,
 			brandModalRef,
 			...toRefs(state)
 		}
