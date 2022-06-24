@@ -1,6 +1,6 @@
 <template>
 	<div class='category-modal-container'>
-		<el-dialog :close-on-click-modal='false' title="新增商品类目" v-model="isShowDialog" width="769px">
+		<el-dialog :close-on-click-modal='false' :title="title" v-model="isShowDialog" width="769px">
 			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
 				<el-form-item label='类目名称' prop='name'>
 					<el-input v-model='ruleForm.name' placeholder='请输入类目名称' clearable></el-input>
@@ -57,6 +57,7 @@ export default defineComponent({
 		const formRef = ref();
 		const state = reactive({
 			isShowDialog: false,
+			title: '',
 			ruleForm: {
 				id: '',
 				name: '',
@@ -86,6 +87,7 @@ export default defineComponent({
 			state.ruleForm.id = '';
 			getFirstCategoryList();
 			if (row) {
+				state.title = '修改商品类目';
 				viewCategoryApi({
 					id: row.id
 				}).then(res => {
@@ -94,6 +96,7 @@ export default defineComponent({
 					}
 				})
 			} else {
+				state.title = '新增商品类目';
 				nextTick(() => {
 					formRef.value.resetFields();
 				})

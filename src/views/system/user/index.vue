@@ -16,9 +16,9 @@
 			<el-table :data="dataList" style="width: 100%">
 				<el-table-column type="index" label="序号" width="60" />
 				<el-table-column prop="username" label="管理员名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop='avatar' label='管理员头像' show-overflow-tooltip>
+				<el-table-column prop='avatar' label='管理员头像'>
 					<template #default='scope'>
-						<img class='avatar-img' :src='scope.row.avatar' alt=''>
+						<PreviewImg :img-url='scope.row.avatar' />
 					</template>
 				</el-table-column>
 				<el-table-column prop="roles" label="关联角色" show-overflow-tooltip>
@@ -61,10 +61,11 @@ import { StatusEnum} from '/@/common/status.enun';
 import AddUer from '/@/views/system/user/component/addUser.vue';
 import UpdatePassModal from '/@/views/system/user/component/updatePassModal.vue';
 import { ElMessage } from 'element-plus';
+import PreviewImg from '/@/components/previewImg/index.vue';
 
 export default defineComponent({
 	name: 'systemUser',
-	components: { AddUer, UpdatePassModal },
+	components: { AddUer, UpdatePassModal, PreviewImg },
 	setup() {
 		const addUserRef = ref();
 		const updatePassRef = ref();

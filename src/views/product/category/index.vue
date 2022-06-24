@@ -15,12 +15,12 @@
 				<el-table-column prop='name' label='类目名称' show-overflow-tooltip />
 				<el-table-column prop='iconUrl' label='类目图标'>
 					<template #default='scope'>
-						<img class='img50' :src='scope.row.iconUrl' alt=''>
+						<PreviewImg :img-url='scope.row.iconUrl' />
 					</template>
 				</el-table-column>
 				<el-table-column prop='pic' label='类目图片'>
 					<template #default='scope'>
-						<img :src='scope.row.picUrl' alt='' class='img50'>
+						<PreviewImg :img-url='scope.row.picUrl' />
 					</template>
 				</el-table-column>
 				<el-table-column prop='keywords' label='关键字' show-overflow-tooltip />
@@ -45,13 +45,15 @@
 <script lang='ts'>
 import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
 import { StatusEnum } from '/@/common/status.enun';
-import { getCategoryListApi } from '/@/api/pms/category';
+import { getCategoryListApi, deleteCategoryApi } from '/@/api/pms/category';
 import CategoryModal from './component/categoryModal.vue';
+import PreviewImg from '/@/components/previewImg/index.vue';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'productCategory',
 	components: {
-		CategoryModal
+		CategoryModal, PreviewImg
 	},
 	setup() {
 		const categoryModalRef = ref();
@@ -76,7 +78,14 @@ export default defineComponent({
 			categoryModalRef.value.openDialog(row);
 		};
 		const deleteCategory = (row: any) => {
-
+			deleteCategoryApi({
+				id: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success('删除成功');
+					getCategoryList()
+				}
+			})
 		};
 		onMounted(() => {
 			getCategoryList();
@@ -94,8 +103,5 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
-	.img50{
-		width: 50px;
-		height: 50px;
-	}
+
 </style>

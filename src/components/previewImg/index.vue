@@ -1,0 +1,40 @@
+<template>
+	<div class='preview-img-container'>
+		<img :src='imgUrl' alt='' class='img50' @click='showImg'>
+		<el-dialog title='预览' append-to-body v-model='dialogVisible' width='800px'>
+			<img :src='imgUrl' alt=''>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogVisible = false" size="default">关 闭</el-button>
+				</span>
+			</template>
+		</el-dialog>
+	</div>
+</template>
+
+<script lang='ts'>
+import { defineComponent, reactive, toRefs } from 'vue';
+
+export default defineComponent({
+	name: 'previewImg',
+	props: {
+		imgUrl: String
+	},
+	setup() {
+		const state = reactive({
+			dialogVisible: false
+		});
+		const showImg = () => {
+			state.dialogVisible = true;
+		};
+		return {
+			showImg,
+			...toRefs(state)
+		}
+	}
+});
+</script>
+
+<style scoped lang='less'>
+
+</style>
