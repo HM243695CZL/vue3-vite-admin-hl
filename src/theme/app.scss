@@ -157,6 +157,11 @@ body,
 .flex {
 	display: flex;
 }
+.flex-start{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
 .flex-auto {
 	flex: 1;
 	overflow: hidden;
