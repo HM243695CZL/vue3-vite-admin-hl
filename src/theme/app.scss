@@ -280,3 +280,11 @@ body,
 		padding-left: #{$i}px !important;
 	}
 }
+
+.back-icon{
+	font-size: 20px;
+	cursor: pointer;
+	&:hover{
+		color: #126ac6;
+	}
+}

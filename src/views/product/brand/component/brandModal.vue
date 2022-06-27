@@ -81,23 +81,27 @@ export default defineComponent({
 			state.ruleForm.picUrl = url;
 		};
 		const onSubmit = () => {
-			if (state.ruleForm.id) {
-				updateBrandApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success('操作成功');
-						closeDialog();
-						ctx.emit('refresh-list');
+			formRef.value.validate((valid: boolean) => {
+				if (valid) {
+					if (state.ruleForm.id) {
+						updateBrandApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success('操作成功');
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
+					} else {
+						saveBrandApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success('操作成功');
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
 					}
-				})
-			} else {
-				saveBrandApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success('操作成功');
-						closeDialog();
-						ctx.emit('refresh-list');
-					}
-				})
-			}
+				}
+			})
 		};
 		return {
 			formRef,

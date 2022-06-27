@@ -112,23 +112,27 @@ export default defineComponent({
 			state.isShowDialog = false;
 		};
 		const onSubmit = () => {
-			if (state.ruleForm.id) {
-				updateCategoryApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
+			formRef.value.validate((valid: boolean) => {
+				if (valid) {
+					if (state.ruleForm.id) {
+						updateCategoryApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
+					} else {
+						saveCategoryApi(state.ruleForm).then(res => {
+							if (res.status === StatusEnum.SUCCESS) {
+								ElMessage.success("操作成功");
+								closeDialog();
+								ctx.emit('refresh-list');
+							}
+						})
 					}
-				})
-			} else {
-				saveCategoryApi(state.ruleForm).then(res => {
-					if (res.status === StatusEnum.SUCCESS) {
-						ElMessage.success("操作成功");
-						closeDialog();
-						ctx.emit('refresh-list');
-					}
-				})
-			}
+				}
+			})
 		};
 		return {
 			formRef,
