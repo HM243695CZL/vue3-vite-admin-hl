@@ -3,8 +3,8 @@
 		<el-card shadow="hover">
 			<el-steps :active="stepIndex" finish-status="success" align-center>
 				<el-step title="第一步" description="填写商品信息" />
-				<el-step title="第一步" description="填写商品规格和库存" />
-				<el-step title="第二步" description="填写商品参数" />
+				<el-step title="第二步" description="填写商品规格和库存" />
+				<el-step title="第三步" description="填写商品参数" />
 			</el-steps>
 			<Info ref='infoRef' v-show='stepIndex === 0' />
 			<Specifications ref='specificationsRef' v-show='stepIndex === 1' />
@@ -20,10 +20,14 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, reactive, ref, toRefs } from 'vue';
+import {defineComponent, reactive, ref, toRefs } from 'vue';
+import { saveGoodsApi } from '/@/api/pms/goods';
+import { StatusEnum } from '/@/common/status.enun';
 import Info from './component/info.vue';
 import Specifications from './component/specifications.vue';
 import Params from './component/params.vue';
+import { ElMessage } from 'element-plus';
+
 
 export default defineComponent({
 	name: 'productGoodsInfo',
@@ -49,8 +53,12 @@ export default defineComponent({
 				specifications: specificationsRef.value.dataList,
 				products: specificationsRef.value.stockList,
 				attributes: paramsRef.value.dataList
-			}
-			console.log(obj);
+			};
+			saveGoodsApi(obj).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success('操作成功');
+				}
+			})
 		};
 		return {
 			infoRef,

@@ -3,7 +3,9 @@ const preUrl = '/pms/goods/';
 
 export function getGoodsPageApi(data: any) {
 	return request({
-		url: `${preUrl}page`
+		url: `${preUrl}page`,
+		method: 'post',
+		data
 	})
 }
 
