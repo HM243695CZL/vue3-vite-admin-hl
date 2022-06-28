@@ -12,7 +12,7 @@
 					<el-input v-model='ruleForm.number' placeholder='请输入获取数量' clearable></el-input>
 				</el-form-item>
 				<el-form-item prop='url' label='货品图片'>
-					<PreviewImg :img-url='ruleForm.url' />
+					<SingleUpload :source-url='ruleForm.url' @change-source-url='changeUrl' />
 				</el-form-item>
 			</el-form>
 			<template #footer>
@@ -27,13 +27,13 @@
 
 <script lang='ts'>
 import { defineComponent, nextTick, reactive, ref, toRefs } from 'vue';
-import PreviewImg from '/@/components/previewImg/index.vue';
+import SingleUpload from '/@/components/Upload/SingleUpload.vue';
 import { cloneDeep } from 'lodash';
 
 export default defineComponent({
 	name: 'stockModal',
 	components: {
-		PreviewImg
+		SingleUpload
 	},
 	setup(props, ctx) {
 		const formRef = ref();
@@ -57,6 +57,9 @@ export default defineComponent({
 		const closeDialog = () => {
 			state.isShowDialog = false;
 		};
+		const changeUrl = (url: string) => {
+			state.ruleForm.url = url;
+		}
 		const onSubmit = () => {
 			ctx.emit('change-stock', state.ruleForm);
 			closeDialog();
@@ -66,6 +69,7 @@ export default defineComponent({
 			openDialog,
 			closeDialog,
 			formRef,
+			changeUrl,
 			onSubmit
 		}
 	}

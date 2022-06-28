@@ -20,12 +20,14 @@ export default defineComponent({
 	props: {
 		imgUrl: String
 	},
-	setup() {
+	setup(props) {
 		const state = reactive({
 			dialogVisible: false
 		});
 		const showImg = () => {
-			state.dialogVisible = true;
+			if (props.imgUrl) {
+				state.dialogVisible = true;
+			}
 		};
 		return {
 			showImg,
