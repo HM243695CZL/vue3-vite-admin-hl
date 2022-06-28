@@ -1,0 +1,78 @@
+<template>
+	<div class='specifications-modal-container'>
+		<el-dialog :close-on-click-modal='false' :title="title" v-model="isShowDialog" width="769px">
+			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
+				<el-form-item prop='specification' label='规格名'>
+					<el-input v-model='ruleForm.specification' placeholder='规格名' clearable></el-input>
+				</el-form-item>
+				<el-form-item prop='value' label='规格值'>
+					<el-input v-model='ruleForm.value' placeholder='规格值' clearable></el-input>
+				</el-form-item>
+				<el-form-item prop='picUrl' label='规格图片'>
+					<SingleUpload :source-url='ruleForm.picUrl' @change-source-url='changePicUrl' />
+				</el-form-item>
+			</el-form>
+			<template #footer>
+					<span class="dialog-footer">
+						<el-button @click="closeDialog" size="default">取 消</el-button>
+						<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
+					</span>
+			</template>
+		</el-dialog>
+	</div>
+</template>
+
+<script lang='ts'>
+import { defineComponent, nextTick, reactive, ref, toRefs } from 'vue';
+import SingleUpload from '/@/components/Upload/SingleUpload.vue';
+import { cloneDeep} from 'lodash';
+
+export default defineComponent({
+	name: 'specificationsModal',
+	components: {
+		SingleUpload
+	},
+	setup(props, ctx) {
+		const formRef = ref();
+		const state = reactive({
+			isShowDialog: false,
+			title: '设置规格',
+			ruleForm: {
+				specification: '',
+				value: '',
+				picUrl: ''
+			},
+			rules: {}
+		});
+		const openDialog = (row: any) => {
+			state.isShowDialog = true;
+			state.ruleForm = cloneDeep(state.ruleForm);
+			nextTick(() => {
+				formRef.value.resetFields();
+			});
+		};
+		const closeDialog = () => {
+			state.isShowDialog = false;
+		};
+		const changePicUrl = (url: string) => {
+			state.ruleForm.picUrl = url;
+		};
+		const onSubmit = () => {
+			ctx.emit('change-specification', state.ruleForm);
+			closeDialog();
+		};
+		return {
+			formRef,
+			openDialog,
+			closeDialog,
+			onSubmit,
+			changePicUrl,
+			...toRefs(state)
+		}
+	}
+});
+</script>
+
+<style scoped lang='less'>
+
+</style>
