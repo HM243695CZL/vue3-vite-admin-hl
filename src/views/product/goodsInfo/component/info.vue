@@ -97,7 +97,7 @@ export default defineComponent({
 				isHot: false,
 				isOnSale: false,
 				picUrl: '',
-				gallery: [],
+				gallery: ['aa', 'bb'],
 				unit: '',
 				keywords: '',
 				categoryId: '',
@@ -126,7 +126,7 @@ export default defineComponent({
 		};
 		// 宣传画廊发生改变时
 		const changeGallery = (fileList: any) => {
-			console.log(fileList);
+			state.goodsForm.gallery = fileList;
 		};
 		// 关键字输入框失去焦点
 		const setKeywordsValue = () => {
