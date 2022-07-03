@@ -48,8 +48,17 @@ export default defineComponent({
 			state.stepIndex += 1;
 		};
 		const onSubmit = () => {
+			const gallery = [] as  any;
+				infoRef.value.goodsForm.gallery.map(((item: any) => {
+				gallery.push(item.url)
+			}))
 			const obj = {
-				goods: infoRef.value.goodsForm,
+				goods: {
+					...infoRef.value.goodsForm,
+					gallery: JSON.stringify(gallery),
+					categoryId: infoRef.value.goodsForm.categoryId[infoRef.value.goodsForm.categoryId.length - 1],
+					keywords: infoRef.value.keywordsList.join(',')
+				},
 				specifications: specificationsRef.value.dataList,
 				products: specificationsRef.value.stockList,
 				attributes: paramsRef.value.dataList

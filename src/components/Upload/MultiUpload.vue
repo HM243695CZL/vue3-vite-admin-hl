@@ -50,10 +50,10 @@ export default defineComponent({
 		const imgList = computed(() => {
 			const arr: any[] = []
 			props.list.map((item: any) => {
-				const fileName = item.substr(item.lastIndexOf('/') + 1);
+				const fileName = item.url?.substr(item.url?.lastIndexOf('/') + 1);
 				arr.push({
 					name: fileName,
-					url: item
+					url: item.url
 				})
 			});
 			return arr;
@@ -65,13 +65,13 @@ export default defineComponent({
 			console.log(file);
 		};
 		const handleSuccess = (res: any, file: any) => {
-			if (file.url.indexOf('blob') > -1) return false;
 			const url = state.dataObj.host + '/' + state.dataObj.dir + '/' + file.name;
+			imgList.value.pop();
 			imgList.value.push({
 				name: file.name,
 				url
 			});
-			changeFileList(imgList);
+			changeFileList(imgList.value);
 		};
 		const handleBeforeUpload = () => {
 			return new Promise(((resolve, reject) => {

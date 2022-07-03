@@ -62,7 +62,7 @@
 				<el-input type='textarea' :rows='3' v-model='goodsForm.brief' clearable placeholder='请输入商品简介'></el-input>
 			</el-form-item>
 			<el-form-item prop='detail' label='商品详细介绍'>
-				<HlEditor :content='goodsForm.detail'></HlEditor>
+				<HlEditor :content='goodsForm.detail' @editor-blur='changeDetail'></HlEditor>
 			</el-form-item>
 		</el-form>
 	</div>
@@ -97,7 +97,7 @@ export default defineComponent({
 				isHot: false,
 				isOnSale: false,
 				picUrl: '',
-				gallery: ['aa', 'bb'],
+				gallery: [],
 				unit: '',
 				keywords: '',
 				categoryId: '',
@@ -151,6 +151,10 @@ export default defineComponent({
 				keywordsRef.value.focus();
 			})
 		};
+		// 商品详情发生改变时
+		const changeDetail = (htmlStr: string) => {
+			state.goodsForm.detail = htmlStr;
+		}
 		// 获取商品分类列表
 		const getCategoryList = () => {
 			getCategoryListApi().then(res => {
@@ -177,6 +181,7 @@ export default defineComponent({
 			setKeywordsValue,
 			clickAddKeywords,
 			deleteKeywordsItem,
+			changeDetail,
 			keywordsRef,
 			...toRefs(state)
 		}

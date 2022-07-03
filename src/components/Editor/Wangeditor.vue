@@ -12,6 +12,7 @@
 			:defaultConfig="editorConfig"
 			:mode="mode"
 			@onCreated="handleCreated"
+			@onBlur='onBlur'
 		/>
 	</div>
 </template>
@@ -39,7 +40,7 @@ export default defineComponent({
 			default: false
 		}
 	},
-	setup (props) {
+	setup (props, ctx) {
 		const editorRef = shallowRef();
 		const toolbarConfig = {
 
@@ -48,7 +49,8 @@ export default defineComponent({
 		const mode = 'default';
 		const editorConfig = {
 			placeholder: '请输入内容...',
-			readOnly: props.readonly
+			readOnly: props.readonly,
+			isFullScreen: false
 		};
 		// 组件销毁时，也及时销毁编辑器
 		onBeforeUnmount(() => {
@@ -58,6 +60,9 @@ export default defineComponent({
 		});
 		const handleCreated = (editor: any) => {
 			editorRef.value = editor // 记录 editor 实例，重要！
+		};
+		const onBlur = (editor: any) => {
+			ctx.emit('editor-blur', editor.getHtml())
 		};
 		const editorStyle = {
 			height:  props.height + 'px',
@@ -70,6 +75,7 @@ export default defineComponent({
 			contentHtml,
 			editorConfig,
 			handleCreated,
+			onBlur,
 			editorStyle
 		}
 	}
