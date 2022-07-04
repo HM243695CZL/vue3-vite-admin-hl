@@ -132,7 +132,7 @@ export default defineComponent({
 				name: 'productGoodsInfo',
 				params: {
 					id: row.id,
-					tagsViewName: `修改商品-【${row.id}】`
+					tagsViewName: `修改商品-[${row.id}]`
 				}
 			});
 		};
