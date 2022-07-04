@@ -34,6 +34,22 @@ export function useTitle() {
 }
 
 /**
+ * 设置 自定义 tagsView 名称
+ * @param params 路由 query、params 中的 tagsViewName
+ * @returns 返回当前 tagsViewName 名称
+ */
+export function setTagsViewName(item: any) {
+	let tagsViewName: any = '';
+	const { query, params, meta } = item;
+	if (query?.tagsViewName || params?.tagsViewName) {
+		tagsViewName = query?.tagsViewName || params?.tagsViewName
+	} else {
+		tagsViewName = meta.title;
+	}
+	return tagsViewName
+}
+
+/**
  * 图片懒加载
  * @param el dom 目标元素
  * @param arr 列表数据
@@ -137,6 +153,9 @@ const other = {
 	},
 	useTitle: () => {
 		useTitle();
+	},
+	setTagsViewName: (route: any) => {
+		return setTagsViewName(route);
 	},
 	lazyImg: (el: any, arr: any) => {
 		lazyImg(el, arr);

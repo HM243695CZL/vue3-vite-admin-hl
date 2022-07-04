@@ -18,7 +18,7 @@
 				>
 					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
 					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
-					<span>{{ v.meta.title }}</span>
+					<span>{{ setTagsViewName(v) }}</span>
 					<template v-if="isActive(v)">
 						<SvgIcon
 							name="ele-RefreshRight"
@@ -120,6 +120,11 @@ export default defineComponent({
 		// 动态设置 tagsView 风格样式
 		const setTagsStyle = computed(() => {
 			return store.state.themeConfig.themeConfig.tagsStyle;
+		});
+		const setTagsViewName = computed(() => {
+			return (v: any) => {
+				return other.setTagsViewName(v);
+			}
 		});
 		// 获取布局配置信息
 		const getThemeConfig = computed(() => {
@@ -543,6 +548,7 @@ export default defineComponent({
 			refreshCurrentTagsView,
 			closeCurrentTagsView,
 			onCurrentContextmenuClick,
+			setTagsViewName,
 			...toRefs(state),
 		};
 	},
