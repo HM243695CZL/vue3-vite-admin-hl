@@ -44,7 +44,8 @@ export default defineComponent({
 				specifications: '',
 				price: 0,
 				number: 0,
-				url: ''
+				url: '',
+				updateTime: ''
 			},
 			rules: {}
 		});
@@ -61,6 +62,7 @@ export default defineComponent({
 			state.ruleForm.url = url;
 		}
 		const onSubmit = () => {
+			state.ruleForm.updateTime = '';
 			ctx.emit('change-stock', state.ruleForm);
 			closeDialog();
 		};

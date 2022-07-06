@@ -3,10 +3,10 @@
 		<el-dialog :close-on-click-modal='false' :title="title" v-model="isShowDialog" width="769px">
 			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
 				<el-form-item prop='specification' label='规格名'>
-					<el-input v-model='ruleForm.specification' placeholder='规格名' clearable></el-input>
+					<el-input :disabled='disabled' v-model='ruleForm.specification' placeholder='规格名' clearable></el-input>
 				</el-form-item>
 				<el-form-item prop='value' label='规格值'>
-					<el-input v-model='ruleForm.value' placeholder='规格值' clearable></el-input>
+					<el-input :disabled='disabled' v-model='ruleForm.value' placeholder='规格值' clearable></el-input>
 				</el-form-item>
 				<el-form-item prop='picUrl' label='规格图片'>
 					<SingleUpload :source-url='ruleForm.picUrl' @change-source-url='changePicUrl' />
@@ -40,13 +40,19 @@ export default defineComponent({
 			ruleForm: {
 				specification: '',
 				value: '',
-				picUrl: ''
+				picUrl: '',
+				updateTime: ''
 			},
-			rules: {}
+			rules: {},
+			disabled: false
 		});
-		const openDialog = (row: any) => {
+		const openDialog = (row: any, type: boolean) => {
 			state.isShowDialog = true;
 			state.ruleForm = cloneDeep(state.ruleForm);
+			state.disabled = type;
+			if (row) {
+				state.ruleForm = row;
+			}
 			nextTick(() => {
 				formRef.value.resetFields();
 			});
@@ -58,7 +64,8 @@ export default defineComponent({
 			state.ruleForm.picUrl = url;
 		};
 		const onSubmit = () => {
-			ctx.emit('change-specification', state.ruleForm);
+			state.ruleForm.updateTime = '';
+			ctx.emit('change-specification', state.ruleForm, state.disabled);
 			closeDialog();
 		};
 		return {

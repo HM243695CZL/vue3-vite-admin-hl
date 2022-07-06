@@ -320,6 +320,14 @@ export default defineComponent({
 		// 当前项右键菜单点击
 		const onCurrentContextmenuClick = async (item: CurrentContextmenu) => {
 			const cParams = item.meta.isDynamic ? item.params : item.query;
+			const valueStr = Object.values(item.params).join('');
+			// @ts-ignore
+			const dynamicPath = item.meta.isDynamicPath + '-' + valueStr;
+			if (item.contextMenuClickId === 5) {
+				// 关闭动态路由标签
+				closeCurrentTagsView(dynamicPath);
+				return false;
+			}
 			if (!getCurrentRouteItem(item.path, cParams)) return ElMessage({ type: 'warning', message: '请正确输入路径及完整参数（query、params）' });
 			const { path, name, params, query, meta, url } = getCurrentRouteItem(item.path, cParams);
 			switch (item.contextMenuClickId) {
