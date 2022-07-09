@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-
+const preUrl = '/admin/menu/'
 /**
  * 后端控制菜单模拟json，路径在 https://gitee.com/lyt-top/vue-next-admin-images/tree/master/menu
  * 后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
@@ -195,7 +195,7 @@ export function getMenuListApi () {
 
 export function saveMenuApi (data: any) {
 	return request({
-		url: '/menu/create',
+		url: `${preUrl}create`,
 		method: 'post',
 		data
 	})
@@ -203,7 +203,7 @@ export function saveMenuApi (data: any) {
 
 export function updateMenuApi (data: any) {
 	return request({
-		url: '/menu/update',
+		url: `${preUrl}update`,
 		method: 'post',
 		data
 	})
@@ -211,14 +211,14 @@ export function updateMenuApi (data: any) {
 
 export function viewMenuApi (params: any) {
 	return request({
-		url: '/menu/view/' + params.id,
+		url: `${preUrl}view/` + params.id,
 		method: 'get'
 	})
 }
 
 export function deleteMenuApi (params: any) {
 	return request({
-		url: '/menu/delete/' + params.id,
+		url: `${preUrl}delete/` + params.id,
 		method: 'get'
 	})
 }

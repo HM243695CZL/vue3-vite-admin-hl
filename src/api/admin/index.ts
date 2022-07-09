@@ -1,8 +1,8 @@
 import request from '/@/utils/request';
-
+const preUrl = '/admin/admin/'
 export function getAdminPageApi (data: any) {
 	return request({
-		url: '/admin/page',
+		url: `${preUrl}page`,
 		method: 'post',
 		data
 	})
@@ -10,7 +10,7 @@ export function getAdminPageApi (data: any) {
 
 export function saveAdminApi (data: any) {
 	return request({
-		url: '/admin/create',
+		url: `${preUrl}create`,
 		method: 'post',
 		data
 	})
@@ -18,7 +18,7 @@ export function saveAdminApi (data: any) {
 
 export function updateAdminApi (data: any) {
 	return request({
-		url: '/admin/update',
+		url: `${preUrl}update`,
 		method: 'post',
 		data
 	})
@@ -26,21 +26,21 @@ export function updateAdminApi (data: any) {
 
 export function viewAdminApi (params: any) {
 	return request({
-		url: '/admin/view/' + params.id,
+		url: `${preUrl}view/` + params.id,
 		method: 'get'
 	})
 }
 
 export function deleteAdminApi (params: any) {
 	return request({
-		url: '/admin/delete/' + params.id,
+		url: `${preUrl}delete/` + params.id,
 		method: 'get',
 	})
 }
 
 export function loginApi (data: any) {
 	return request({
-		url: '/admin/login',
+		url: `${preUrl}login`,
 		method: 'post',
 		data
 	})
@@ -48,7 +48,7 @@ export function loginApi (data: any) {
 
 export function updatePassApi (data: any) {
 	return request({
-		url: '/admin/updatePass',
+		url: `${preUrl}updatePass`,
 		method: 'post',
 		data
 	})

@@ -1,8 +1,8 @@
 import request from '/@/utils/request';
-
+const preUrl = '/admin/'
 export function policy() {
 	return request({
-		url: '/aliyun/oss/policy',
+		url: `${preUrl}aliyun/oss/policy`,
 		method: 'get'
 	})
 }

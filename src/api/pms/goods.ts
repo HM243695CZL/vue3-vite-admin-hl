@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/pms/goods/';
+const preUrl = '/admin/pms/goods/';
 
 export function getGoodsPageApi(data: any) {
 	return request({

@@ -1,29 +1,29 @@
 import request from '/@/utils/request';
-
+const preUrl = '/admin/user/';
 export function getUserPageApi (data: any) {
 	return request({
-		url: '/user/page',
+		url: `${preUrl}page`,
 		method: 'post',
 		data
 	})
 }
 export function saveUserApi (data: any) {
 	return request({
-		url: '/user/create',
+		url: `${preUrl}create`,
 		method: 'post',
 		data
 	})
 }
 export function viewUserApi (data: any) {
 	return request({
-		url: '/user/view',
+		url: `${preUrl}view`,
 		method: 'post',
 		data
 	})
 }
 export function deleteUserApi (data: any) {
 	return request({
-		url: '/user/delete',
+		url: `${preUrl}delete`,
 		method: 'post',
 		data
 	})

@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/role/';
+const preUrl = '/admin/role/';
 export function getRolePageApi (data: any) {
 	return request({
 		url: `${preUrl}page`,

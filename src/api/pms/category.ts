@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/pms/category/';
+const preUrl = '/admin/pms/category/';
 
 export function getCategoryPageApi (data: any) {
 	return request({

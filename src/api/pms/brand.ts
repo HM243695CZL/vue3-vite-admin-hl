@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/pms/brand/';
+const preUrl = '/admin/pms/brand/';
 
 export function getBrandPageApi (data: any) {
 	return request({

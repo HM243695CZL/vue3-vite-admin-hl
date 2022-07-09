@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/pms/attr/';
+const preUrl = '/admin/pms/attr/';
 
 export function getGoodsAttrPageApi (data: any) {
 	return request({
