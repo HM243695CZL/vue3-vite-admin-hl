@@ -30,7 +30,7 @@
 				</el-table-column>
 				<el-table-column prop='status' label='状态'>
 					<template #default='scope'>
-						{{statusObj[scope.row.status]}}
+						<el-tag>{{statusObj[scope.row.status]}}</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="200">
