@@ -188,7 +188,7 @@ export function getMenuList (){
 
 export function getMenuListApi () {
 	return request({
-		url: '/menu/list',
+		url: preUrl + 'list',
 		method: 'get'
 	})
 }
