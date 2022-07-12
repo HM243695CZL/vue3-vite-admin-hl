@@ -34,18 +34,24 @@
 			>
 			</el-pagination>
 		</el-card>
+		<IssueModal ref='issueModalRef' @refresh-list='getIssueList' />
 	</div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive, ref, toRefs } from 'vue';
 import { getIssuePageApi, deleteIssueApi } from '/@/api/pms/issue';
+import IssueModal from '/@/views/product/issue/component/issueModal.vue';
 import { StatusEnum } from '/@/common/status.enun';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'productIssue',
+	components: {
+		IssueModal
+	},
 	setup() {
+		const issueModalRef = ref();
 		const state = reactive({
 			pageIndex: 1,
 			pageSize: 10,
@@ -64,10 +70,10 @@ export default defineComponent({
 			})
 		};
 		const onOpenAddIssue = () => {
-
+			issueModalRef.value.openDialog()
 		};
 		const onOpenEditIssue = (row: any) => {
-
+			issueModalRef.value.openDialog(row);
 		};
 		const deleteIssue = (row: any) => {
 			deleteIssueApi({
@@ -94,7 +100,8 @@ export default defineComponent({
 			getIssueList,
 			onOpenAddIssue,
 			onOpenEditIssue,
-			deleteIssue
+			deleteIssue,
+			issueModalRef
 		}
 	}
 });
