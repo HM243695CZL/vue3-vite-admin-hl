@@ -106,7 +106,7 @@
 				<el-table :data='products'>
 					<el-table-column prop='specifications' label='货品规格'>
 						<template #default='scope'>
-							<el-tag>{{ scope.row.specifications }}</el-tag>
+							<el-tag class='product-tag' v-for='item in scope.row.specifications' :key='item'>{{item}}</el-tag>
 						</template>
 					</el-table-column>
 					<el-table-column prop='price' label='货品售价' />
@@ -322,7 +322,68 @@ export default defineComponent({
 			});
 		};
 		const changeStockList = () => {
-			console.log(state.specifications);
+			if (state.specifications.length === 0) return false;
+			// 根据specifications创建临时规格列表
+			let specValues = [] as any;
+			let spec = state.specifications[0].specification;
+			let values = [] as any;
+			values.push(0);
+			for (let i = 1; i < state.specifications.length; i ++) {
+				const aspec = state.specifications[i].specification;
+				if (spec === aspec) {
+					values.push(i)
+				} else {
+					specValues.push(values);
+					spec = aspec;
+					values = [];
+					values.push(i)
+				}
+			}
+			specValues.push(values);
+			// 根据临时规格表生成货品规格
+			// 算法基于 https://blog.csdn.net/tyhj_sf/article/details/53893125
+			let productsIndex = 0;
+			let products = [];
+			let combination = [] as any;
+			let n = specValues.length;
+			for (let s = 0; s < n; s ++) {
+				combination[s] = 0;
+			}
+			let index = 0;
+			let isContinue = false;
+			do {
+				let specifications = [] as any;
+				for (let x = 0; x < n; x ++) {
+					let z = specValues[x][combination[x]];
+					specifications.push(state.specifications[z].value);
+				}
+				products[productsIndex] = {
+					id: productsIndex,
+					specifications,
+					price: 0.00,
+					number: 0,
+					url: ''
+				}
+				productsIndex ++;
+				index ++;
+				combination[n - 1] = index;
+				for (let j = n -1; j >= 0; j --) {
+					if (combination[j] >= specValues[j].length) {
+						combination[j] = 0;
+						index = 0;
+						if (j - 1 >= 0) {
+							combination[j - 1] = combination[j - 1] + 1
+						}
+					}
+				}
+				isContinue = false;
+				for (let p = 0; p < n; p ++) {
+					if (combination[p] !== 0) {
+						isContinue = true
+					}
+				}
+			} while (isContinue)
+			state.products = products;
 		}
 		const setStockInfo = (row: any) => {
 			stockModalRef.value.openDialog(row);
@@ -401,7 +462,6 @@ export default defineComponent({
 			getCategoryList();
 			getBrandList();
 			if (route.params.id === 'add') {
-				console.log('新增');
 			} else {
 				state.showDetailFlag = false;
 				viewGoodsApi({
@@ -498,6 +558,9 @@ export default defineComponent({
 		.stock-divider {
 			margin-top: 50px;
 		}
+	}
+	.product-tag{
+		margin-right: 5px;
 	}
 
 	.params-container {

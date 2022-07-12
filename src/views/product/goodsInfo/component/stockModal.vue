@@ -3,7 +3,7 @@
 		<el-dialog :close-on-click-modal='false' :title="title" v-model="isShowDialog" width="769px">
 			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="90px">
 				<el-form-item prop='specifications' label='货品规格列'>
-					<el-tag>{{ruleForm.specifications}}</el-tag>
+					<el-tag v-for='item in ruleForm.specifications' :key='item'>{{item}}</el-tag>
 				</el-form-item>
 				<el-form-item prop='price' label='货品售价'>
 					<el-input v-model='ruleForm.price' placeholder='请输入货品售价' clearable></el-input>
@@ -79,5 +79,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang='scss'>
-
+	.el-tag{
+		margin-right: 5px;
+	}
 </style>
