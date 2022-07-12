@@ -122,7 +122,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<SpecificationsModal ref='specificationsModalRef' @change-specification='changeSpecification' />
+				<SpecificationsModal :specification-list='specifications' ref='specificationsModalRef' @change-specification='changeSpecification' />
 				<StockModal ref='stockModalRef' @change-stock='changeStock' />
 			</div>
 
@@ -307,12 +307,7 @@ export default defineComponent({
 			} else {
 				data.key = new Date().getTime();
 				state.specifications.push(data);
-				state.products.push({
-					specifications: data.value,
-					price: 0,
-					number: 0,
-					url: data.picUrl,
-				});
+				changeStockList();
 			}
 		};
 		const setSpecification = (row: any) => {
@@ -322,10 +317,13 @@ export default defineComponent({
 			state.specifications.map((item: any, index: number) => {
 				if (row.key === item.key) {
 					state.specifications.splice(index, 1);
-					state.products.splice(index, 1);
+					changeStockList();
 				}
 			});
 		};
+		const changeStockList = () => {
+			console.log(state.specifications);
+		}
 		const setStockInfo = (row: any) => {
 			stockModalRef.value.openDialog(row);
 		};

@@ -26,11 +26,18 @@
 import { defineComponent, nextTick, reactive, ref, toRefs } from 'vue';
 import SingleUpload from '/@/components/Upload/SingleUpload.vue';
 import { cloneDeep} from 'lodash';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'specificationsModal',
 	components: {
 		SingleUpload
+	},
+	props: {
+		specificationList: {
+			type: Array,
+			default: () => []
+		}
 	},
 	setup(props, ctx) {
 		const formRef = ref();
@@ -64,6 +71,21 @@ export default defineComponent({
 			state.ruleForm.picUrl = url;
 		};
 		const onSubmit = () => {
+			if (!state.disabled) {
+				// 新增
+				let flag = false;
+				props.specificationList.map((item: any) => {
+					if (item.specification === state.ruleForm.specification) {
+						if (item.value === state.ruleForm.value) {
+							flag = true;
+							ElMessage.error('已存在规格值：' + item.value)
+						}
+					}
+				});
+				if (flag) {
+					return false;
+				}
+			}
 			state.ruleForm.updateTime = '';
 			ctx.emit('change-specification', state.ruleForm, state.disabled);
 			closeDialog();
