@@ -423,6 +423,9 @@ export default defineComponent({
 			state.goodsForm.gallery.map(((item: any) => {
 				gallery.push(item.url);
 			}));
+			state.products.map((item: any) => {
+				item.specifications = JSON.stringify(item.specifications)
+			});
 			const obj = {
 				goods: {
 					...state.goodsForm,
