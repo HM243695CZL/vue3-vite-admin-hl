@@ -94,7 +94,6 @@
 					</el-table-column>
 					<el-table-column label='操作'>
 						<template #default='scope'>
-							<el-button size='small' type='default' @click='setSpecification(scope.row)'>设置</el-button>
 							<el-button v-if='!goodsForm.id' size='small' type='default' @click='deleteSpecification(scope.row)'>删除
 							</el-button>
 						</template>
@@ -297,7 +296,7 @@ export default defineComponent({
 		const onOpenAddSpecifications = () => {
 			specificationsModalRef.value.openDialog();
 		};
-		const changeSpecification = (data: any, isEdit: boolean) => {
+		const changeSpecification = (data: any, isEdit: boolean, index: number) => {
 			if (isEdit) {
 				state.specifications.map((item: any, index: number) => {
 					if (item.id === data.id) {
@@ -306,12 +305,9 @@ export default defineComponent({
 				});
 			} else {
 				data.key = new Date().getTime();
-				state.specifications.push(data);
+				state.specifications.splice(index + 1, 0, data);
 				changeStockList();
 			}
-		};
-		const setSpecification = (row: any) => {
-			specificationsModalRef.value.openDialog(row, true);
 		};
 		const deleteSpecification = (row: any) => {
 			state.specifications.map((item: any, index: number) => {
@@ -358,7 +354,7 @@ export default defineComponent({
 					specifications.push(state.specifications[z].value);
 				}
 				products[productsIndex] = {
-					id: productsIndex,
+					key: productsIndex,
 					specifications,
 					price: 0.00,
 					number: 0,
@@ -390,7 +386,7 @@ export default defineComponent({
 		};
 		const changeStock = (data: any) => {
 			state.products.map((item: any, index: number) => {
-				if (item.specifications === data.specifications) {
+				if (item.specifications.join(',') === data.specifications.join(',')) {
 					state.products[index] = data;
 				}
 			});
@@ -501,7 +497,6 @@ export default defineComponent({
 			stockModalRef,
 			changeSpecification,
 			onOpenAddSpecifications,
-			setSpecification,
 			deleteSpecification,
 			setStockInfo,
 			changeStock,

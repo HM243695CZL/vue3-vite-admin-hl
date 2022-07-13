@@ -59,10 +59,11 @@ export default defineComponent({
 			state.disabled = type;
 			if (row) {
 				state.ruleForm = row;
+			} else {
+				nextTick(() => {
+					formRef.value.resetFields();
+				});
 			}
-			nextTick(() => {
-				formRef.value.resetFields();
-			});
 		};
 		const closeDialog = () => {
 			state.isShowDialog = false;
@@ -71,23 +72,27 @@ export default defineComponent({
 			state.ruleForm.picUrl = url;
 		};
 		const onSubmit = () => {
+			let index = props.specificationList.length;
 			if (!state.disabled) {
 				// 新增
 				let flag = false;
-				props.specificationList.map((item: any) => {
+				for (let i = 0; i < props.specificationList.length; i ++) {
+					const item = props.specificationList[i] as any;
 					if (item.specification === state.ruleForm.specification) {
 						if (item.value === state.ruleForm.value) {
 							flag = true;
 							ElMessage.error('已存在规格值：' + item.value)
+						} else {
+							index = i;
 						}
 					}
-				});
+				}
 				if (flag) {
 					return false;
 				}
 			}
 			state.ruleForm.updateTime = '';
-			ctx.emit('change-specification', state.ruleForm, state.disabled);
+			ctx.emit('change-specification', state.ruleForm, state.disabled, index);
 			closeDialog();
 		};
 		return {
