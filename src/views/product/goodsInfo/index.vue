@@ -480,6 +480,9 @@ export default defineComponent({
 						state.keywordsList = goods.keywords.split(',');
 
 						state.specifications = specifications;
+						products.map((item: any) => {
+							item.specifications = JSON.parse(item.specifications)
+						})
 						state.products = products;
 						state.attributes = attributes;
 					}
