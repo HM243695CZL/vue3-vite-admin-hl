@@ -149,6 +149,7 @@ export default defineComponent({
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
+			state.pageIndex = 1;
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {

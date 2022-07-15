@@ -66,7 +66,7 @@ import PreviewImg from '/@/components/previewImg/index.vue';
 
 
 export default defineComponent({
-	name: 'cmdMember',
+	name: 'cmsMember',
 	components: {
 		PreviewImg,
 		MemberModal
@@ -111,6 +111,7 @@ export default defineComponent({
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
+			state.pageIndex = 1;
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
