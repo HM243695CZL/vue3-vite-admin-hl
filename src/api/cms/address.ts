@@ -1,5 +1,5 @@
 import request from '/@/utils/request';
-const preUrl = '/admin/cms/address';
+const preUrl = '/admin/cms/address/';
 
 export function getAddressPageApi (data: any) {
 	return request({
