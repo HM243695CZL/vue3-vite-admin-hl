@@ -10,9 +10,19 @@
 			<el-table :data='dataList'>
 				<el-table-column type='index' label='序号' width='80' />
 				<el-table-column prop='userId' label='用户id' />
-				<el-table-column prop='name' label='收货人名称' />
+				<el-table-column prop='name' label='收货人名称' show-overflow-tooltip />
 				<el-table-column prop='tel' label='手机号码' />
-				<el-table-column prop='isDefault' label='是否默认' />
+				<el-table-column prop='province' label='区域地址' show-overflow-tooltip>
+					<template #default='scope'>
+						{{scope.row.province}}{{scope.row.city}}{{scope.row.county}}
+					</template>
+				</el-table-column>
+				<el-table-column prop='addressDetail' label='详细地址' show-overflow-tooltip />
+				<el-table-column prop='isDefault' label='是否默认'>
+					<template #default='scope'>
+						<el-tag>{{scope.row.isDefault ? '是' : '否'}}</el-tag>
+					</template>
+				</el-table-column>
 			</el-table>
 			<el-pagination
 				@size-change="onHandleSizeChange"
