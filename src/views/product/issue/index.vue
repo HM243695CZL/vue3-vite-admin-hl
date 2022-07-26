@@ -39,7 +39,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, ref, toRefs } from 'vue';
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
 import { getIssuePageApi, deleteIssueApi } from '/@/api/pms/issue';
 import IssueModal from '/@/views/product/issue/component/issueModal.vue';
 import { StatusEnum } from '/@/common/status.enun';
@@ -89,11 +89,16 @@ export default defineComponent({
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
 			state.pageIndex = 1;
+			getIssueList();
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.pageIndex = val;
+			getIssueList();
 		};
+		onMounted(() => {
+			getIssueList();
+		});
 		return {
 			...toRefs(state),
 			onHandleSizeChange,

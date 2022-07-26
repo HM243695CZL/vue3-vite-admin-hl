@@ -112,10 +112,12 @@ export default defineComponent({
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
 			state.pageIndex = 1;
+			getUserPageList();
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.pageIndex = val;
+			getUserPageList();
 		};
 		// 页面加载时
 		onMounted(() => {

@@ -70,10 +70,12 @@ export default defineComponent({
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
 			state.pageIndex = 1;
+			getAddressList();
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.pageIndex = val;
+			getAddressList();
 		};
 		onMounted(() => {
 			getAddressList();

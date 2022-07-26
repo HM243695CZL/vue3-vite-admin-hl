@@ -52,7 +52,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, toRefs, ref } from 'vue';
+import { defineComponent, reactive, toRefs, ref, onMounted } from 'vue';
 import { deleteKeywordApi, getKeywordPageApi } from '/@/api/pms/keyword';
 import { StatusEnum } from '/@/common/status.enun';
 import { ElMessage } from 'element-plus';
@@ -103,11 +103,16 @@ export default defineComponent({
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
 			state.pageIndex = 1;
+			getKeywordList();
 		};
 		// 分页改变
 		const onHandleCurrentChange = (val: number) => {
 			state.pageIndex = val;
+			getKeywordList();
 		};
+		onMounted(() => {
+			getKeywordList();
+		});
 		return {
 			...toRefs(state),
 			getKeywordList,
