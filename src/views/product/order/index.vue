@@ -2,12 +2,40 @@
 	<div class='product-order-container'>
 		<el-card shadow="hover">
 			<div class='system-user-search mb15'>
-				<el-input v-model='orderSn' size="default" placeholder="请输入订单编号" style="max-width: 180px"> </el-input>
-				<el-input v-model='consignee' size="default" placeholder="请输入收货人" style="max-width: 180px"> </el-input>
-				<el-input v-model='nickName' size="default" placeholder="请输入用户昵称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getOrderList'>
-					查询
-				</el-button>
+				<el-form inline label-width='100px'>
+					<el-row :gutter='20'>
+						<el-col :span='6'>
+							<el-form-item label='订单编号'>
+								<el-input v-model='orderSn' size="default" placeholder="请输入订单编号"> </el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-form-item label='收货人'>
+								<el-input v-model='consignee' size="default" placeholder="请输入收货人"> </el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-form-item label='下单用户'>
+								<el-input v-model='nickName' size="default" placeholder="请输入下单用户"> </el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-form-item label='订单状态'>
+								<el-select size='default' v-model='orderStatus' placeholder='请选择订单状态' clearable>
+									<el-option v-for='(val, key) in statusObj' :key='key' :label='val' :value='key'></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter='20'>
+						<el-col :span='2' :offset='22'>
+							<el-button size="default" type="primary" class="ml10" @click='getOrderList'>
+								查询
+							</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='expand'>
@@ -83,6 +111,19 @@
 				<el-table-column prop='shipChannel' label='物流公司' show-overflow-tooltip />
 			</el-table>
 		</el-card>
+		<el-pagination
+			@size-change="onHandleSizeChange"
+			@current-change="onHandleCurrentChange"
+			class="mt15"
+			:pager-count="5"
+			:page-sizes="[10, 20, 30]"
+			v-model:current-page="pageIndex"
+			background
+			v-model:page-size="pageSize"
+			layout="total, sizes, prev, pager, next, jumper"
+			:total="total"
+		>
+		</el-pagination>
 	</div>
 </template>
 
@@ -100,6 +141,9 @@ export default defineComponent({
 	setup() {
 		const state = reactive({
 			dataList: [],
+			pageIndex: 1,
+			pageSize: 10,
+			total: 0,
 			orderSn: '',
 			consignee: '',
 			nickName: '',
@@ -118,15 +162,29 @@ export default defineComponent({
 		});
 		const getOrderList = () => {
 			getOrderListApi({
+				pageIndex: state.pageIndex,
+				pageSize: state.pageSize,
 				orderSn: state.orderSn,
 				consignee: state.consignee,
 				nickName: state.nickName,
 				orderStatus: state.orderStatus
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
-					state.dataList = res.data;
+					state.dataList = res.data.list;
+					state.total = res.data.total;
 				}
 			})
+		};
+		// 分页改变
+		const onHandleSizeChange = (val: number) => {
+			state.pageSize = val;
+			state.pageIndex = 1;
+			getOrderList();
+		};
+		// 分页改变
+		const onHandleCurrentChange = (val: number) => {
+			state.pageIndex = val;
+			getOrderList();
 		};
 		onMounted(() => {
 			getOrderList();
@@ -134,6 +192,8 @@ export default defineComponent({
 		return {
 			...toRefs(state),
 			getOrderList,
+			onHandleSizeChange,
+			onHandleCurrentChange,
 		}
 	}
 });
