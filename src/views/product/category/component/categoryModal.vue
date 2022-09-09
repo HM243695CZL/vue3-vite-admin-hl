@@ -80,8 +80,8 @@ export default defineComponent({
 				if (res.status === StatusEnum.SUCCESS) {
 					state.categoryList = res.data;
 				}
-			})
-		}
+			});
+		};
 		const openDialog = (row: any) => {
 			state.isShowDialog = true;
 			state.ruleForm.id = '';

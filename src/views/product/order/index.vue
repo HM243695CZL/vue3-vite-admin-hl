@@ -77,7 +77,6 @@
 					</template>
 				</el-table-column>
 				<el-table-column type='index' label='序号' width='60' />
-				<el-table-column prop='orderSn' label='订单编号' show-overflow-tooltip />
 				<el-table-column prop='avatar' label='用户头像'>
 					<template #default='scope'>
 						<PreviewImg :img-url='scope.row.avatar'></PreviewImg>
@@ -85,18 +84,19 @@
 				</el-table-column>
 				<el-table-column prop='userName' label='下单用户' show-overflow-tooltip />
 				<el-table-column prop='addTime' label='下单时间' show-overflow-tooltip />
+				<el-table-column prop='orderSn' label='订单编号' show-overflow-tooltip />
 				<el-table-column prop='orderStatus' label='订单状态' show-overflow-tooltip>
 					<template #default='scope'>
 						<el-tag>{{statusObj[scope.row.orderStatus]}}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop='orderPrice' label='订单金额' show-overflow-tooltip>
-					<template #default='scope'>
-						<span class='price'>
-							{{(scope.row.orderPrice * 100 / 100).toFixed(2)}}元
-						</span>
-					</template>
-				</el-table-column>
+<!--				<el-table-column prop='orderPrice' label='订单金额' show-overflow-tooltip>-->
+<!--					<template #default='scope'>-->
+<!--						<span class='price'>-->
+<!--							{{(scope.row.orderPrice * 100 / 100).toFixed(2)}}元-->
+<!--						</span>-->
+<!--					</template>-->
+<!--				</el-table-column>-->
 				<el-table-column prop='actualPrice' label='实付金额' show-overflow-tooltip>
 					<template #default='scope'>
 						<span class='price'>
@@ -107,8 +107,14 @@
 				<el-table-column prop='payTime' label='支付时间' show-overflow-tooltip />
 				<el-table-column prop='consignee' label='收货人' show-overflow-tooltip />
 				<el-table-column prop='mobile' label='收货电话' show-overflow-tooltip />
-				<el-table-column prop='shipSn' label='物流单号' show-overflow-tooltip />
 				<el-table-column prop='shipChannel' label='物流公司' show-overflow-tooltip />
+				<el-table-column label='操作' width='200'>
+					<template #default='scope'>
+						<el-button size='small' type='default'>详情</el-button>
+						<el-button v-if='scope.row.orderStatus === 201' size='small' type='danger' @click='clickShip(scope.row)'>发货</el-button>
+						<el-button v-if='scope.row.orderStatus === 202' size='small' type='danger' @click='clickRefund(scope.row)'>退款</el-button>
+					</template>
+				</el-table-column>
 			</el-table>
 		</el-card>
 		<el-pagination
@@ -124,21 +130,26 @@
 			:total="total"
 		>
 		</el-pagination>
+		<ShipModal ref='shipModalRef' @refresh-list='getOrderList' />
 	</div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, reactive, toRefs } from 'vue';
-import { getOrderListApi} from '/@/api/pms/order';
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
+import { getOrderListApi, orderRefundApi } from '/@/api/pms/order';
 import PreviewImg from '/@/components/previewImg/index.vue';
+import ShipModal from '/@/views/product/order/component/shipModal.vue';
 import {StatusEnum} from '/@/common/status.enun';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'productOrder',
 	components: {
-		PreviewImg
+		PreviewImg,
+		ShipModal
 	},
 	setup() {
+		const shipModalRef = ref();
 		const state = reactive({
 			dataList: [],
 			pageIndex: 1,
@@ -186,6 +197,21 @@ export default defineComponent({
 			state.pageIndex = val;
 			getOrderList();
 		};
+		// 点击发货
+		const clickShip = (row: any) => {
+			shipModalRef.value.openDialog(row);
+		};
+		// 点击退款
+		const clickRefund = (row: any) => {
+			orderRefundApi({
+				id: row.id
+			}).then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					ElMessage.success('退款成功');
+					getOrderList();
+				}
+			})
+		}
 		onMounted(() => {
 			getOrderList();
 		});
@@ -194,6 +220,9 @@ export default defineComponent({
 			getOrderList,
 			onHandleSizeChange,
 			onHandleCurrentChange,
+			clickRefund,
+			clickShip,
+			shipModalRef
 		}
 	}
 });
