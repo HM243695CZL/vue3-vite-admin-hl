@@ -42,14 +42,17 @@
 				<el-table-column prop='content' label='评论内容' show-overflow-tooltip />
 				<el-table-column prop='picUrls' label='评论图片'>
 					<template #default='scope'>
-						<PreviewImg :img-url='item' v-for='item in JSON.parse(scope.row.picUrls)' :key='item'></PreviewImg>
-						<div class='no-data' v-if='JSON.parse(scope.row.picUrls).length === 0'>无</div>
+						<div class='preview-box flex-start' v-if='JSON.parse(scope.row.picUrls).length > 0'>
+							<PreviewImg :img-url='item' v-for='item in JSON.parse(scope.row.picUrls)' :key='item'></PreviewImg>
+						</div>
+						<div class='no-data' v-else>无</div>
 					</template>
 				</el-table-column>
 				<el-table-column prop='addTime' label='时间' show-overflow-tooltip />
 				<el-table-column label='操作' width='200'>
 					<template #default='scope'>
-						<el-button size='small' type='default'>回复</el-button>
+						<el-button v-if='scope.row.adminContent === ""' size='small' type='default' @click='handleReply(scope.row)'>回复</el-button>
+						<el-button v-else size='small' type='default' @click='viewReply(scope.row)'>查看回复</el-button>
 						<el-button size='small' type='default' @click='handleDelete(scope.row)'>删除</el-button>
 					</template>
 				</el-table-column>
@@ -67,23 +70,27 @@
 				:total="total"
 			>
 			</el-pagination>
+			<CommentModal ref='commentModalRef'></CommentModal>
 		</el-card>
 	</div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, onMounted, reactive, toRefs } from 'vue';
+import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
 import { getCommentPageApi, deleteCommentApi } from '/@/api/pms/comment';
 import { StatusEnum } from '/@/common/status.enun';
 import PreviewImg from '/@/components/previewImg/index.vue';
+import CommentModal from '/@/views/product/comment/component/commentModal.vue';
 import { ElMessage } from 'element-plus';
 
 export default defineComponent({
 	name: 'productComment',
 	components: {
-		PreviewImg
+		PreviewImg,
+		CommentModal
 	},
 	setup() {
+		const commentModalRef = ref();
 		const state = reactive({
 			pageIndex: 1,
 			pageSize: 10,
@@ -96,13 +103,22 @@ export default defineComponent({
 		const getCommentList = () => {
 			getCommentPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				goodsName: state.goodsName,
+				username: state.username,
+				star: state.star
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const handleReply = (row: any) => {
+			commentModalRef.value.openDialog(row, false);
+		};
+		const viewReply = (row: any) => {
+			commentModalRef.value.openDialog(row, true);
 		};
 		const handleDelete = (row: any) => {
 			deleteCommentApi({
@@ -133,7 +149,10 @@ export default defineComponent({
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			handleDelete,
-			...toRefs(state)
+			handleReply,
+			viewReply,
+			...toRefs(state),
+			commentModalRef
 		}
 	}
 });
@@ -141,6 +160,11 @@ export default defineComponent({
 
 <style scoped lang='scss'>
 	.product-comment-container{
+		.preview-box{
+			.preview-img-container{
+				margin-right: 15px;
+			}
+		}
 		.no-data{
 			color: #ccc;
 		}
