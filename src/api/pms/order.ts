@@ -23,3 +23,11 @@ export function orderShipApi(data: any) {
 		data
 	})
 }
+
+
+export function viewOrderApi (params: any) {
+	return request({
+		url: `${preUrl}view/` + params.id,
+		method: 'get'
+	})
+}

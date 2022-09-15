@@ -110,7 +110,7 @@
 				<el-table-column prop='shipChannel' label='物流公司' show-overflow-tooltip />
 				<el-table-column label='操作' width='200'>
 					<template #default='scope'>
-						<el-button size='small' type='default'>详情</el-button>
+						<el-button size='small' type='default' @click='clickView(scope.row)'>详情</el-button>
 						<el-button v-if='scope.row.orderStatus === 201' size='small' type='danger' @click='clickShip(scope.row)'>发货</el-button>
 						<el-button v-if='scope.row.orderStatus === 202' size='small' type='danger' @click='clickRefund(scope.row)'>退款</el-button>
 					</template>
@@ -131,6 +131,7 @@
 		>
 		</el-pagination>
 		<ShipModal ref='shipModalRef' @refresh-list='getOrderList' />
+		<OrderModal ref='orderModalRef' />
 	</div>
 </template>
 
@@ -139,6 +140,7 @@ import { defineComponent, onMounted, reactive, ref, toRefs } from 'vue';
 import { getOrderListApi, orderRefundApi } from '/@/api/pms/order';
 import PreviewImg from '/@/components/previewImg/index.vue';
 import ShipModal from '/@/views/product/order/component/shipModal.vue';
+import OrderModal from '/@/views/product/order/component/orderModal.vue';
 import {StatusEnum} from '/@/common/status.enun';
 import { ElMessage } from 'element-plus';
 
@@ -146,10 +148,12 @@ export default defineComponent({
 	name: 'productOrder',
 	components: {
 		PreviewImg,
-		ShipModal
+		ShipModal,
+		OrderModal
 	},
 	setup() {
 		const shipModalRef = ref();
+		const orderModalRef = ref();
 		const state = reactive({
 			dataList: [],
 			pageIndex: 1,
@@ -197,6 +201,10 @@ export default defineComponent({
 			state.pageIndex = val;
 			getOrderList();
 		};
+		// 点击详情
+		const clickView = (row: any) => {
+			orderModalRef.value.openDialog(row);
+		};
 		// 点击发货
 		const clickShip = (row: any) => {
 			shipModalRef.value.openDialog(row);
@@ -222,7 +230,9 @@ export default defineComponent({
 			onHandleCurrentChange,
 			clickRefund,
 			clickShip,
-			shipModalRef
+			clickView,
+			shipModalRef,
+			orderModalRef
 		}
 	}
 });

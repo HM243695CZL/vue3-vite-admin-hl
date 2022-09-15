@@ -11,7 +11,7 @@
 					<el-input v-model='ruleForm.shipSn' placeholder='请输入快递单号'></el-input>
 				</el-form-item>
 			</el-form>
-			<template #footer>
+			<template #footer>.
 				<span class="dialog-footer">
 					<el-button @click="closeDialog" size="default">取 消</el-button>
 					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
