@@ -35,7 +35,6 @@
 						</el-col>
 					</el-row>
 				</el-form>
-
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='expand'>
@@ -116,20 +115,20 @@
 					</template>
 				</el-table-column>
 			</el-table>
+			<el-pagination
+				@size-change="onHandleSizeChange"
+				@current-change="onHandleCurrentChange"
+				class="mt15"
+				:pager-count="5"
+				:page-sizes="[10, 20, 30]"
+				v-model:current-page="pageIndex"
+				background
+				v-model:page-size="pageSize"
+				layout="total, sizes, prev, pager, next, jumper"
+				:total="total"
+			>
+			</el-pagination>
 		</el-card>
-		<el-pagination
-			@size-change="onHandleSizeChange"
-			@current-change="onHandleCurrentChange"
-			class="mt15"
-			:pager-count="5"
-			:page-sizes="[10, 20, 30]"
-			v-model:current-page="pageIndex"
-			background
-			v-model:page-size="pageSize"
-			layout="total, sizes, prev, pager, next, jumper"
-			:total="total"
-		>
-		</el-pagination>
 		<ShipModal ref='shipModalRef' @refresh-list='getOrderList' />
 		<OrderModal ref='orderModalRef' />
 	</div>

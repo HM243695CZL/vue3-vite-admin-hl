@@ -57,7 +57,7 @@
 					</el-table-column>
 					<el-table-column prop='price' label='货品价格'>
 						<template #default='scope'>
-							<span class='price'>{{scope.row.price}}￥</span>
+							<span class='price'>￥{{(scope.row.price * 100 / 100).toFixed(2)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop='number' label='货品数量' />
