@@ -62,7 +62,7 @@ export default defineComponent({
 				id: '',
 				name: '',
 				keywords: '',
-				level: '',
+				level: 'L1',
 				pid: '',
 				iconUrl: '',
 				picUrl: '',

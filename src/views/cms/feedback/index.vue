@@ -9,7 +9,7 @@
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='index' label='序号' width='60' />
-				<el-table-column prop='username' label='用户名' show-overflow-tooltip />
+				<el-table-column prop='userId' label='用户id' show-overflow-tooltip />
 				<el-table-column prop='mobile' label='手机号' show-overflow-tooltip />
 				<el-table-column prop='hasPicture' label='是否有图片'>
 					<template #default='scope'>

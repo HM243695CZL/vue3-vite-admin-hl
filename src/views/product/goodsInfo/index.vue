@@ -214,6 +214,9 @@ export default defineComponent({
 				name: [
 					{ required: true, message: '商品名称不能为空', trigger: 'blur' },
 				],
+				goodsSn: [
+					{ required: true, message: '商品编号不能为空', trigger: 'blur'}
+				]
 			},
 			keywordsValue: '',
 			keywordsInputVisible: false,
