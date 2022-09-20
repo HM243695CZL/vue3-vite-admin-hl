@@ -2,7 +2,6 @@
 	<div class="system-menu-container">
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
-				<el-input v-model='title' size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10" @click='getMenuList'>
 					<el-icon>
 						<ele-Search />
@@ -60,7 +59,6 @@ export default defineComponent({
 		const addMenuRef = ref();
 		const editMenuRef = ref();
 		const state = reactive({
-			title: '',
 			dataList: []
 		});
 		const getMenuList = () => {

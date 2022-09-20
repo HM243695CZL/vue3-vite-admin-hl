@@ -6,21 +6,21 @@
 					<el-row :gutter='20'>
 						<el-col :span='6'>
 							<el-form-item label='字典类型'>
-								<el-input v-model='dataType'></el-input>
+								<el-input size='default' clearable v-model='dataType'></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
 							<el-form-item label='字典键'>
-								<el-input v-model='dateKey'></el-input>
+								<el-input size='default' clearable v-model='dateKey'></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
 							<el-form-item label='字典值'>
-								<el-input v-model='dateValue'></el-input>
+								<el-input size='default' clearable v-model='dateValue'></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
-							<el-button size="default" type="primary" class="ml10" @click='getDictList'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 								查询
 							</el-button>
 							<el-button size="default" type="success" class="ml10" @click="openAddDict">
@@ -64,7 +64,7 @@ export default defineComponent({
 		const state = reactive({
 			dataList: [],
 			pageIndex: 1,
-			pageSize: 10,
+			pageSize: 20,
 			total: 0,
 			dataType: '',
 			dateKey: '',
@@ -73,13 +73,20 @@ export default defineComponent({
 		const getDictList = () => {
 			getDictPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				dataKey: state.dateKey,
+				dataValue: state.dateValue,
+				dataType: state.dataType,
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getDictList();
 		};
 		const openAddDict = () => {
 			dictModalRef.value.openDialog();
@@ -119,7 +126,8 @@ export default defineComponent({
 			dictModalRef,
 			openAddDict,
 			onOpenEditDict,
-			deleteDict
+			deleteDict,
+			clickSearch
 		}
 	}
 });

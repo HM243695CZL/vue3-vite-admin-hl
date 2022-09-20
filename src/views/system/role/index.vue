@@ -2,8 +2,8 @@
 	<div class="system-role-container">
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入角色名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getRolePageList'>
+				<el-input v-model='name' size="default" placeholder="请输入角色名称" style="max-width: 180px" clearable> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 					查询
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole">
@@ -71,12 +71,14 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			dataList: [],
-			total: 0
+			total: 0,
+			name: ''
 		});
 		const getRolePageList = () => {
 			getRolePageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				name: state.name
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
@@ -84,6 +86,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getRolePageList();
+		}
 		// 打开新增角色弹窗
 		const onOpenAddRole = () => {
 			addRoleRef.value.openDialog();
@@ -130,6 +136,7 @@ export default defineComponent({
 			onHandleCurrentChange,
 			deleteRole,
 			...toRefs(state),
+			clickSearch,
 		};
 	},
 });

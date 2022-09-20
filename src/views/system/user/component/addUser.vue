@@ -2,8 +2,8 @@
 	<div class="system-add-user-container">
 		<el-dialog title="新增用户" v-model="isShowDialog" width="769px">
 			<el-form ref='formRef' :rules='rules' :model="ruleForm" size="default" label-width="100px">
-				<el-form-item label="管理员名称" prop='username'>
-					<el-input v-model="ruleForm.username" placeholder="请输入管理员名称" clearable></el-input>
+				<el-form-item label="用户名称" prop='username'>
+					<el-input v-model="ruleForm.username" placeholder="请输入用户名称" clearable></el-input>
 				</el-form-item>
 				<el-form-item label='头像' prop='avatar'>
 					<SingleUpload :source-url='ruleForm.avatar' @change-source-url='changeAvatar'></SingleUpload>
