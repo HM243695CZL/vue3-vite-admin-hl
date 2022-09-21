@@ -26,6 +26,7 @@
 				<el-table-column type='index' label='序号' width='80' />
 				<el-table-column prop='username' label='用户名称' />
 				<el-table-column prop='keyword' label='搜索关键词' show-overflow-tooltip />
+				<el-table-column prop='searchCount' label='搜索次数' show-overflow-tooltip />
 				<el-table-column prop='from' label='来源' show-overflow-tooltip />
 				<el-table-column prop='addTime' label='添加时间' />
 			</el-table>
