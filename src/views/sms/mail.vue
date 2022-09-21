@@ -2,9 +2,20 @@
 	<div class='sms-mail-container'>
 		<el-card shadow="hover">
 			<div class='system-user-search mb15'>
-				<el-button size="default" type="primary" class="ml10" @click='getMailList'>
-				查询
-				</el-button>
+				<el-form inline label-width='100px'>
+					<el-row :gutter='20'>
+						<el-col :span='6'>
+							<el-form-item label='收件人'>
+								<el-input v-model='to' size='default' placeholder='请输入收件人' clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
+								查询
+							</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='expand'>
@@ -36,18 +47,24 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			to: ''
 		});
 		const getMailList = () => {
 			getMailPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				to: state.to
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const clickSearch = () => {
+			state.pageIndex  =1;
+			getMailList();
 		};
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
@@ -67,7 +84,8 @@ export default defineComponent({
 			getMailList,
 			onHandleSizeChange,
 			onHandleCurrentChange,
-			...toRefs(state)
+			...toRefs(state),
+			clickSearch
 		}
 	}
 });
