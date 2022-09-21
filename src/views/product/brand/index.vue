@@ -2,8 +2,8 @@
 	<div class='product-brand-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入制造商名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getBrandList'>
+				<el-input v-model='name' clearable size="default" placeholder="请输入制造商名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 					查询
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddBrand">
@@ -64,18 +64,24 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			name: ''
 		});
 		const getBrandList = () => {
 			getBrandPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				name: state.name
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getBrandList();
 		};
 		const onOpenAddBrand = () => {
 			brandModalRef.value.openDialog();
@@ -115,7 +121,8 @@ export default defineComponent({
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			brandModalRef,
-			...toRefs(state)
+			...toRefs(state),
+			clickSearch
 		}
 	}
 });

@@ -41,6 +41,19 @@
 						</template>
 					</el-table-column>
 				</el-table>
+				<el-pagination
+					@size-change="onHandleSizeChange"
+					@current-change="onHandleCurrentChange"
+					class="mt15"
+					:pager-count="5"
+					:page-sizes="[10, 20, 30]"
+					v-model:current-page="pageIndex"
+					background
+					v-model:page-size="pageSize"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="total"
+				>
+				</el-pagination>
 			</div>
 		</el-card>
 		<DictModal ref='dictModalRef' @refresh-list='getDictList' />

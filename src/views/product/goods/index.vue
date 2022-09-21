@@ -2,8 +2,8 @@
 	<div class='product-goods-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入商品名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getGoodsList'>
+				<el-input v-model='keyword' clearable size="default" placeholder="请输入商品名称" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 					查询
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddGoods">
@@ -114,12 +114,14 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			keyword: ''
 		});
 		const getGoodsList = () => {
 			getGoodsPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				keyword: state.keyword
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
@@ -127,6 +129,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getGoodsList();
+		}
 		const handleEdit = (row: any) => {
 			router.push({
 				name: 'productGoodsInfo',
@@ -176,7 +182,8 @@ export default defineComponent({
 			onHandleCurrentChange,
 			handleEdit,
 			handleDelete,
-			...toRefs(state)
+			...toRefs(state),
+			clickSearch
 		}
 	}
 });

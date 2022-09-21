@@ -2,14 +2,23 @@
 	<div class='cms-member-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getMemberList'>
-					查询
-				</el-button>
+				<el-form inline label-width='100px'>
+					<el-row :gutter='20'>
+						<el-col :span='6'>
+							<el-form-item label='用户昵称'>
+								<el-input v-model='nickname' clearable size="default" placeholder="请输入用户昵称" style="max-width: 180px"> </el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
+								查询
+							</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='index' label='序号' width='80' />
-				<el-table-column prop='id' label='用户ID' show-overflow-tooltip />
 				<el-table-column prop='nickname' label='用户昵称' show-overflow-tooltip />
 				<el-table-column prop='avatar' label='用户头像' show-overflow-tooltip>
 					<template #default='scope'>
@@ -33,9 +42,10 @@
 						<el-tag>{{statusObj[scope.row.status]}}</el-tag>
 					</template>
 				</el-table-column>
+				<el-table-column prop='addTime' label='添加时间' show-overflow-tooltip />
 				<el-table-column label="操作" width="200">
 					<template #default="scope">
-						<el-button size="small" type="default" @click="onOpenEditMember(scope.row)">详情</el-button>
+						<el-button size="small" type="default" @click="onOpenEditMember(scope.row)">编辑</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -78,6 +88,7 @@ export default defineComponent({
 			pageSize: 10,
 			dataList: [],
 			total: 0,
+			nickname: '',
 			userLevelObj: {
 				0: '普通用户',
 				1: 'VIP用户',
@@ -97,13 +108,18 @@ export default defineComponent({
 		const getMemberList = () => {
 			getMemberPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				nickname: state.nickname
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getMemberList();
 		};
 		const onOpenEditMember = (row: any) => {
 			memberModalRef.value.openDialog(row);
@@ -128,7 +144,8 @@ export default defineComponent({
 			onOpenEditMember,
 			onHandleSizeChange,
 			onHandleCurrentChange,
-			memberModalRef
+			memberModalRef,
+			clickSearch
 		}
 	}
 });

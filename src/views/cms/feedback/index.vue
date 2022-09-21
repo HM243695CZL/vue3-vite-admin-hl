@@ -2,14 +2,31 @@
 	<div class='cmd-feedback-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="用户名" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getFeedbackList'>
-					查询
-				</el-button>
+				<el-form inline label-width='100px'>
+					<el-row :gutter='20'>
+						<el-col :span='6'>
+							<el-form-item label='用户名称'>
+								<el-input v-model='username' size='default' placeholder='请输入用户名称' clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-form-item label='反馈类型'>
+								<el-select v-model='feedType' placeholder='请选择' size='default' clearable>
+									<el-option v-for='item in feedTypeList' :key='item' :label='item' :value='item'></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
+								查询
+							</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='index' label='序号' width='60' />
-				<el-table-column prop='userId' label='用户id' show-overflow-tooltip />
+				<el-table-column prop='username' label='用户名称' show-overflow-tooltip />
 				<el-table-column prop='mobile' label='手机号' show-overflow-tooltip />
 				<el-table-column prop='hasPicture' label='是否有图片'>
 					<template #default='scope'>
@@ -66,19 +83,27 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			username: '',
+			feedType: '',
+			feedTypeList:  ['商品相关', '功能异常', '优化建议', '其他']
 		});
-
 		const getFeedbackList = () => {
 			getFeedbackPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				username: state.username,
+				feedType: state.feedType
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
 					state.total = res.data.total;
 				}
 			})
+		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getFeedbackList();
 		};
 		const onOpenViewFeedback = (row: any) => {
 			feedbackModalRef.value.openDialog(row);
@@ -114,7 +139,8 @@ export default defineComponent({
 			deleteFeedback,
 			onHandleSizeChange,
 			onHandleCurrentChange,
-			onOpenViewFeedback
+			onOpenViewFeedback,
+			clickSearch
 		}
 	}
 });

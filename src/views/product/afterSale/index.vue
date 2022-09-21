@@ -6,12 +6,12 @@
 					<el-row :gutter='20'>
 						<el-col :span='6'>
 							<el-form-item label='售后编号'>
-								<el-input v-model='afterSaleSn' size="default" placeholder="请输入售后编号"> </el-input>
+								<el-input v-model='afterSaleSn' size="default" placeholder="请输入售后编号" clearable> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
 							<el-form-item label='用户名称'>
-								<el-input v-model='username' size="default" placeholder="请输入用户名称"> </el-input>
+								<el-input v-model='username' size="default" placeholder="请输入用户名称" clearable> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
@@ -31,7 +31,7 @@
 					</el-row>
 					<el-row :gutter='20'>
 						<el-col :span='2' :offset='22'>
-							<el-button size="default" type="primary" class="ml10" @click='getAfterSaleList'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 								查询
 							</el-button>
 						</el-col>
@@ -138,6 +138,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getAfterSaleList();
+		}
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
@@ -162,7 +166,8 @@ export default defineComponent({
 			onHandleSizeChange,
 			onHandleCurrentChange,
 			clickView,
-			afterSaleModalRef
+			afterSaleModalRef,
+			clickSearch
 		}
 	}
 });

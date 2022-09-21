@@ -2,14 +2,29 @@
 	<div class='cms-address-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入用户id" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getAddressList'>
-					查询
-				</el-button>
+				<el-form inline label-width='100px'>
+					<el-row :gutter='20'>
+						<el-col :span='6'>
+							<el-form-item label='用户名称'>
+								<el-input v-model='username' size='default' placeholder='请输入用户名称' clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-form-item label='收货人名称'>
+								<el-input v-model='name' size='default' placeholder='请输入收货人名称' clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span='6'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
+								查询
+							</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
 			</div>
 			<el-table :data='dataList'>
 				<el-table-column type='index' label='序号' width='80' />
-				<el-table-column prop='userId' label='用户id' />
+				<el-table-column prop='username' label='用户名称' />
 				<el-table-column prop='name' label='收货人名称' show-overflow-tooltip />
 				<el-table-column prop='tel' label='手机号码' />
 				<el-table-column prop='province' label='区域地址' show-overflow-tooltip>
@@ -54,11 +69,15 @@ export default defineComponent({
 			pageSize: 10,
 			dataList: [],
 			total: 0,
+			username: '',
+			name: ''
 		});
 		const getAddressList = () => {
 			getAddressPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				username: state.username,
+				name: state.name
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
@@ -66,6 +85,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getAddressList();
+		}
 		// 分页改变
 		const onHandleSizeChange = (val: number) => {
 			state.pageSize = val;
@@ -84,7 +107,8 @@ export default defineComponent({
 			...toRefs(state),
 			getAddressList,
 			onHandleSizeChange,
-			onHandleCurrentChange
+			onHandleCurrentChange,
+			clickSearch
 		}
 	}
 });

@@ -2,8 +2,8 @@
 	<div class='product-keyword-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入关键词" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click='getKeywordList'>
+				<el-input v-model='keyword' clearable size="default" placeholder="请输入关键词" style="max-width: 180px"> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 					查询
 				</el-button>
 				<el-button size="default" type="success" class="ml10" @click="onOpenAddKeyword">
@@ -69,13 +69,15 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			keyword: ''
 		});
 
 		const getKeywordList = () => {
 			getKeywordPageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				keyword: state.keyword
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;
@@ -83,6 +85,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getKeywordList();
+		}
 		const onOpenAddKeyword = () => {
 			keywordModalRef.value.openDialog();
 		};
@@ -121,7 +127,8 @@ export default defineComponent({
 			onHandleCurrentChange,
 			onOpenAddKeyword,
 			onOpenEditKeyword,
-			keywordModalRef
+			keywordModalRef,
+			clickSearch
 		}
 	}
 });

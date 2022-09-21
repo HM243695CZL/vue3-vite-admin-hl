@@ -2,7 +2,6 @@
 	<div class='product-category-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入类目名称" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10" @click='getCategoryList'>
 					查询
 				</el-button>

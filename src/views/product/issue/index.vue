@@ -2,7 +2,7 @@
 	<div class='product-issue-container'>
 		<el-card shadow="hover">
 			<div class="system-user-search mb15">
-				<el-input size="default" placeholder="请输入制造商名称" style="max-width: 180px"> </el-input>
+				<el-input v-model='question' clearable size="default" placeholder="请输入问题内容" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10" @click='getIssueList'>
 					查询
 				</el-button>
@@ -56,12 +56,14 @@ export default defineComponent({
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			dataList: []
+			dataList: [],
+			question: ''
 		});
 		const getIssueList = () => {
 			getIssuePageApi({
 				pageIndex: state.pageIndex,
-				pageSize: state.pageSize
+				pageSize: state.pageSize,
+				question: state.question
 			}).then(res => {
 				if (res.status === StatusEnum.SUCCESS) {
 					state.dataList = res.data.list;

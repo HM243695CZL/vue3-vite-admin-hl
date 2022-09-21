@@ -6,12 +6,12 @@
 					<el-row :gutter='20'>
 						<el-col :span='6'>
 							<el-form-item label='商品名称'>
-								<el-input v-model='goodsName' size="default" placeholder="请输入商品名称"> </el-input>
+								<el-input v-model='goodsName' size="default" placeholder="请输入商品名称" clearable> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
 							<el-form-item label='用户名'>
-								<el-input v-model='username' size="default" placeholder="请输入用户名"> </el-input>
+								<el-input v-model='username' size="default" placeholder="请输入用户名" clearable> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
@@ -22,7 +22,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span='6'>
-							<el-button size="default" type="primary" class="ml10" @click='getCommentList'>
+							<el-button size="default" type="primary" class="ml10" @click='clickSearch'>
 								查询
 							</el-button>
 						</el-col>
@@ -114,6 +114,10 @@ export default defineComponent({
 				}
 			})
 		};
+		const clickSearch = () => {
+			state.pageIndex = 1;
+			getCommentList();
+		}
 		const handleReply = (row: any) => {
 			commentModalRef.value.openDialog(row, false);
 		};
@@ -152,7 +156,8 @@ export default defineComponent({
 			handleReply,
 			viewReply,
 			...toRefs(state),
-			commentModalRef
+			commentModalRef,
+			clickSearch
 		}
 	}
 });
