@@ -1,6 +1,25 @@
 import axios from 'axios';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus';
 import { Session } from '/@/utils/storage';
+
+let loadingReqCount = 0;
+let loadingInstance: any;
+const showLoading = () => {
+	if (loadingReqCount === 0) {
+		loadingInstance = ElLoading.service({
+			target: '#app'
+		})
+	}
+	loadingReqCount += 1;
+}
+
+const hideLoading = () => {
+	if (loadingReqCount <= 0) return;
+	loadingReqCount -= 1;
+	if (loadingReqCount === 0) {
+		loadingInstance.close();
+	}
+}
 
 // 配置新建一个 axios 实例
 const service = axios.create({
@@ -12,6 +31,7 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
+		showLoading();
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
 			(<any>config.headers).common['Authorization'] = `Bearer ${Session.get('token')}`;
@@ -27,6 +47,7 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response) => {
+		hideLoading();
 		// 对响应数据做点什么
 		const res = response.data;
 		if (res.status && res.status !== 200) {
@@ -46,6 +67,7 @@ service.interceptors.response.use(
 		}
 	},
 	(error) => {
+		hideLoading();
 		// 对响应错误做点什么
 		if (error.message.indexOf('timeout') != -1) {
 			ElMessage.error('网络超时');

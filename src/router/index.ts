@@ -210,17 +210,6 @@ router.beforeEach(async (to, from, next) => {
 			NProgress.done();
 		} else {
 			next();
-			// if (store.state.routesList.routesList.length === 0) {
-			// 	if (isRequestRoutes) {
-			// 		// 后端控制路由：路由数据初始化，防止刷新时丢失
-			// 		await initBackEndControlRoutes();
-			// 		// 动态添加路由：防止非首页刷新时跳转回首页的问题
-			// 		// 确保 addRoute() 时动态添加的路由已经被完全加载上去
-			// 		next({ ...to, replace: true });
-			// 	}
-			// } else {
-			// 	next();
-			// }
 		}
 	}
 });
