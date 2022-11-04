@@ -71,7 +71,7 @@
 						<el-input type='textarea' :rows='3' v-model='goodsForm.brief' clearable placeholder='请输入商品简介'></el-input>
 					</el-form-item>
 					<el-form-item prop='detail' label='商品详细介绍'>
-						<HlEditor v-if='showDetailFlag' :content='goodsForm.detail' @editor-blur='changeDetail'></HlEditor>
+						<HlEditor ref='hlEditorRef' :content='goodsForm.detail' @editor-blur='changeDetail'></HlEditor>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -189,6 +189,7 @@ export default defineComponent({
 		const stockModalRef = ref();
 
 		const paramsModalRef = ref();
+		const hlEditorRef = ref();
 
 		const state = reactive({
 			stepIndex: 0,
@@ -209,7 +210,6 @@ export default defineComponent({
 				brief: '',
 				detail: '',
 			},
-			showDetailFlag: true,
 			goodsRules: {
 				name: [
 					{ required: true, message: '商品名称不能为空', trigger: 'blur' },
@@ -465,14 +465,13 @@ export default defineComponent({
 			getBrandList();
 			if (route.params.id === 'add') {
 			} else {
-				state.showDetailFlag = false;
 				viewGoodsApi({
 					id: route.params.id,
 				}).then(res => {
-					state.showDetailFlag = true;
 					if (res.status === StatusEnum.SUCCESS) {
 						const { goods, specifications, products, attributes } = res.data;
 						state.goodsForm = goods;
+						hlEditorRef.value.editorRef.setHtml(state.goodsForm.detail);
 						const galleryList = [] as any;
 						JSON.parse(goods.gallery).map((item: string) => {
 							galleryList.push({
@@ -504,6 +503,7 @@ export default defineComponent({
 
 			specificationsModalRef,
 			stockModalRef,
+			hlEditorRef,
 			changeSpecification,
 			onOpenAddSpecifications,
 			deleteSpecification,
