@@ -74,5 +74,10 @@
 	"repository": {
 		"type": "git",
 		"url": "https://gitee.com/lyt-top/vue-next-admin.git"
+	},
+	"eslintConfig": {
+		"rules": {
+			"no-mixed-spaces-and-tabs": 0
+		}
 	}
 }
