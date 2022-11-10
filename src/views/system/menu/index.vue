@@ -33,6 +33,7 @@
 						<span>{{ scope.row.roles }}</span>
 					</template>
 				</el-table-column>
+				<el-table-column label='排序' prop='sort' />
 				<el-table-column label="操作" show-overflow-tooltip width="240">
 					<template #default="scope">
 						<el-button size="small" type="default" @click="onOpenEditMenu(scope.row)">修改</el-button>
