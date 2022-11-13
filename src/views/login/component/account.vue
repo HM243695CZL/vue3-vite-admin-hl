@@ -53,7 +53,7 @@ import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
 import { postAction } from '/@/api/common';
-import { loginApi } from '/@/api/login';
+import { loginApi} from '/@/api/system/user';
 import { StatusEnum } from '/@/common/status.enum';
 
 export default defineComponent({

@@ -1,5 +1,5 @@
 <template>
-	<div class="h100">
+	<div class="parent-container">
 		<router-view v-slot="{ Component }">
 			<transition :name="setTransitionName" mode="out-in">
 				<keep-alive :include="getKeepAliveNames">
@@ -86,3 +86,9 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang='scss'>
+	.parent-container{
+		background: #fff;
+		height: 100%;
+	}
+</style>

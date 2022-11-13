@@ -32,11 +32,11 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
+		showLoading();
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
-			(<any>config.headers).common['Authorization'] = `${Session.get('token')}`;
+			(<any>config.headers).common['Authorization'] = `Bearer ${Session.get('token')}`;
 		}
-		showLoading();
 		return config;
 	},
 	(error) => {
@@ -53,7 +53,7 @@ service.interceptors.response.use(
 		const res = response.data;
 		if (res.status && res.status !== 200) {
 			// `token` 过期或者账号已在别处登录
-			if (res.code === 401 || res.code === 4001) {
+			if (res.status === 401 || res.status === 4001) {
 				Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/'; // 去登录页
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
@@ -64,10 +64,6 @@ service.interceptors.response.use(
 			}
 			return Promise.reject(service.interceptors.response);
 		} else {
-			// 响应流文件时直接返回
-			if (response.data.type) {
-				return response;
-			}
 			return response.data;
 		}
 	},
@@ -79,7 +75,7 @@ service.interceptors.response.use(
 		} else if (error.message == 'Network Error') {
 			ElMessage.error('网络连接错误');
 		} else {
-			if (error.response.data) ElMessage.error(error.response.statusText);
+			if (error.response.data) ElMessage.error('【' + error.response.data.path + '】' + error.response.data.error);
 			else ElMessage.error('接口路径找不到');
 		}
 		return Promise.reject(error);

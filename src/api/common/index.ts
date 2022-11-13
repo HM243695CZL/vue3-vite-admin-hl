@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 
-export const baseUrl = import.meta.env.VITE_API_URL as any;
+export const reviewFileUrl = '';
 
 export function postAction(url: string, data: any) {
 	return request({
@@ -15,5 +15,24 @@ export function getAction(url: string, data: any) {
 		url,
 		method: 'get',
 		data
+	})
+}
+
+export function uploadAction(url: string, data: any) {
+	return request({
+		url,
+		method: 'post',
+		data,
+		headers: {
+			'Content-Type': 'multipart/form-data'
+		}
+	})
+}
+
+export function ArrayBufferAction(url: string) {
+	return request({
+		url,
+		method: 'get',
+		responseType: 'arraybuffer'
 	})
 }
