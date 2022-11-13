@@ -48,10 +48,7 @@ import { toRefs, reactive, defineComponent, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import Cookies from 'js-cookie';
-import { storeToRefs } from 'pinia';
-import { useThemeConfig } from '/@/stores/themeConfig';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
-import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
@@ -62,8 +59,6 @@ import { StatusEnum } from '/@/common/status.enum';
 export default defineComponent({
 	name: 'loginAccount',
 	setup() {
-		const storesThemeConfig = useThemeConfig();
-		const { themeConfig } = storeToRefs(storesThemeConfig);
 		const route = useRoute();
 		const router = useRouter();
 		const state = reactive({
@@ -89,22 +84,24 @@ export default defineComponent({
 				password: state.ruleForm.password
 			}).then(async res => {
 				if (res.status === StatusEnum.SUCCESS) {
+					const {
+						username, avatar, roles
+					} = res.data.userInfo;
 					// 存储 token 到浏览器缓存
 					Session.set('token', res.data.token);
 					Session.set('menuList', res.data.menuList);
+					Session.set('userInfo', {
+						userName: username,
+						photo: avatar,
+						time: 0,
+						roles,
+						authBtnList: []
+					});
 					// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
 					Cookies.set('userName', state.ruleForm.username);
-					if (!themeConfig.value.isRequestRoutes) {
-						// 前端控制路由，2、请注意执行顺序
-						await initFrontEndControlRoutes();
-						signInSuccess();
-					} else {
-						// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-						// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-						await initBackEndControlRoutes();
-						// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-						signInSuccess();
-					}
+					// 前端控制路由，2、请注意执行顺序
+					await initFrontEndControlRoutes();
+					signInSuccess();
 				}
 			})
 
