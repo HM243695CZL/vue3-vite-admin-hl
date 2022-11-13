@@ -20,8 +20,9 @@
 
 <script lang='ts'>
 import { computed, defineComponent, reactive, toRefs } from 'vue';
-import { policy } from '/@/api/oss';
-import { StatusEnum } from '/@/common/status.enun';
+import { policyApi } from '/@/api/oss';
+import { StatusEnum } from '/@/common/status.enum';
+import { getAction } from '/@/api/common';
 
 export default defineComponent({
 	name: 'MultiUpload',
@@ -75,7 +76,7 @@ export default defineComponent({
 		};
 		const handleBeforeUpload = () => {
 			return new Promise(((resolve, reject) => {
-				policy().then(res => {
+				getAction(policyApi, '').then(res => {
 					if (res.status === StatusEnum.SUCCESS) {
 						const {accessKeyId, dir, host, policy, signature} = res.data;
 						state.dataObj.policy = policy;

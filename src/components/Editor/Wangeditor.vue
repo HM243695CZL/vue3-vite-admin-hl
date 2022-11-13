@@ -24,7 +24,7 @@ import { getAction, uploadAction } from '/@/api/common';
 	import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
   import {onBeforeUnmount, onMounted, reactive, ref, shallowRef} from 'vue';
 	import { StatusEnum } from '/@/common/status.enum';
-	import { policyAip } from '/@/api/oss';
+	import { policyApi } from '/@/api/oss';
 	import { ElMessage } from 'element-plus';
   import {
     base64ToBlob,
@@ -204,7 +204,7 @@ import { getAction, uploadAction } from '/@/api/common';
 		editor.destroy();
 	});
   onMounted(() => {
-		getAction(policyAip, '').then(res => {
+		getAction(policyApi, '').then(res => {
 			if (res.status === StatusEnum.SUCCESS) {
 				const {accessKeyId, dir, host, policy, signature} = res.data;
 				state.dataObj.policy = policy;

@@ -1,8 +1,15 @@
 <template>
 	<div class="user-container h100" ref='userRef'>
 		<CommonTop
-
-		/>
+			@clickSearch='clickSearch'
+			@clickReset='clickReset'
+		>
+			<template #left>
+				<el-form-item label='用户名'>
+					<el-input v-model='searchParams.username' size='default' placeholder='请输入用户名' clearable></el-input>
+				</el-form-item>
+			</template>
+		</CommonTop>
 		<vxe-table
 			ref='tableRef'
 			:row-config='{
@@ -10,6 +17,7 @@
 				keyField: "id"
 			}'
 			:data='dataList'
+			:max-height='tableHeight'
 		>
 			<vxe-column type='seq' title='序号' width='60' />
 			<vxe-column title='用户名称' field='username' />
@@ -32,45 +40,63 @@
 				</template>
 			</vxe-column>
 		</vxe-table>
+		<PaginationCommon
+			:page-info='pageInfo'
+			@changePageSize='changePageSize'
+			@changePageIndex='changePageIndex'
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 	import useCrud from '/@/hooks/useCrud';
-	import { reactive, ref } from 'vue';
+	import { reactive, ref, toRefs } from 'vue';
 	import { getUserPageApi } from '/@/api/system/user';
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
+	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
 
 	export default {
 		name: 'user',
 		components: {
 			PreviewImg,
-			CommonTop
+			CommonTop,
+			PaginationCommon
 		},
 		setup() {
 			const userRef = ref();
 			const state = reactive({
 				uris: {
 					page: getUserPageApi
-				}
-			})
+				},
+			});
 			const {
-				getDataList,
 				pageInfo,
 				dataList,
 				tableHeight,
-				tableRef
+				tableRef,
+				searchParams,
+				clickSearch,
+				clickReset,
+				changePageIndex,
+				changePageSize
 			} = useCrud({
 				uris: state.uris,
 				parentRef: userRef
 			});
 			return {
 				userRef,
+				...toRefs(state),
 
 				tableRef,
 				dataList,
-				tableHeight
+				tableHeight,
+				searchParams,
+				pageInfo,
+				clickSearch,
+				clickReset,
+				changePageIndex,
+				changePageSize
 			}
 		}
 	}

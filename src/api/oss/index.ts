@@ -1,3 +1,3 @@
 const baseOssApi = 'admin/';
 
-export const policyAip = `${baseOssApi}aliyun/oss/policy`;
+export const policyApi = `${baseOssApi}aliyun/oss/policy`;
