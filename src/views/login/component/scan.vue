@@ -8,6 +8,7 @@
 <script lang="ts">
 import { ref, defineComponent, onMounted } from 'vue';
 import QRCode from 'qrcodejs2-fixes';
+
 export default defineComponent({
 	name: 'loginScan',
 	setup() {
@@ -46,7 +47,7 @@ export default defineComponent({
 	text-align: center;
 	@extend .login-scan-animation;
 	animation-delay: 0.1s;
-	::v-deep(img) {
+	:deep(img) {
 		margin: auto;
 	}
 	.login-msg {

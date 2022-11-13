@@ -1,6 +1,26 @@
 import axios from 'axios';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElLoading } from 'element-plus';
 import { Session } from '/@/utils/storage';
+
+let loadingReqCount = 0;
+let loadingInstance: any;
+const showLoading = () => {
+	if (loadingReqCount === 0) {
+		loadingInstance = ElLoading.service({
+			target: '#app'
+		})
+	}
+	loadingReqCount += 1;
+}
+
+const hideLoading = () => {
+	if (loadingReqCount <= 0) return;
+	loadingReqCount -= 1;
+	if (loadingReqCount === 0) {
+		loadingInstance.close();
+	}
+}
+
 
 // 配置新建一个 axios 实例
 const service = axios.create({
@@ -16,6 +36,7 @@ service.interceptors.request.use(
 		if (Session.get('token')) {
 			(<any>config.headers).common['Authorization'] = `${Session.get('token')}`;
 		}
+		showLoading();
 		return config;
 	},
 	(error) => {
@@ -27,9 +48,10 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
 	(response) => {
+		hideLoading();
 		// 对响应数据做点什么
 		const res = response.data;
-		if (res.code && res.code !== 0) {
+		if (res.status && res.status !== 200) {
 			// `token` 过期或者账号已在别处登录
 			if (res.code === 401 || res.code === 4001) {
 				Session.clear(); // 清除浏览器全部临时缓存
@@ -37,13 +59,20 @@ service.interceptors.response.use(
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
 					.then(() => {})
 					.catch(() => {});
+			} else {
+				ElMessage.error(res.message);
 			}
 			return Promise.reject(service.interceptors.response);
 		} else {
+			// 响应流文件时直接返回
+			if (response.data.type) {
+				return response;
+			}
 			return response.data;
 		}
 	},
 	(error) => {
+		hideLoading();
 		// 对响应错误做点什么
 		if (error.message.indexOf('timeout') != -1) {
 			ElMessage.error('网络超时');

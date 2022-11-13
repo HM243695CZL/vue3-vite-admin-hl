@@ -2,7 +2,7 @@
 	<div class="system-menu-container">
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
-				<el-input v-model='menuValue' size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
+				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10">
 					<el-icon>
 						<ele-Search />
@@ -46,9 +46,9 @@
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" type="text" @click="onOpenAddMenu">新增</el-button>
-						<el-button size="small" type="text" @click="onOpenEditMenu(scope.row)">修改</el-button>
-						<el-button size="small" type="text" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" @click="onOpenAddMenu">新增</el-button>
+						<el-button size="small" text type="primary" @click="onOpenEditMenu(scope.row)">修改</el-button>
+						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -62,22 +62,23 @@
 import { ref, toRefs, reactive, computed, defineComponent } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { useStore } from '/@/store/index';
+import { storeToRefs } from 'pinia';
+import { useRoutesList } from '/@/stores/routesList';
 import AddMenu from '/@/views/system/menu/component/addMenu.vue';
 import EditMenu from '/@/views/system/menu/component/editMenu.vue';
+
 export default defineComponent({
 	name: 'systemMenu',
 	components: { AddMenu, EditMenu },
 	setup() {
-		const store = useStore();
+		const stores = useRoutesList();
+		const { routesList } = storeToRefs(stores);
 		const addMenuRef = ref();
 		const editMenuRef = ref();
-		const state = reactive({
-			menuValue: ''
-		});
+		const state = reactive({});
 		// 获取 vuex 中的路由
 		const menuTableData = computed(() => {
-			return store.state.routesList.routesList;
+			return routesList.value;
 		});
 		// 打开新增菜单弹窗
 		const onOpenAddMenu = () => {

@@ -1,4 +1,7 @@
 import request from '/@/utils/request';
+export const adminBaseApi = 'admin/admin/';
+
+export const loginApi = `${adminBaseApi}login`;
 
 /**
  * 用户登录

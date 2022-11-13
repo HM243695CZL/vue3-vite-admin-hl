@@ -41,38 +41,13 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					assetFileNames: `assets/[name].${new Date().getTime()}.[ext]`,
 					compact: true,
 					manualChunks: {
-						vue: ['vue', 'vue-router', 'vuex'],
+						vue: ['vue', 'vue-router', 'pinia'],
 						echarts: ['echarts'],
 					},
 				},
 			},
-			terserOptions: {
-				compress: {
-					drop_console: true,
-					drop_debugger: true,
-				},
-				ie8: true,
-				output: {
-					comments: true,
-				},
-			},
 		},
-		css: {
-			postcss: {
-				plugins: [
-					{
-						postcssPlugin: 'internal:charset-removal',
-						AtRule: {
-							charset: (atRule) => {
-								if (atRule.name === 'charset') {
-									atRule.remove();
-								}
-							},
-						},
-					},
-				],
-			},
-		},
+		css: { preprocessorOptions: { css: { charset: false } } },
 	};
 });
 
