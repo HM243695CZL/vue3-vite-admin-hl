@@ -35,7 +35,7 @@
 			<vxe-column title='创建时间' field='addTime' />
 			<vxe-column title='操作' width='260'>
 				<template #default='scope'>
-					<el-button size='small' type='default'>修改密码</el-button>
+					<el-button size='small' type='default' @click='clickUpdatePass(scope.row.id)'>修改密码</el-button>
 					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
 					<el-button size='small' type='danger' @click='clickDelete(scope.row.id)'>删除</el-button>
 				</template>
@@ -51,6 +51,9 @@
         :role-list="roleList"
         @refreshList='getDataList'
     />
+		<UpdatePassModal
+			ref='updatePassRef'
+		/>
 	</div>
 </template>
 
@@ -62,6 +65,7 @@
 	import CommonTop from '/@/components/CommonTop/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
   import UserModal from './component/user/userModal.vue';
+	import UpdatePassModal from './component/user/updatePassModal.vue';
   import {getAction} from '/@/api/common';
   import {getRoleListApi} from '/@/api/system/role';
   import {StatusEnum} from '/@/common/status.enum';
@@ -72,10 +76,12 @@
 			PreviewImg,
 			CommonTop,
 			PaginationCommon,
-      UserModal
+      UserModal,
+			UpdatePassModal
 		},
 		setup() {
 			const userRef = ref();
+			const updatePassRef = ref();
 			const state = reactive({
 				uris: {
 					page: getUserPageApi,
@@ -109,12 +115,17 @@
           }
         })
       };
+			const clickUpdatePass = (id: string) => {
+				updatePassRef.value.openDialog(id);
+			};
       onMounted(() => {
         getRoleList();
       });
 			return {
 				userRef,
+				updatePassRef,
 				...toRefs(state),
+				clickUpdatePass,
 
         tableRef,
         modalFormRef,
