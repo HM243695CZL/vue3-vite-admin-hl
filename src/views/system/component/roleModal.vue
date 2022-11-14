@@ -28,7 +28,7 @@
 <script lang="ts" setup>
   import {reactive, ref} from 'vue';
   import {createRoleApi, updateRoleApi, viewRoleApi} from '/@/api/system/role';
-  import useInitModal from '/@/hooks/useInitModal';
+  import useCrudModal from '/@/hooks/useCrudModal';
 
   const emits = defineEmits([
       'refreshList'
@@ -54,7 +54,7 @@
     isShowDialog,
     title,
     ruleForm
-  } = useInitModal({
+  } = useCrudModal({
     formRef: formRef,
     createPath: createRoleApi,
     updatePath: updateRoleApi,
