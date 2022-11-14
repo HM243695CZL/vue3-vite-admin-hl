@@ -2,14 +2,19 @@
   <div class="user-modal-container">
     <el-dialog :append-to-body='false'
                :close-on-click-modal='false'
-               :title='state.title'
-               v-model='state.isShowDialog' width='600px'>
-      <el-form ref='formRef' :rules='state.rules' :model='state.ruleForm' label-width='100px'>
+               :title='title'
+               v-model='isShowDialog' width='600px'>
+      <el-form ref='formRef' :rules='state.rules' :model='ruleForm' label-width='100px'>
         <el-form-item label="用户名称" prop="username">
-          <el-input v-model="state.ruleForm.username" placeholder="请输入用户名称"></el-input>
+          <el-input v-model="ruleForm.username" placeholder="请输入用户名称"></el-input>
         </el-form-item>
         <el-form-item label="关联角色" prop="roleIds">
-          <el-input v-model="state.ruleForm.roleIds" placeholder="请输入关联角色"></el-input>
+          <el-select v-model="ruleForm.roleIds" clearable multiple class="w100">
+            <el-option v-for="item in props.roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="头像">
+          <SingleUpload :source-url="ruleForm.avatar" @change-source-url="changeAvatar" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -23,40 +28,48 @@
 </template>
 
 <script lang="ts" setup>
-  import {nextTick, reactive, ref} from 'vue';
+  import {reactive, ref} from 'vue';
+  import useCrudModal from '/@/hooks/useCrudModal';
+  import SingleUpload from '/@/components/Upload/SingleUpload.vue';
+  import {createUserApi, updateUserApi, viewUserApi} from '/@/api/system/user';
 
+  const props = defineProps({
+    roleList: {
+      type: Array,
+      required: true
+    }
+  });
+  const emits = defineEmits([
+    'refreshList'
+  ]);
   const formRef = ref();
   const state = reactive({
-    isShowDialog: false,
-    title: '',
-    ruleForm: {
-      id: '',
-      username: '',
-      roleIds: []
-    },
     rules: {
       username: [
         { required: true, message: '用户名称不能为空', trigger: 'blur'}
       ]
     }
   });
-  const closeDialog = () => {
-    state.isShowDialog = false;
+  const refreshList = () => {
+    emits('refreshList');
   };
-  const openDialog = (row: any) => {
-    state.isShowDialog = true;
-    state.ruleForm.id = '';
-    nextTick(() => {
-      formRef.value.resetFields();
-      if (row) {
-        state.title = '修改用户';
-      } else {
-        state.title = '新增用户';
-      }
-    })
-  };
-  const clickConfirm = () => {
-
+  const {
+    openDialog,
+    closeDialog,
+    clickConfirm,
+    isShowDialog,
+    title,
+    ruleForm
+  } = useCrudModal({
+    formRef: formRef,
+    createPath: createUserApi,
+    updatePath: updateUserApi,
+    viewPath: viewUserApi,
+    title: '用户',
+    refreshList
+  });
+  const changeAvatar = (url: string) => {
+    ruleForm.avatar = url;
   };
   defineExpose({
     openDialog

@@ -36,7 +36,7 @@
 			<vxe-column title='操作' width='260'>
 				<template #default='scope'>
 					<el-button size='small' type='default'>修改密码</el-button>
-					<el-button size='small' type='default'>修改</el-button>
+					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
 					<el-button size='small' type='danger'>删除</el-button>
 				</template>
 			</vxe-column>
@@ -48,6 +48,7 @@
 		/>
     <UserModal
         ref='modalFormRef'
+        :role-list="roleList"
         @refreshList='getDataList'
     />
 	</div>
@@ -55,12 +56,15 @@
 
 <script lang="ts">
 	import useCrud from '/@/hooks/useCrud';
-	import { reactive, ref, toRefs } from 'vue';
+  import {onMounted, reactive, ref, toRefs} from 'vue';
 	import { getUserPageApi } from '/@/api/system/user';
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
   import UserModal from './component/user/userModal.vue';
+  import {getAction} from '/@/api/common';
+  import {getRoleListApi} from '/@/api/system/role';
+  import {StatusEnum} from '/@/common/status.enum';
 
 	export default {
 		name: 'user',
@@ -76,6 +80,7 @@
 				uris: {
 					page: getUserPageApi
 				},
+        roleList: []
 			});
 			const {
         tableRef,
@@ -86,14 +91,26 @@
 				searchParams,
         getDataList,
         clickAdd,
-				clickSearch,
-				clickReset,
-				changePageIndex,
-				changePageSize
+        clickEdit,
+        clickSearch,
+        clickReset,
+        clickDelete,
+        changePageIndex,
+        changePageSize
 			} = useCrud({
 				uris: state.uris,
 				parentRef: userRef
 			});
+      const getRoleList = () => {
+        getAction(getRoleListApi, '').then(res => {
+          if (res.status === StatusEnum.SUCCESS) {
+            state.roleList = res.data;
+          }
+        })
+      };
+      onMounted(() => {
+        getRoleList();
+      });
 			return {
 				userRef,
 				...toRefs(state),
@@ -106,8 +123,10 @@
         searchParams,
         getDataList,
         clickAdd,
+        clickEdit,
         clickSearch,
         clickReset,
+        clickDelete,
         changePageIndex,
         changePageSize
 			}
