@@ -3,6 +3,7 @@
 		<CommonTop
 			@clickSearch='clickSearch'
 			@clickReset='clickReset'
+      @clickAdd="clickAdd"
 		>
 			<template #left>
 				<el-form-item label='用户名'>
@@ -36,7 +37,7 @@
 				<template #default='scope'>
 					<el-button size='small' type='default'>修改密码</el-button>
 					<el-button size='small' type='default'>修改</el-button>
-					<el-button size='small' type='default'>删除</el-button>
+					<el-button size='small' type='danger'>删除</el-button>
 				</template>
 			</vxe-column>
 		</vxe-table>
@@ -45,6 +46,10 @@
 			@changePageSize='changePageSize'
 			@changePageIndex='changePageIndex'
 		/>
+    <UserModal
+        ref='modalFormRef'
+        @refreshList='getDataList'
+    />
 	</div>
 </template>
 
@@ -55,13 +60,15 @@
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
+  import UserModal from './component/userModal.vue';
 
 	export default {
 		name: 'user',
 		components: {
 			PreviewImg,
 			CommonTop,
-			PaginationCommon
+			PaginationCommon,
+      UserModal
 		},
 		setup() {
 			const userRef = ref();
@@ -71,6 +78,7 @@
 				},
 			});
 			const {
+        modalFormRef,
 				pageInfo,
 				dataList,
 				tableHeight,
@@ -78,8 +86,10 @@
 				searchParams,
 				clickSearch,
 				clickReset,
+        clickAdd,
 				changePageIndex,
-				changePageSize
+				changePageSize,
+        getDataList
 			} = useCrud({
 				uris: state.uris,
 				parentRef: userRef
@@ -89,14 +99,17 @@
 				...toRefs(state),
 
 				tableRef,
+        modalFormRef,
 				dataList,
 				tableHeight,
 				searchParams,
 				pageInfo,
+        clickAdd,
 				clickSearch,
 				clickReset,
 				changePageIndex,
-				changePageSize
+				changePageSize,
+        getDataList
 			}
 		}
 	}

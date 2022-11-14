@@ -114,7 +114,7 @@ export default function({
 		}
 		postAction(uris.deleteBatch, state.selectedRowKeys).then(res => {
 			if (res.status === StatusEnum.SUCCESS) {
-				ElMessage.success('删除成功');
+				ElMessage.success(res.message);
 				state.selectedRowKeys = [];
 				getDataList();
 			}
@@ -131,7 +131,7 @@ export default function({
 		}
 		postAction(uris.delete, {id}).then(res => {
 			if (res.status === StatusEnum.SUCCESS) {
-				ElMessage.success('删除成功');
+				ElMessage.success(res.message);
 				getDataList();
 			}
 		})
@@ -166,6 +166,7 @@ export default function({
 		tableRef,
 		modalFormRef,
 		...toRefs(state),
+		getDataList,
 		clickAdd,
 		clickEdit,
 		clickSearch,
