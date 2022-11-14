@@ -8,16 +8,6 @@
 					</el-icon>
 					新增
 				</el-button>
-				<el-popconfirm title='确定删除所选数据吗？' @confirm='clickBatchDelete' v-if='props.buttonAuth.includes("deleteBtn")'>
-					<template #reference>
-						<el-button size='default' type='default' class='ml10'>
-							<el-icon>
-								<ele-Delete />
-							</el-icon>
-							删除
-						</el-button>
-					</template>
-				</el-popconfirm>
 				<slot name='left'></slot>
 			</div>
 			<div class='search-top-title-right'>
@@ -44,13 +34,13 @@
 		buttonAuth: {
 			type: Array,
 			default: () => [
-				'addBtn', 'deleteBtn', 'searchBtn', 'resetBtn'
+				'addBtn', 'searchBtn', 'resetBtn'
 			]
 		}
 	});
 
 	const emits = defineEmits([
-		'clickAdd', 'clickBatchDelete', 'clickSearch', 'clickReset'
+		'clickAdd', 'clickSearch', 'clickReset'
 	]);
 
 	const clickSearch = () => {
@@ -58,9 +48,6 @@
 	};
 	const clickReset = () => {
 		emits('clickReset');
-	};
-	const clickBatchDelete = () => {
-		emits('clickBatchDelete');
 	};
 	const clickAdd = () => {
 		emits('clickAdd');
@@ -76,6 +63,9 @@
 			&-left{
 				display: flex;
 				justify-content: flex-start;
+        button{
+          margin-right: 10px;
+        }
 			}
 			&-right{
 				display: flex;

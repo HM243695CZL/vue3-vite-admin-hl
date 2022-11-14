@@ -1,7 +1,7 @@
 import {computed, onMounted, reactive, ref, toRefs} from 'vue';
 import { PageEntity } from '/@/common/page.entity';
 import { ElMessage } from 'element-plus';
-import { postAction } from '/@/api/common';
+import {getAction, postAction} from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
 import _ from 'lodash';
 
@@ -85,20 +85,20 @@ export default function({
 		getDataList();
 	};
 	/**
-	 * 选中表格数据
-	 * @param selectionRows 选中的数据
+	 * 单个删除
+	 * @param id 需要删除的id
 	 */
-	const selectionChange = (selectionRows: any) => {
-		if (!tableRef.value.rowConfig) {
-			ElMessage.error('请为表格ref绑定rowConfig,并设置数据主键');
+	const clickDelete = (id: string) => {
+		if (!uris.delete) {
+			ElMessage.error('请设置uris.delete属性');
 			return false;
 		}
-		const selectedRowKeys: string[] = [];
-		(selectionRows.records || []).map((item: any) => {
-			selectedRowKeys.push(item[tableRowKey.value]);
-		});
-		state.selectedRowKeys = selectedRowKeys;
-		state.selectionRows = selectionRows.records;
+		getAction(`${uris.delete}/${id}`, '').then(res => {
+			if (res.status === StatusEnum.SUCCESS) {
+				ElMessage.success(res.message);
+				getDataList();
+			}
+		})
 	};
 	/**
 	 * 批量删除
@@ -121,20 +121,20 @@ export default function({
 		})
 	};
 	/**
-	 * 单个删除
-	 * @param id 需要删除的id
+	 * 选中表格数据
+	 * @param selectionRows 选中的数据
 	 */
-	const clickDelete = (id: string) => {
-		if (!uris.delete) {
-			ElMessage.error('请设置uris.delete属性');
+	const selectionChange = (selectionRows: any) => {
+		if (!tableRef.value.rowConfig) {
+			ElMessage.error('请为表格ref绑定rowConfig,并设置数据主键');
 			return false;
 		}
-		postAction(uris.delete, {id}).then(res => {
-			if (res.status === StatusEnum.SUCCESS) {
-				ElMessage.success(res.message);
-				getDataList();
-			}
-		})
+		const selectedRowKeys: string[] = [];
+		(selectionRows.records || []).map((item: any) => {
+			selectedRowKeys.push(item[tableRowKey.value]);
+		});
+		state.selectedRowKeys = selectedRowKeys;
+		state.selectionRows = selectionRows.records;
 	};
 	/**
 	 * 切换第几页
@@ -169,13 +169,13 @@ export default function({
 		getDataList,
 		clickAdd,
 		clickEdit,
+		clickView,
 		clickSearch,
 		clickReset,
-		clickView,
-		changePageIndex,
-		changePageSize,
-		selectionChange,
+		clickDelete,
 		clickBatchDelete,
-		clickDelete
+		selectionChange,
+		changePageIndex,
+		changePageSize
 	}
 }

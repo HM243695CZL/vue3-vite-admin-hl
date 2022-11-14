@@ -78,18 +78,18 @@
 				},
 			});
 			const {
+        tableRef,
         modalFormRef,
 				pageInfo,
 				dataList,
 				tableHeight,
-				tableRef,
 				searchParams,
+        getDataList,
+        clickAdd,
 				clickSearch,
 				clickReset,
-        clickAdd,
 				changePageIndex,
-				changePageSize,
-        getDataList
+				changePageSize
 			} = useCrud({
 				uris: state.uris,
 				parentRef: userRef
@@ -98,18 +98,18 @@
 				userRef,
 				...toRefs(state),
 
-				tableRef,
+        tableRef,
         modalFormRef,
-				dataList,
-				tableHeight,
-				searchParams,
-				pageInfo,
+        pageInfo,
+        dataList,
+        tableHeight,
+        searchParams,
+        getDataList,
         clickAdd,
-				clickSearch,
-				clickReset,
-				changePageIndex,
-				changePageSize,
-        getDataList
+        clickSearch,
+        clickReset,
+        changePageIndex,
+        changePageSize
 			}
 		}
 	}
