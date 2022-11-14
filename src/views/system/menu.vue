@@ -40,7 +40,7 @@ import {onMounted, reactive, ref, toRefs} from 'vue';
 import {getAction} from '/@/api/common';
 import {deleteMenuApi, getMenuListApi} from '/@/api/system/menu';
 import {StatusEnum} from '/@/common/status.enum';
-import MenuModal from './component/menuModal.vue';
+import MenuModal from './component/menu/menuModal.vue';
 import {ElMessage} from 'element-plus';
 
 export default {

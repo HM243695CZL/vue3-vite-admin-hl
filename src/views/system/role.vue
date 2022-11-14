@@ -37,7 +37,7 @@
       <vxe-column title="创建时间" field="addTime" />
       <vxe-column title="操作" width="200">
         <template #default="scope">
-          <el-button size='small' type='default'>授权</el-button>
+          <el-button size='small' type='default' @click="clickAuth(scope.row.id)">授权</el-button>
           <el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
           <el-button size='small' type='danger' @click="clickDelete(scope.row.id)">删除</el-button>
         </template>
@@ -52,32 +52,43 @@
       ref="modalFormRef"
       @refreshList="getDataList"
     />
+    <AuthModal
+      ref="authModalRef"
+      :menu-list="menuList"
+    />
   </div>
 </template>
 
 <script lang="ts">
 
-import {reactive, ref, toRefs} from 'vue';
+import {onMounted, reactive, ref, toRefs} from 'vue';
 import {deleteRoleApi, getRolePageApi} from '/@/api/system/role';
 import useCrud from '/@/hooks/useCrud';
 import CommonTop from '/@/components/CommonTop/index.vue';
 import PaginationCommon from '/@/components/PaginationCommon/index.vue';
-import RoleModal from './component/roleModal.vue';
+import RoleModal from './component/role/roleModal.vue';
+import AuthModal from './component/role/authModal.vue';
+import {getAction} from '/@/api/common';
+import {StatusEnum} from '/@/common/status.enum';
+import {getMenuListApi} from '/@/api/system/menu';
 
 export default {
   name: 'role',
   components: {
     CommonTop,
     PaginationCommon,
-    RoleModal
+    RoleModal,
+    AuthModal
   },
   setup() {
     const roleRef = ref();
+    const authModalRef = ref();
     const state = reactive({
       uris: {
         page: getRolePageApi,
         delete: deleteRoleApi
-      }
+      },
+      menuList: []
     });
     const {
       tableRef,
@@ -98,8 +109,23 @@ export default {
       uris: state.uris,
       parentRef: roleRef
     });
+    const getMenuList = () => {
+      getAction(getMenuListApi, '').then(res => {
+        if (res.status === StatusEnum.SUCCESS) {
+          state.menuList = res.data;
+        }
+      })
+    };
+    const clickAuth = (id: string) => {
+      authModalRef.value.openDialog(id);
+    };
+    onMounted(() => {
+      getMenuList();
+    });
     return {
       roleRef,
+      authModalRef,
+      clickAuth,
       ...toRefs(state),
 
       tableRef,

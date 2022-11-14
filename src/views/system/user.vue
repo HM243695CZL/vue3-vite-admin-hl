@@ -60,7 +60,7 @@
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
-  import UserModal from './component/userModal.vue';
+  import UserModal from './component/user/userModal.vue';
 
 	export default {
 		name: 'user',
