@@ -12,6 +12,7 @@
 				:style="{
 					padding: !isClassicOrTransverse || (currentRouteMeta.isLink && currentRouteMeta.isIframe) ? '0' : '15px',
 					transition: 'padding 0.3s ease-in-out',
+					height: `calc(100vh - ${headerHeight})`
 				}"
 			/>
 			<Footers v-if="themeConfig.isFooter" />

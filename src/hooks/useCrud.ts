@@ -1,4 +1,4 @@
-import { onMounted, reactive, ref, toRefs } from 'vue';
+import {computed, onMounted, reactive, ref, toRefs} from 'vue';
 import { PageEntity } from '/@/common/page.entity';
 import { ElMessage } from 'element-plus';
 import { postAction } from '/@/api/common';
@@ -8,6 +8,8 @@ import _ from 'lodash';
 interface ICrudParams {
 	uris: {
 		page?: string, // 分页查询接口
+		deleteBatch?: string, // 批量删除
+		delete?: string, // 单个删除接口
 	},
 	parentRef?: any, // 父级ref
 }
@@ -83,6 +85,58 @@ export default function({
 		getDataList();
 	};
 	/**
+	 * 选中表格数据
+	 * @param selectionRows 选中的数据
+	 */
+	const selectionChange = (selectionRows: any) => {
+		if (!tableRef.value.rowConfig) {
+			ElMessage.error('请为表格ref绑定rowConfig,并设置数据主键');
+			return false;
+		}
+		const selectedRowKeys: string[] = [];
+		(selectionRows.records || []).map((item: any) => {
+			selectedRowKeys.push(item[tableRowKey.value]);
+		});
+		state.selectedRowKeys = selectedRowKeys;
+		state.selectionRows = selectionRows.records;
+	};
+	/**
+	 * 批量删除
+	 */
+	const clickBatchDelete = () => {
+		if (!uris.deleteBatch) {
+			ElMessage.error('请设置uris.deleteBatch属性！');
+			return false;
+		}
+		if (!state.selectedRowKeys || state.selectedRowKeys.length <= 0) {
+			ElMessage.error('请选择需要删除的数据');
+			return false;
+		}
+		postAction(uris.deleteBatch, state.selectedRowKeys).then(res => {
+			if (res.status === StatusEnum.SUCCESS) {
+				ElMessage.success('删除成功');
+				state.selectedRowKeys = [];
+				getDataList();
+			}
+		})
+	};
+	/**
+	 * 单个删除
+	 * @param id 需要删除的id
+	 */
+	const clickDelete = (id: string) => {
+		if (!uris.delete) {
+			ElMessage.error('请设置uris.delete属性');
+			return false;
+		}
+		postAction(uris.delete, {id}).then(res => {
+			if (res.status === StatusEnum.SUCCESS) {
+				ElMessage.success('删除成功');
+				getDataList();
+			}
+		})
+	};
+	/**
 	 * 切换第几页
 	 * @param index 第几页
 	 */
@@ -98,7 +152,13 @@ export default function({
 		state.pageInfo.pageIndex = 1;
 		state.pageInfo.pageSize = size;
 		getDataList();
-	}
+	};
+	const tableRowKey = computed(() => {
+		if (!tableRef.value) {
+			return '';
+		}
+		return tableRef.value.rowConfig.keyField || '';
+	});
 	onMounted(() => {
 		getDataList();
 	});
@@ -112,6 +172,9 @@ export default function({
 		clickReset,
 		clickView,
 		changePageIndex,
-		changePageSize
+		changePageSize,
+		selectionChange,
+		clickBatchDelete,
+		clickDelete
 	}
 }
