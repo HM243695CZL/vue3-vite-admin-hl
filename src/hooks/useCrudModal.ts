@@ -10,6 +10,8 @@ interface IInitModal {
     viewPath: string, // 查看的请求地址
     title?: string, // 弹窗的标题
     refreshList: Function, // 更新列表的方法
+    otherForm?: any, // 其他表单属性
+    otherInitMethod?: Function, // 运行其他方法
 }
 export default function ({
     formRef,
@@ -17,13 +19,15 @@ export default function ({
     updatePath,
     viewPath,
     title,
-    refreshList
+    refreshList,
+    otherForm,
+    otherInitMethod
     }: IInitModal) {
     const state = reactive({
         isShowDialog: false,
         title: '',
         ruleForm: {
-            id: ''
+            id: '',
         }
     });
     const closeDialog = () => {
@@ -39,17 +43,26 @@ export default function ({
                 getAction(`${viewPath}/${id}`, '').then(res => {
                     if (res.status === StatusEnum.SUCCESS) {
                         state.ruleForm = res.data;
+                        if (otherInitMethod) {
+                            otherInitMethod(res.data);
+                        }
                     }
                 })
             } else {
                 state.title = '新增' + title;
+                if (otherInitMethod) {
+                    otherInitMethod();
+                }
             }
         })
     };
     const clickConfirm = () => {
         formRef.value.validate((valid: boolean) => {
             if (valid) {
-                postAction(state.ruleForm.id ? updatePath : createPath, state.ruleForm).then(res => {
+                postAction(state.ruleForm.id ? updatePath : createPath, {
+                    ...state.ruleForm,
+                    ...otherForm
+                }).then(res => {
                     if (res.status === StatusEnum.SUCCESS) {
                         ElMessage.success(res.message);
                         closeDialog();

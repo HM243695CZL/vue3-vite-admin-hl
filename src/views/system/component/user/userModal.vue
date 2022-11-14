@@ -6,15 +6,15 @@
                v-model='isShowDialog' width='600px'>
       <el-form ref='formRef' :rules='state.rules' :model='ruleForm' label-width='100px'>
         <el-form-item label="用户名称" prop="username">
-          <el-input v-model="ruleForm.username" placeholder="请输入用户名称"></el-input>
+					<el-input v-model="ruleForm.username" placeholder="请输入用户名称"></el-input>
         </el-form-item>
         <el-form-item label="关联角色" prop="roleIds">
           <el-select v-model="ruleForm.roleIds" clearable multiple class="w100">
             <el-option v-for="item in props.roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="头像">
-          <SingleUpload :source-url="ruleForm.avatar" @change-source-url="changeAvatar" />
+        <el-form-item label="头像" prop='avatar'>
+          <SingleUpload :source-url="state.otherForm.avatar" @change-source-url="changeAvatar" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -44,6 +44,9 @@
   ]);
   const formRef = ref();
   const state = reactive({
+		otherForm: {
+			avatar: ''
+		},
     rules: {
       username: [
         { required: true, message: '用户名称不能为空', trigger: 'blur'}
@@ -53,6 +56,11 @@
   const refreshList = () => {
     emits('refreshList');
   };
+	const otherInitMethod = (dataMap: any) => {
+		for (const o in state.otherForm) {
+			state.otherForm[o] = dataMap ? dataMap[o] : null;
+		}
+	};
   const {
     openDialog,
     closeDialog,
@@ -66,11 +74,13 @@
     updatePath: updateUserApi,
     viewPath: viewUserApi,
     title: '用户',
-    refreshList
+    refreshList,
+		otherForm: state.otherForm,
+		otherInitMethod
   });
   const changeAvatar = (url: string) => {
-    ruleForm.avatar = url;
-  };
+    state.otherForm.avatar = url;
+	};
   defineExpose({
     openDialog
   });

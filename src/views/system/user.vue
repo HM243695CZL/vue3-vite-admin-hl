@@ -37,7 +37,7 @@
 				<template #default='scope'>
 					<el-button size='small' type='default'>修改密码</el-button>
 					<el-button size='small' type='default' @click="clickEdit(scope.row.id)">修改</el-button>
-					<el-button size='small' type='danger'>删除</el-button>
+					<el-button size='small' type='danger' @click='clickDelete(scope.row.id)'>删除</el-button>
 				</template>
 			</vxe-column>
 		</vxe-table>
@@ -57,7 +57,7 @@
 <script lang="ts">
 	import useCrud from '/@/hooks/useCrud';
   import {onMounted, reactive, ref, toRefs} from 'vue';
-	import { getUserPageApi } from '/@/api/system/user';
+	import { deleteUserApi, getUserPageApi } from '/@/api/system/user';
 	import PreviewImg from '/@/components/previewImg/index.vue';
 	import CommonTop from '/@/components/CommonTop/index.vue';
 	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
@@ -78,7 +78,8 @@
 			const userRef = ref();
 			const state = reactive({
 				uris: {
-					page: getUserPageApi
+					page: getUserPageApi,
+					delete: deleteUserApi
 				},
         roleList: []
 			});

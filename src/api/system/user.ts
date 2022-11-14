@@ -5,3 +5,4 @@ export const getUserPageApi = `${adminBaseApi}page`;
 export const createUserApi = `${adminBaseApi}create`;
 export const updateUserApi = `${adminBaseApi}update`;
 export const viewUserApi = `${adminBaseApi}view`;
+export const deleteUserApi = `${adminBaseApi}delete`;
