@@ -22,7 +22,7 @@
       <vxe-column field="sort" title="排序" />
       <vxe-column title="操作" width="200">
         <template #default="scope">
-          <el-button size="small" type="default" @click="clickEdit(scope.row)">修改</el-button>
+          <el-button size="small" type="default" @click="clickEdit(scope.row.id)">修改</el-button>
           <el-button size="small" type="danger" @click="clickDelete(scope.row.id)">删除</el-button>
         </template>
       </vxe-column>

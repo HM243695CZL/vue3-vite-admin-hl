@@ -69,7 +69,7 @@
     title,
     ruleForm
   } = useCrudModal({
-    formRef: formRef,
+    formRef,
     createPath: createUserApi,
     updatePath: updateUserApi,
     viewPath: viewUserApi,
