@@ -8,6 +8,8 @@ import other from '/@/utils/other';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import formCreate from '@form-create/element-ui';
+import FcDesigner from '@form-create/designer';
 import 'vxe-table/lib/style.css';
 import '/@/theme/index.scss';
 import mitt from 'mitt';
@@ -41,6 +43,6 @@ VXETable.setup({
 directive(app);
 other.elSvg(app);
 
-app.use(pinia).use(router).use(ElementPlus).use(useTable).mount('#app');
+app.use(pinia).use(router).use(ElementPlus).use(formCreate).use(FcDesigner).use(useTable).mount('#app');
 
 app.config.globalProperties.mittBus = mitt();

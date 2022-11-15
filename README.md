@@ -65,4 +65,5 @@
 - [lodash中文文档](https://www.lodashjs.com/)
 - [vite中文文档](https://vitejs.cn/vite3-cn/guide/why.html)
 - [富文本编辑器：wangEditor](https://www.wangeditor.com/)
-- [表单生成器：form-create](http://www.form-create.com/v3/guide/form-create)
+- [表单生成器：form-create](http://www.form-create.com/v3/guide/)
+- [表单设计器：form-designer](http://designer.form-create.com/guide/)
