@@ -43,6 +43,7 @@ VXETable.setup({
 directive(app);
 other.elSvg(app);
 
+// @ts-ignore
 app.use(pinia).use(router).use(ElementPlus).use(formCreate).use(FcDesigner).use(useTable).mount('#app');
 
 app.config.globalProperties.mittBus = mitt();
