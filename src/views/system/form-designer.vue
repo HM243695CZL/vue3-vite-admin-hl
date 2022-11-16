@@ -85,7 +85,7 @@ export default {
     const clickEdit = (row: any) => {
       state.isView = true;
       nextTick(() => {
-        designerRef.value.setRule(row.config);
+        designerRef.value.setRule(row.config, row);
       });
     };
     const back = (refresh: boolean) => {

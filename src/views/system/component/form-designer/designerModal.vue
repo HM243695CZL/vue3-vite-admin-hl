@@ -55,13 +55,18 @@ import {ElMessage} from 'element-plus';
       ]
     }
   });
-  const openDialog = (formData: any) => {
+  const openDialog = (formData: any, row: any) => {
     state.isShowDialog = true;
     state.ruleForm.id = '';
     nextTick(() => {
       formRef.value.resetFields();
-      state.ruleForm.config = formData;
-      state.title = '新增表单配置';
+			if (row.id) {
+				state.ruleForm = row;
+				state.ruleForm.config = formData;
+				state.title = '修改表单配置';
+			} else {
+				state.title = '新增表单配置';
+			}
     });
   };
   const closeDialog = () => {
@@ -85,6 +90,6 @@ import {ElMessage} from 'element-plus';
   });
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 
 </style>
