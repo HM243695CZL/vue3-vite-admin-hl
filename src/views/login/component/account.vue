@@ -36,7 +36,7 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round @click="onSignIn" :loading="loading.signIn">
+			<el-button type="primary" class="login-content-submit" round @click="onSignIn">
 				<span>登 录</span>
 			</el-button>
 		</el-form-item>
@@ -68,9 +68,6 @@ export default defineComponent({
 				password: '123456',
 				code: '1234',
 			},
-			loading: {
-				signIn: false,
-			},
 		});
 		// 时间获取
 		const currentTime = computed(() => {
@@ -78,7 +75,6 @@ export default defineComponent({
 		});
 		// 登录
 		const onSignIn = async () => {
-			state.loading.signIn = true;
 			postAction(loginApi, {
 				username: state.ruleForm.username,
 				password: state.ruleForm.password
@@ -121,8 +117,6 @@ export default defineComponent({
 				router.push('/');
 			}
 			// 登录成功提示
-			// 关闭 loading
-			state.loading.signIn = true;
 			const signInText = '欢迎回来！';
 			ElMessage.success(`${currentTimeInfo}，${signInText}`);
 			NextLoading.start();
