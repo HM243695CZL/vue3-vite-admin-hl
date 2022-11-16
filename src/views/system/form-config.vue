@@ -1,24 +1,32 @@
 <template>
   <div class="form-config-container h100">
-    <form-create :rule="rule" v-model:api="fApi" :option="options"/>
+    <form-create v-model="value" :rule="rule" v-model:api="fApi" :option="options"/>
   </div>
 </template>
 
 <script lang="ts">
-
 import {reactive, toRefs} from 'vue';
 
 export default {
   name: 'form-config',
   setup() {
     const state = reactive({
+      // 实例对象
       fApi:{},
+      // 表单数据
+      value: {
+        goods_name: '1234',
+        label: [2]
+      },
+      // 组件参数配置
       options:{
-        onSubmit:(formData)=>{
-          alert(JSON.stringify(formData))
+        onSubmit:(formData, fApi)=>{
+          console.log(formData);
+          console.log(fApi);
         },
         resetBtn:true
       },
+      // 表单生成规则
       rule:[
         {
           type:'input',
