@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
+	import { reactive, ref } from 'vue';
   import DesignerModal from './designerModal.vue';
   import {ElMessage} from 'element-plus';
 	import FormDesigner from '/@/components/FormDesigner/index.vue';
