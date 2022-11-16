@@ -12,13 +12,13 @@
       </template>
     </CommonTop>
     <vxe-table
-        ref='tableRef'
-        :row-config='{
-				useKey: true,
-				keyField: "id"
-			}'
-        :data='dataList'
-        :max-height='tableHeight'
+      ref='tableRef'
+      :row-config='{
+        useKey: true,
+        keyField: "id"
+      }'
+      :data='dataList'
+      :max-height='tableHeight'
     >
       <vxe-column type="seq" title="序号" width="60" />
       <vxe-column title="角色名称" field="name" />
