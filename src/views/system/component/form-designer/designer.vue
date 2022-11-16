@@ -26,7 +26,7 @@
     emits('back', refresh);
   };
   // 回显表单
-  const setRule = (rule: any) => {
+  const setRule = (rule: string) => {
     designer.value.setRule(rule);
   };
   const clickSave = () => {
