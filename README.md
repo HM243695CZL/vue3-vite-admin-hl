@@ -24,11 +24,12 @@
     - 组件说明
         - `/@/components/CommonTop` 顶部公共组件
         - `/@/components/Editor/Wangeditor.vue` 富文本编辑器
+        - `/@/components/FormDesigner` 表单设计组件
         - `/@/components/iconSelector` 图标选择
         - `/@/components/PaginationCommon` 分页公共组件
         - `/@/components/PreviewFile` 文件在线预览
         - `/@/components/previewImg` 图片预览
-        - `/@/components/Upload/MultiUpload.vue` 多文件显示上传最贱
+        - `/@/components/Upload/MultiUpload.vue` 多文件显示上传组件
         - `/@/components/Upload/SingleUpload.vue` 单文件显示上传组件
 - **组合式API `/@/hooks`**
     - *`useCrud` 常见的页面操作【增删改查】*
