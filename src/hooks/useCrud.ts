@@ -115,6 +115,7 @@ export default function({
 		}
 		postAction(uris.deleteBatch, state.selectedRowKeys).then(res => {
 			if (res.status === StatusEnum.SUCCESS) {
+				state.pageInfo.pageIndex = 1;
 				ElMessage.success(res.message);
 				state.selectedRowKeys = [];
 				getDataList();
