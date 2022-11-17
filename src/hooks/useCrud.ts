@@ -95,6 +95,7 @@ export default function({
 		}
 		getAction(`${uris.delete}/${id}`, '').then(res => {
 			if (res.status === StatusEnum.SUCCESS) {
+				state.pageInfo.pageIndex = 1;
 				ElMessage.success(res.message);
 				getDataList();
 			}
