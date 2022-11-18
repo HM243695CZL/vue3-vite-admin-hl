@@ -1,5 +1,11 @@
 import { createApp } from 'vue';
-import VXETable from 'vxe-table';
+import {
+	VXETable,
+	Table,
+	Icon,
+	Column,
+	Filter
+} from 'vxe-table';
 import pinia from '/@/stores/index';
 import App from './App.vue';
 import router from './router';
@@ -17,7 +23,7 @@ import mitt from 'mitt';
 const app = createApp(App);
 
 function useTable(app: any) {
-	app.use(VXETable);
+	app.use(Table).use(Icon).use(Column).use(Filter);
 }
 VXETable.setup({
 	table: {

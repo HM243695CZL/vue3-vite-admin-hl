@@ -1,6 +1,10 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
+import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 const pathResolve = (dir: string): any => {
 	return resolve(__dirname, '.', dir);
@@ -13,7 +17,21 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
-		plugins: [vue()],
+		plugins: [
+			vue(),
+			// 按需导入vxe-table
+			createStyleImportPlugin({
+				resolves: [
+					VxeTableResolve()
+				]
+			}),
+			// AutoImport({
+			// 	resolvers: [ElementPlusResolver()],
+			// }),
+			// Components({
+			// 	resolvers: [ElementPlusResolver()],
+			// })
+		],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
