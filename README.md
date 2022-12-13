@@ -22,8 +22,10 @@
 - 公共组件 `/@/components`
     - 组件注册请使用大写，如`CommonTop`
     - 组件说明
+        - `/@/components/CommonModal` 公共弹窗组件 
         - `/@/components/CommonTop` 顶部公共组件
         - `/@/components/Editor/Wangeditor.vue` 富文本编辑器
+        - `/@/components/FormCreate` 表单生成组件
         - `/@/components/FormDesigner` 表单设计组件
         - `/@/components/iconSelector` 图标选择
         - `/@/components/PaginationCommon` 分页公共组件
@@ -34,6 +36,7 @@
 - **组合式API `/@/hooks`**
     - *`useCrud` 常见的页面操作【增删改查】*
     - *`useCrudModal`常见的弹窗操作【增删改查】*
+    - *`useFormCreateCrud`表单生成器的弹窗操作【增删改查】*
 - 路由
     1. 项目可以动态加载路由
     2. 创建文件说明

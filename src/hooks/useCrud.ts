@@ -20,6 +20,7 @@ export default function({
 	}: ICrudParams) {
 	const tableRef = ref();
 	const modalFormRef = ref();
+	const formCreateRef = ref();
 	const state = reactive({
 		pageInfo: new PageEntity(),
 		dataList: [],
@@ -53,21 +54,21 @@ export default function({
 	 * 点击新增
 	 */
 	const clickAdd = () => {
-		modalFormRef.value.openDialog();
+		modalFormRef.value.openDialog('', false, formCreateRef);
 	};
 	/**
 	 * 点击编辑
 	 * @param row 当前行的数据
 	 */
 	const clickEdit = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row));
+		modalFormRef.value.openDialog(_.cloneDeep(row), false, formCreateRef);
 	};
 	/**
 	 * 点击查看
 	 * @param row 当前行的数据
 	 */
 	const clickView = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row), true);
+		modalFormRef.value.openDialog(_.cloneDeep(row), true, formCreateRef);
 	};
 	/**
 	 * 点击查询
@@ -167,6 +168,7 @@ export default function({
 	return {
 		tableRef,
 		modalFormRef,
+		formCreateRef,
 		...toRefs(state),
 		getDataList,
 		clickAdd,
