@@ -62,11 +62,11 @@ import {ElMessage} from 'element-plus';
       formRef.value.resetFields();
 			if (row.id) {
 				state.ruleForm = row;
-				state.ruleForm.config = formData;
 				state.title = '修改表单配置';
 			} else {
 				state.title = '新增表单配置';
 			}
+			state.ruleForm.config = formData;
     });
   };
   const closeDialog = () => {
