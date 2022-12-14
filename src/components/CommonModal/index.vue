@@ -16,52 +16,56 @@
 </template>
 
 <script lang='ts' setup>
-	import useFormCreateCrud from '/@/hooks/useFormCreateCrud';
+import useCommonModal from '/@/hooks/useCommonModal';
 
-	const props = defineProps({
-		title: {
-			type: String,
-			default: ''
-		},
-		createPath: {
-			type: String,
-			required: true
-		},
-		updatePath: {
-			type: String,
-			required: true
-		},
-		viewPath: {
-			type: String,
-			required: true
-		},
-		modalWidth: {
-			type: String,
-			default: '600px'
-		}
-	});
-	const emits = defineEmits([
-		'refreshList'
-	]);
-	const refreshList = () => {
-		emits('refreshList');
-	};
-	const {
-		title,
-		isShowDialog,
-		closeDialog,
-		openDialog,
-		clickConfirm
-	} = useFormCreateCrud({
-		title: '分类',
-		createPath: props.createPath,
-		updatePath: props.updatePath,
-		viewPath: props.viewPath,
-		clearFields: ['name'],
-		refreshList
-	});
-	defineExpose({
-		openDialog
-	});
+const props = defineProps({
+	title: {
+		type: String,
+		default: ''
+	},
+	createPath: {
+		type: String,
+		required: true
+	},
+	updatePath: {
+		type: String,
+		required: true
+	},
+	viewPath: {
+		type: String,
+		required: true
+	},
+	ruleForm: {
+		type: Object,
+		default: () => {}
+	},
+	modalWidth: {
+		type: String,
+		default: '600px'
+	}
+});
+const emits = defineEmits([
+	'refreshList'
+]);
+
+const refreshList = () => {
+	emits('refreshList');
+};
+
+const {
+	openDialog,
+	closeDialog,
+	clickConfirm,
+	isShowDialog,
+	title,
+} = useCommonModal({
+	createPath: props.createPath,
+	updatePath: props.updatePath,
+	viewPath: props.viewPath,
+	title: props.title,
+	refreshList,
+});
+defineExpose({
+	openDialog,
+});
 </script>
-

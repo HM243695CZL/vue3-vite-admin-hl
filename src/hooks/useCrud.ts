@@ -3,11 +3,11 @@ import { PageEntity } from '/@/common/page.entity';
 import { ElMessage } from 'element-plus';
 import {getAction, postAction} from '/@/api/common';
 import { StatusEnum } from '/@/common/status.enum';
-import _ from 'lodash';
 
 interface ICrudParams {
 	uris: {
 		page?: string, // 分页查询接口
+		pageMethod?: string, // 分页查询接口请求方法
 		deleteBatch?: string, // 批量删除
 		delete?: string, // 单个删除接口
 	},
@@ -15,12 +15,12 @@ interface ICrudParams {
 }
 
 export default function({
-		uris,
-		parentRef
-	}: ICrudParams) {
+													uris,
+													parentRef
+												}: ICrudParams) {
 	const tableRef = ref();
 	const modalFormRef = ref();
-	const formCreateRef = ref();
+	const childRef = ref();
 	const state = reactive({
 		pageInfo: new PageEntity(),
 		dataList: [],
@@ -37,7 +37,12 @@ export default function({
 			ElMessage.error('请设置uris.page属性！');
 			return false;
 		}
-		postAction(uris.page, {
+		let actionMap = {
+			post: (url, data) => postAction(url, data),
+			get: (url, data) => getAction(url, data)
+		};
+		const reqMethod = uris.pageMethod ? uris.pageMethod : 'post';
+		actionMap[reqMethod](uris.page, {
 			...state.pageInfo,
 			...state.searchParams
 		}).then(res => {
@@ -45,7 +50,7 @@ export default function({
 				if (parentRef) {
 					state.tableHeight = parentRef.value.getBoundingClientRect().height;
 				}
-				state.dataList = res.data.list;
+				state.dataList = reqMethod === 'post' ? res.data.list : res.data;
 				state.pageInfo.totalRecords = res.data.total;
 			}
 		})
@@ -54,21 +59,33 @@ export default function({
 	 * 点击新增
 	 */
 	const clickAdd = () => {
-		modalFormRef.value.openDialog('', false, formCreateRef);
+		modalFormRef.value.openDialog({
+			dataId: '',
+			isView: false,
+			childRef
+		});
 	};
 	/**
 	 * 点击编辑
-	 * @param row 当前行的数据
+	 * @param id 当前行的数据id
 	 */
-	const clickEdit = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row), false, formCreateRef);
+	const clickEdit = (id: string) => {
+		modalFormRef.value.openDialog({
+			dataId: id,
+			isView: false,
+			childRef
+		});
 	};
 	/**
 	 * 点击查看
-	 * @param row 当前行的数据
+	 * @param id 当前行的数据id
 	 */
-	const clickView = (row: any) => {
-		modalFormRef.value.openDialog(_.cloneDeep(row), true, formCreateRef);
+	const clickView = (id: string) => {
+		modalFormRef.value.openDialog({
+			dataId: id,
+			isView: true,
+			childRef
+		});
 	};
 	/**
 	 * 点击查询
@@ -168,7 +185,7 @@ export default function({
 	return {
 		tableRef,
 		modalFormRef,
-		formCreateRef,
+		childRef,
 		...toRefs(state),
 		getDataList,
 		clickAdd,

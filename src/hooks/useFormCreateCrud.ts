@@ -15,13 +15,13 @@ interface IInitForm {
 	refreshList?: Function; // 更新列表的方法
 }
 export default function({
-	title,
-	clearFields,
-	createPath,
-	updatePath,
-	viewPath,
-	refreshList
-	}: IInitForm) {
+													title,
+													clearFields,
+													createPath,
+													updatePath,
+													viewPath,
+													refreshList
+												}: IInitForm) {
 	const state = reactive({
 		isShowDialog: false,
 		title: '',

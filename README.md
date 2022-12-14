@@ -35,7 +35,7 @@
         - `/@/components/Upload/SingleUpload.vue` 单文件显示上传组件
 - **组合式API `/@/hooks`**
     - *`useCrud` 常见的页面操作【增删改查】*
-    - *`useCrudModal`常见的弹窗操作【增删改查】*
+    - *`useCommonModal`常见的弹窗操作【增删改查】*
     - *`useFormCreateCrud`表单生成器的弹窗操作【增删改查】*
 - 路由
     1. 项目可以动态加载路由

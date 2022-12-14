@@ -3,7 +3,7 @@
 		<CommonTop
 			@clickSearch='clickSearch'
 			@clickReset='clickReset'
-      @clickAdd="clickAdd"
+			@clickAdd="clickAdd"
 		>
 			<template #left>
 				<el-form-item label='用户名'>
@@ -46,11 +46,19 @@
 			@changePageSize='changePageSize'
 			@changePageIndex='changePageIndex'
 		/>
-    <UserModal
-        ref='modalFormRef'
-        :role-list="roleList"
-        @refreshList='getDataList'
-    />
+		<CommonModal
+			ref='modalFormRef'
+			:title='configObj.title'
+			:create-path='configObj.createPath'
+			:update-path='configObj.updatePath'
+			:view-path='configObj.viewPath'
+			@refreshList='getDataList'
+		>
+			<UserModal
+				ref='childRef'
+				:role-list="roleList"
+			/>
+		</CommonModal>
 		<UpdatePassModal
 			ref='updatePassRef'
 		/>
@@ -58,96 +66,107 @@
 </template>
 
 <script lang="ts">
-	import useCrud from '/@/hooks/useCrud';
-  import {onMounted, reactive, ref, toRefs} from 'vue';
-	import { deleteUserApi, getUserPageApi } from '/@/api/system/user';
-	import PreviewImg from '/@/components/previewImg/index.vue';
-	import CommonTop from '/@/components/CommonTop/index.vue';
-	import PaginationCommon from '/@/components/PaginationCommon/index.vue';
-  import UserModal from './component/user/userModal.vue';
-	import UpdatePassModal from './component/user/updatePassModal.vue';
-  import {getAction} from '/@/api/common';
-  import {getRoleListApi} from '/@/api/system/role';
-  import {StatusEnum} from '/@/common/status.enum';
+import useCrud from '/@/hooks/useCrud';
+import {onMounted, reactive, ref, toRefs} from 'vue';
+import { createUserApi, deleteUserApi,
+	getUserPageApi, updateUserApi, viewUserApi } from '/@/api/system/user';
+import PreviewImg from '/@/components/previewImg/index.vue';
+import CommonTop from '/@/components/CommonTop/index.vue';
+import CommonModal from '/@/components/CommonModal/index.vue';
+import PaginationCommon from '/@/components/PaginationCommon/index.vue';
+import UserModal from './component/user/userModal.vue';
+import UpdatePassModal from './component/user/updatePassModal.vue';
+import {getAction} from '/@/api/common';
+import {getRoleListApi} from '/@/api/system/role';
+import {StatusEnum} from '/@/common/status.enum';
 
-	export default {
-		name: 'user',
-		components: {
-			PreviewImg,
-			CommonTop,
-			PaginationCommon,
-      UserModal,
-			UpdatePassModal
-		},
-		setup() {
-			const userRef = ref();
-			const updatePassRef = ref();
-			const state = reactive({
-				uris: {
-					page: getUserPageApi,
-					delete: deleteUserApi
-				},
-        roleList: []
-			});
-			const {
-        tableRef,
-        modalFormRef,
-				pageInfo,
-				dataList,
-				tableHeight,
-				searchParams,
-        getDataList,
-        clickAdd,
-        clickEdit,
-        clickSearch,
-        clickReset,
-        clickDelete,
-        changePageIndex,
-        changePageSize
-			} = useCrud({
-				uris: state.uris,
-				parentRef: userRef
-			});
-      const getRoleList = () => {
-        getAction(getRoleListApi, '').then(res => {
-          if (res.status === StatusEnum.SUCCESS) {
-            state.roleList = res.data;
-          }
-        })
-      };
-			const clickUpdatePass = (id: string) => {
-				updatePassRef.value.openDialog(id);
-			};
-      onMounted(() => {
-        getRoleList();
-      });
-			return {
-				userRef,
-				updatePassRef,
-				...toRefs(state),
-				clickUpdatePass,
-
-        tableRef,
-        modalFormRef,
-        pageInfo,
-        dataList,
-        tableHeight,
-        searchParams,
-        getDataList,
-        clickAdd,
-        clickEdit,
-        clickSearch,
-        clickReset,
-        clickDelete,
-        changePageIndex,
-        changePageSize
+export default {
+	name: 'user',
+	components: {
+		PreviewImg,
+		CommonTop,
+		PaginationCommon,
+		UserModal,
+		CommonModal,
+		UpdatePassModal
+	},
+	setup() {
+		const userRef = ref();
+		const updatePassRef = ref();
+		const state = reactive({
+			uris: {
+				page: getUserPageApi,
+				delete: deleteUserApi
+			},
+			roleList: [],
+			configObj: {
+				title: '用户',
+				createPath: createUserApi,
+				updatePath: updateUserApi,
+				viewPath: viewUserApi
 			}
+		});
+		const {
+			tableRef,
+			modalFormRef,
+			childRef,
+			pageInfo,
+			dataList,
+			tableHeight,
+			searchParams,
+			getDataList,
+			clickAdd,
+			clickEdit,
+			clickSearch,
+			clickReset,
+			clickDelete,
+			changePageIndex,
+			changePageSize
+		} = useCrud({
+			uris: state.uris,
+			parentRef: userRef
+		});
+		const getRoleList = () => {
+			getAction(getRoleListApi, '').then(res => {
+				if (res.status === StatusEnum.SUCCESS) {
+					state.roleList = res.data;
+				}
+			})
+		};
+		const clickUpdatePass = (id: string) => {
+			updatePassRef.value.openDialog(id);
+		};
+		onMounted(() => {
+			getRoleList();
+		});
+		return {
+			userRef,
+			updatePassRef,
+			...toRefs(state),
+			clickUpdatePass,
+
+			tableRef,
+			modalFormRef,
+			childRef,
+			pageInfo,
+			dataList,
+			tableHeight,
+			searchParams,
+			getDataList,
+			clickAdd,
+			clickEdit,
+			clickSearch,
+			clickReset,
+			clickDelete,
+			changePageIndex,
+			changePageSize
 		}
 	}
+}
 </script>
 <style scoped lang='scss'>
-	.user-container{
-		padding: 20px;
-		overflow: auto;
-	}
+.user-container{
+	padding: 20px;
+	overflow: auto;
+}
 </style>
