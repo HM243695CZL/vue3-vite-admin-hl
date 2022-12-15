@@ -1,14 +1,19 @@
 <template>
   <div class="form-config-container h100">
     <form-create v-model="value" :rule="rule" v-model:api="fApi" :option="options"/>
+    <MdEditor :content='content' @editorBlur='editorBlur' />
   </div>
 </template>
 
 <script lang="ts">
 import {reactive, toRefs} from 'vue';
+import MdEditor from '/@/components/Editor/MdEditor.vue'
 
 export default {
   name: 'form-config',
+  components: {
+    MdEditor
+  },
   setup() {
     const state = reactive({
       // 实例对象
@@ -46,10 +51,17 @@ export default {
             {label:'全能',value:3},
           ]
         }
-      ]
+      ],
+      content: `::: tip
+  你可以点击 toolbar 中的 tip 来快速插入
+:::`
     });
+    const editorBlur = text => {
+      console.log(text);
+    }
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      editorBlur
     }
   }
 }

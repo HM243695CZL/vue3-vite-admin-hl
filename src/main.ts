@@ -19,6 +19,12 @@ import FcDesigner from '@form-create/designer';
 import 'vxe-table/lib/style.css';
 import '/@/theme/index.scss';
 import mitt from 'mitt';
+// md编辑器
+import VueMarkdownEditor from '@kangc/v-md-editor';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress';
+import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+import Prism from 'prismjs';
 
 const app = createApp(App);
 
@@ -45,11 +51,15 @@ VXETable.setup({
 		}
 	}
 });
+VueMarkdownEditor.use(vuepressTheme, {
+	Prism
+});
 
 directive(app);
 other.elSvg(app);
 
 // @ts-ignore
-app.use(pinia).use(router).use(ElementPlus).use(formCreate).use(FcDesigner).use(useTable).mount('#app');
+app.use(pinia).use(router).use(ElementPlus).use(formCreate).use(FcDesigner)
+	.use(useTable).use(VueMarkdownEditor).mount('#app');
 
 app.config.globalProperties.mittBus = mitt();
