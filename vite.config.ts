@@ -2,6 +2,7 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
+import prismjs from 'vite-plugin-prismjs';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
@@ -25,6 +26,9 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					VxeTableResolve()
 				]
 			}),
+			prismjs({
+				languages: ['xml', 'json', 'js', 'css', 'html']
+			})
 			// AutoImport({
 			// 	resolvers: [ElementPlusResolver()],
 			// }),

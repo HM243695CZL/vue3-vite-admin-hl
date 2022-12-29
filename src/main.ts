@@ -24,6 +24,18 @@ import VueMarkdownEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
+
+import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index'; // emoji
+import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+
+import createLineNumberPlugin from '@kangc/v-md-editor/lib/plugins/line-number/index'; // 代码行号
+
+import createHighlightLinesPlugin from '@kangc/v-md-editor/lib/plugins/highlight-lines/index'; // 高亮代码行
+import '@kangc/v-md-editor/lib/plugins/highlight-lines/highlight-lines.css';
+
+import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index'; // 快捷复制代码
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
+
 import Prism from 'prismjs';
 
 const app = createApp(App);
@@ -52,8 +64,14 @@ VXETable.setup({
 	}
 });
 VueMarkdownEditor.use(vuepressTheme, {
-	Prism
-});
+	Prism,
+	codeHighlightExtensionMap: {
+		vue: 'html',
+	},
+}).use(createEmojiPlugin())
+	.use(createLineNumberPlugin())
+	.use(createHighlightLinesPlugin())
+	.use(createCopyCodePlugin());
 
 directive(app);
 other.elSvg(app);
