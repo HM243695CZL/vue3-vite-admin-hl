@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import dayjs from 'dayjs';
 import {
 	VXETable,
 	Table,
@@ -62,6 +63,9 @@ VXETable.setup({
 			remote: true // 开启后端排序
 		}
 	}
+});
+VXETable.formats.add('formatDate', ({ cellValue }) => {
+	return dayjs(new Date(cellValue)).format('YYYY-MM-DD HH:mm:ss');
 });
 VueMarkdownEditor.use(vuepressTheme, {
 	Prism,
