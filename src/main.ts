@@ -50,7 +50,7 @@ VXETable.setup({
 		border: true, // 边框
 		align: 'center', // 文字居中
 		highlightHoverRow: true, // 鼠标移入高亮当前行
-		showOverflow: true, // 单行显示,
+		showOverflow: 'title', // 单行显示,
 		columnConfig: {
 			resizable: true, // 可拖拽列
 		},
