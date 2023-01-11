@@ -74,3 +74,4 @@
 - [表单设计器：form-designer](http://designer.form-create.com/guide/)
 - [md编辑器: v-md-editor](https://code-farmer-i.github.io/vue-markdown-editor/zh/quick-start.html#%E5%AE%89%E8%A3%85)
 - [图片编辑器: tui-image-editor](https://juejin.cn/post/7027943745530101773#heading-10)
+- [西瓜播放器: xgplayer](https://v2.h5player.bytedance.com/gettingStarted/#%E5%AE%89%E8%A3%85)
