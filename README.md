@@ -24,6 +24,7 @@
     - 组件说明
         - `/@/components/CommonModal` 公共弹窗组件 
         - `/@/components/CommonTop` 顶部公共组件
+        - `/@/components/Editor/ImageEditor.vue` 图片编辑器
         - `/@/components/Editor/Wangeditor.vue` 富文本编辑器
         - `/@/components/Editor/MdEditor.vue` Markdown编辑器
         - `/@/components/FormCreate` 表单生成组件
@@ -72,3 +73,4 @@
 - [表单生成器：form-create](http://www.form-create.com/v3/guide/)
 - [表单设计器：form-designer](http://designer.form-create.com/guide/)
 - [md编辑器: v-md-editor](https://code-farmer-i.github.io/vue-markdown-editor/zh/quick-start.html#%E5%AE%89%E8%A3%85)
+- [图片编辑器: tui-image-editor](https://juejin.cn/post/7027943745530101773#heading-10)
