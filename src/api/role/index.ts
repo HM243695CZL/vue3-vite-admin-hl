@@ -40,7 +40,7 @@ export function viewRoleApi (params: any) {
 
 export function deleteRoleApi (params: any) {
 	return request({
-		url: `${preUrl}delete` + params.id,
+		url: `${preUrl}delete/` + params.id,
 		method: 'get'
 	})
 }

@@ -1,14 +1,14 @@
 <template>
 	<el-form ref='formRef' :rules='rules' :model="ruleForm" size="large" class="login-content-form">
 		<el-form-item class="login-animation1" prop='username'>
-			<el-input type="text" placeholder="用户名 admin 或不输均为 common" v-model="ruleForm.username" clearable autocomplete="off">
+			<el-input type="text" v-model="ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop='password'>
-			<el-input :type="isShowPassword ? 'text' : 'password'" placeholder="密码：123456" v-model="ruleForm.password" autocomplete="off">
+			<el-input :type="isShowPassword ? 'text' : 'password'" v-model="ruleForm.password" autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
@@ -22,21 +22,8 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation3">
-			<el-col :span="15">
-				<el-input type="text" maxlength="4" placeholder="请输入验证码" v-model="ruleForm.code" clearable autocomplete="off">
-					<template #prefix>
-						<el-icon class="el-input__icon"><ele-Position /></el-icon>
-					</template>
-				</el-input>
-			</el-col>
-			<el-col :span="1"></el-col>
-			<el-col :span="8">
-				<el-button class="login-content-code">1234</el-button>
-			</el-col>
-		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round @click="onSignIn" :loading="loading.signIn">
+			<el-button type="primary" class="login-content-submit" round @click="onSignIn">
 				<span>登 录</span>
 			</el-button>
 		</el-form-item>
@@ -64,9 +51,8 @@ export default defineComponent({
 		const state = reactive({
 			isShowPassword: false,
 			ruleForm: {
-				username: 'admin',
-				password: '123456',
-				code: '1234',
+				username: '',
+				password: '',
 			},
 			rules: {
 				username: [
@@ -76,9 +62,6 @@ export default defineComponent({
 					{ required: true, message: '密码不能为空', trigger: 'blur'}
 				]
 			},
-			loading: {
-				signIn: false,
-			},
 		});
 		// 时间获取
 		const currentTime = computed(() => {
@@ -87,14 +70,12 @@ export default defineComponent({
 		// 登录
 		const onSignIn = async () => {
 			// 模拟数据
-			state.loading.signIn = true;
 			formRef.value.validate((valid: boolean) => {
 				if (valid) {
 					loginApi({
 						username: state.ruleForm.username,
 						password: state.ruleForm.password
 					}).then(async res => {
-						state.loading.signIn = false;
 						if (res.status === StatusEnum.SUCCESS) {
 							// 存储 token 到浏览器缓存
 							Session.set('token', res.data.token);
@@ -137,8 +118,6 @@ export default defineComponent({
 				router.push('/');
 			}
 			// 登录成功提示
-			// 关闭 loading
-			state.loading.signIn = true;
 			const signInText = '欢迎回来！';
 			ElMessage.success(`${currentTimeInfo}，${signInText}`);
 		};
