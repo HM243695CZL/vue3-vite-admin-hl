@@ -1,14 +1,14 @@
 <template>
 	<el-form ref='formRef' :rules='rules' :model="ruleForm" size="large" class="login-content-form">
 		<el-form-item class="login-animation1" prop='username'>
-			<el-input type="text" v-model="ruleForm.username" clearable autocomplete="off">
+			<el-input type="text" v-model="ruleForm.username" placeholder='用户名' clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop='password'>
-			<el-input :type="isShowPassword ? 'text' : 'password'" v-model="ruleForm.password" autocomplete="off">
+			<el-input :type="isShowPassword ? 'text' : 'password'" placeholder='密码' v-model="ruleForm.password" autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
