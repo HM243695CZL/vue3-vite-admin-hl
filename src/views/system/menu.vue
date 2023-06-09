@@ -16,6 +16,11 @@
 			<vxe-column field="path" title="路由路径" />
 			<vxe-column field="component" title="组件路径" />
 			<vxe-column field="roles" title="权限标识" />
+			<vxe-column field="icon" title="图标">
+				<template #default='scope'>
+					<SvgIcon :name='scope.row.icon' />
+				</template>
+			</vxe-column>
 			<vxe-column field="isHide" title="是否隐藏">
 				<template #default="scope">
 					<el-tag>{{scope.row.isHide ? '隐藏' : '显示'}}</el-tag>

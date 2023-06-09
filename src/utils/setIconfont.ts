@@ -36,11 +36,11 @@ export function setJsCdn() {
 const setIntroduction = {
 	// 设置css
 	cssCdn: () => {
-		setCssCdn();
+		// setCssCdn();
 	},
 	// 设置js
 	jsCdn: () => {
-		setJsCdn();
+		// setJsCdn();
 	},
 };
 

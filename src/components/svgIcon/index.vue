@@ -2,9 +2,9 @@
 	<i v-if="isShowIconSvg" class="el-icon" :style="setIconSvgStyle">
 		<component :is="getIconName" />
 	</i>
-	<div v-else-if="isShowIconImg" :style="setIconImgOutStyle">
-		<img :src="getIconName" :style="setIconSvgInsStyle" />
-	</div>
+<!--	<div v-else-if="isShowIconImg" :style="setIconImgOutStyle">-->
+<!--		<img :src="getIconName" :style="setIconSvgInsStyle" />-->
+<!--	</div>-->
 	<i v-else :class="getIconName" :style="setIconSvgStyle" />
 </template>
 

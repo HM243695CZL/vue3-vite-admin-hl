@@ -74,10 +74,10 @@ const delayShow = () => {
 };
 // 页面加载时
 onMounted(() => {
-	delayShow();
-	setTimeout(() => {
-		state.btnTxt = '马上更新';
-	}, 200);
+	// delayShow();
+	// setTimeout(() => {
+	// 	state.btnTxt = '马上更新';
+	// }, 200);
 });
 </script>
 

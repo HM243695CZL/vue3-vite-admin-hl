@@ -10,6 +10,7 @@ import {
 import formCreate from '@form-create/element-ui';
 import FcDesigner from '@form-create/designer';
 import 'vxe-table/lib/style.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 // md编辑器
 import VueMarkdownEditor from '@kangc/v-md-editor';
